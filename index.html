@@ -166,6 +166,14 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 
 /* ═══════════════════════════════ DIVIDER ═══════════════════════════════ */
 .divider { height: 1px; background: var(--c-border); margin: 16px 0; }
+.font-scale-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 4px; }
+.font-scale-btn {
+  background: var(--c-bg); border: 1px solid var(--c-border); color: var(--c-text);
+  border-radius: 8px; padding: 10px 4px; font-size: 12.5px; font-weight: 600;
+  cursor: pointer; transition: all .15s; font-family: var(--font-body);
+}
+.font-scale-btn:hover { border-color: var(--c-border2); }
+.font-scale-btn.active { border-color: var(--c-orange); background: rgba(255,107,53,.1); color: var(--c-orange); font-weight: 700; }
 
 /* ═══════════════════════════════ MODAL ═══════════════════════════════ */
 .modal-backdrop {
@@ -621,6 +629,13 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 .lac-icon { font-size: 22px; flex-shrink: 0; }
 .lac-text { font-size: 12.5px; }
 .lac-text b { font-weight: 700; }
+
+.install-app-card {
+  background: rgba(74,158,255,.08); border: 1px solid rgba(74,158,255,.3);
+  border-radius: 12px; padding: 14px 16px; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all .15s;
+}
+.install-app-card:hover { background: rgba(74,158,255,.14); }
 
 .pending-overview-card {
   background: rgba(239,69,101,.08); border: 1px solid rgba(239,69,101,.3);
@@ -1080,7 +1095,8 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 <div class="screen show" id="scHome">
   <div class="topnav">
     <span class="home-logo">안전서류 <span style="color:var(--c-text);">단디</span></span>
-    <button class="topnav-action ghost" onclick="openModal('modalSettings')" style="margin-left:auto;">⚙ 설정</button>
+    <button class="topnav-action ghost" onclick="openModal('modalOnboarding')" style="margin-left:auto;">❓ 도움말</button>
+    <button class="topnav-action ghost" onclick="openModal('modalSettings')">⚙ 설정</button>
   </div>
   <div class="scroll-body" style="padding-top:16px;">
     <div class="backup-reminder-banner" id="backupReminderBanner" onclick="openSettingsModal()" style="display:none;">
@@ -1088,19 +1104,13 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
       <div class="brb-text" id="backupReminderText"></div>
       <div class="cat-arrow">›</div>
     </div>
-    <div class="tridandi-banner">
-      <div style="font-size:10.5px;color:var(--c-muted);font-weight:700;margin-bottom:4px;letter-spacing:.5px;">🚧 건설현장 3단디 캠페인</div>
-      작업 전 안전점검 <b>단디</b> · 작업 중 보호구 착용 <b>단디</b> · 작업 후 정리정돈 <b>단디</b>
-    </div>
-    <div class="purpose-card">
-      <div class="purpose-title">📋 이 앱을 만든 이유</div>
-      <div class="purpose-body">
-        <b>안전서류 단디</b>는 <b>건설현장 3단디</b> 캠페인과 함께,
-        중소규모 건설현장 근로자의 안전을 지키기 위해
-        <b>대구지방고용노동청 건설산재예방감독과</b>가 만들어 배포하는 안전관리 도구입니다.<br><br>
-        <b>서류 작성에 들이는 시간을 줄이고</b>, 현장의 안전관리 3가지를
-        <b>단디 할 수 있도록 돕기 위해</b> 만들었습니다.
+    <div class="install-app-card" id="installAppCard" onclick="triggerInstallApp()">
+      <div class="poc-icon">📱</div>
+      <div class="poc-info">
+        <div class="poc-title" style="color:var(--c-blue);">앱처럼 설치하기</div>
+        <div class="poc-desc">홈 화면에 아이콘을 추가하면 더 빠르고 편하게 쓸 수 있어요</div>
       </div>
+      <div class="cat-arrow">›</div>
     </div>
     <div class="home-stats">
       <div class="stat-box"><div class="stat-num" id="statSites">0</div><div class="stat-lbl">등록 현장</div></div>
@@ -1704,6 +1714,14 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
       ⚙ 앱 설정
       <button class="modal-close" onclick="closeModal('modalSettings')">✕</button>
     </div>
+    <div class="label-sm" style="margin-bottom:8px;">🔠 글자 크기</div>
+    <div class="font-scale-row" id="fontScaleRow">
+      <button class="font-scale-btn" data-scale="0.9" onclick="setFontScale(0.9)">작게</button>
+      <button class="font-scale-btn" data-scale="1" onclick="setFontScale(1)">보통</button>
+      <button class="font-scale-btn" data-scale="1.15" onclick="setFontScale(1.15)">크게</button>
+      <button class="font-scale-btn" data-scale="1.3" onclick="setFontScale(1.3)">아주 크게</button>
+    </div>
+    <div class="divider"></div>
     <div class="field"><label>내 이름 (자주 쓰는 이름)</label><input type="text" id="cfgUserName" placeholder="현장소장 이름"></div>
     <p style="font-size:11px;color:var(--c-muted);margin-top:-8px;margin-bottom:14px;line-height:1.6;">
       새 현장을 등록할 때 "현장소장" · "안전관리자" 칸에 자동으로 미리 채워집니다.
@@ -1726,11 +1744,6 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
       <button class="btn btn-outline" onclick="document.getElementById('importDataFile').click()">⬆ 백업 파일 불러오기</button>
     </div>
     <input type="file" id="importDataFile" accept="application/json" style="display:none;" onchange="importAllData(event)">
-    <div class="divider"></div>
-    <div class="label-sm" style="margin-bottom:8px;">👋 사용법 안내</div>
-    <div class="btn-row" style="margin-top:0;">
-      <button class="btn btn-outline" onclick="closeModal('modalSettings');openModal('modalOnboarding')">📖 사용법 다시 보기</button>
-    </div>
     <div class="divider"></div>
     <div class="label-sm" style="margin-bottom:8px;">🗑 휴지통 <span id="trashCountBadge" style="color:var(--c-muted);font-size:11px;"></span></div>
     <div class="btn-row" style="margin-top:0;">
@@ -1787,7 +1800,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
     </div>
     <div style="border-top:1px solid var(--c-border);padding-top:12px;margin-bottom:14px;text-align:center;">
       <div style="font-size:11.5px;color:var(--c-muted);margin-bottom:6px;">사용 중 불편한 점이나 문의사항이 있으신가요?</div>
-      <a href="mailto:jslee89@korea.kr?subject=%5B%EC%95%88%EC%A0%84%EC%84%9C%EB%A5%98%20%EB%8B%A8%EB%94%94%5D%20%EB%AC%B8%EC%9D%98%EC%82%AC%ED%95%AD" style="font-size:12.5px;color:var(--c-blue);text-decoration:none;font-weight:700;">✉️ jslee89@korea.kr 로 문의하기</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdBaKgfi18erTv1VOXbNp8k1W7lJoFoKi1vEzFhO2PCZzGwfw/viewform" target="_blank" rel="noopener" style="font-size:12.5px;color:var(--c-blue);text-decoration:none;font-weight:700;">✉️ 문의하기</a>
     </div>
     <div class="btn-row">
       <button class="btn btn-primary" onclick="closeModal('modalOnboarding')">시작하기</button>
@@ -3567,8 +3580,28 @@ function deleteReportById(id) {
 }
 
 /* ══════════════ SETTINGS ══════════════ */
+/* 글자 크기 설정 — CSS zoom을 이용해 앱 전체(글자·버튼·여백 등)를 한 번에
+   비례 확대/축소함. px 단위로 짜여진 기존 스타일 전체를 손대지 않고도
+   전반적인 크기 조절이 가능한 가장 간단한 방법 */
+function setFontScale(scale) {
+  document.body.style.zoom = scale;
+  DB.settings.fontScale = scale;
+  saveDB();
+  document.querySelectorAll('.font-scale-btn').forEach(btn => {
+    btn.classList.toggle('active', parseFloat(btn.dataset.scale) === scale);
+  });
+}
+function applyFontScale() {
+  const scale = DB.settings.fontScale || 1;
+  document.body.style.zoom = scale;
+}
+
 function openSettingsModal() {
   document.getElementById('cfgUserName').value = DB.settings.userName || '';
+  const curScale = DB.settings.fontScale || 1;
+  document.querySelectorAll('.font-scale-btn').forEach(btn => {
+    btn.classList.toggle('active', parseFloat(btn.dataset.scale) === curScale);
+  });
   updateTrashCountBadge();
   openModal('modalSettings');
 }
@@ -4807,25 +4840,26 @@ function buildRiskReportDoc(r) {
 
       const cards = sortedMeta.map(buildCard);
       // 완료·미완료가 둘 다 있을 때만, 미완료 그룹이 시작되는 위치에 구분 표시를 끼워 넣음
+      // ⚠️ 이전에는 이 지점에서 강제로 새 페이지를 시작했는데, 그러면 완료 항목이
+      // 적게 남은 페이지 아래쪽에 불필요한 빈 여백이 생기는 문제가 있었음.
+      // 페이지를 억지로 나누지 않고, 구분 표시 배너만 넣어 자연스럽게 이어지도록 함
       const dividerIdx = (doneCount > 0 && pendingCount > 0) ? doneCount : -1;
 
-      // 2개씩 짝지어 각 쌍이 A4 한 페이지를 채우도록 페이지브레이크 삽입.
-      // 완료/미완료 경계가 짝 중간에 걸리면 그 짝을 나눠서, 미완료 그룹이
-      // 항상 새 페이지에서 깔끔하게 시작하도록 함
+      // 2개씩 짝지어 하나의 블록으로 묶음 (카드 하나가 통째로 다음 페이지로
+      // 넘어가지 않게 잘림 방지 로직이 적용될 대상 단위)
       let paired = '';
-      let p = 0;
-      while (p < cards.length) {
-        const startsDivider = (p === dividerIdx);
-        // 다음 카드가 있고, 그 다음 카드가 구분선 경계를 넘지 않을 때만 함께 짝지음
-        const canPairNext = (p + 1 < cards.length) && (p + 1 !== dividerIdx);
-        const pageClass = startsDivider ? 'rrd-action-page action-divider-page' : 'rrd-action-page';
-        const dividerHtml = startsDivider
-          ? `<div style="background:rgba(239,69,101,.08);border:1px solid rgba(239,69,101,.25);border-radius:8px;padding:10px 14px;margin-bottom:10px;font-size:12px;font-weight:700;color:#c0392b;">
+      for (let p = 0; p < cards.length; p += 2) {
+        const dividerHtml = (p === dividerIdx || p + 1 === dividerIdx)
+          ? `<div style="background:rgba(239,69,101,.08);border:1px solid rgba(239,69,101,.25);border-radius:8px;padding:10px 14px;margin:10px 0;font-size:12px;font-weight:700;color:#c0392b;">
               ⚠ 아래는 아직 조치되지 않은 위험요인입니다 (${pendingCount}건)
             </div>`
           : '';
-        paired += `<div class="${pageClass}">${dividerHtml}${cards[p]}${canPairNext ? cards[p+1] : ''}</div>`;
-        p += canPairNext ? 2 : 1;
+        // 구분선이 짝의 두 번째 카드 앞에 와야 하면, 그 위치에 맞게 삽입
+        if (p + 1 === dividerIdx) {
+          paired += `<div class="rrd-action-page">${cards[p]}${dividerHtml}${cards[p+1] || ''}</div>`;
+        } else {
+          paired += `<div class="rrd-action-page">${dividerHtml}${cards[p]}${cards[p+1] || ''}</div>`;
+        }
       }
 
       const summaryHtml = (doneCount > 0 && pendingCount > 0)
@@ -4920,7 +4954,7 @@ function getUnsplittableRanges(sourceEl, scale) {
 function getHardBreakPoints(sourceEl, scale) {
   const containerTop = sourceEl.getBoundingClientRect().top;
   const points = [];
-  sourceEl.querySelectorAll('.rd-signsheet-page, .signsheet-hard-page, .action-divider-page').forEach(el => {
+  sourceEl.querySelectorAll('.rd-signsheet-page, .signsheet-hard-page').forEach(el => {
     const rect = el.getBoundingClientRect();
     points.push((rect.top - containerTop) * scale);
   });
@@ -6168,9 +6202,6 @@ function showPdfSavedGuide() {
 
 /* ══════════════ WIRE UP ══════════════ */
 document.querySelector('.fab').onclick = openModal_NewSite;
-document.getElementById('modalSettings').querySelector('.topnav-action.ghost') && null;
-// settings button in topnav
-document.querySelector('#scHome .topnav-action.ghost').onclick = openSettingsModal;
 
 /* close modals on backdrop click */
 document.querySelectorAll('.modal-backdrop').forEach(bd => {
@@ -6185,13 +6216,60 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
     navigator.serviceWorker.register('./sw.js').catch(() => {});
   });
 }
+
+/* "홈 화면에 추가"(앱처럼 설치) 버튼 — 안드로이드/크롬 계열은 브라우저가
+   제공하는 설치 프롬프트를 그대로 띄우고, 그 기능이 없는 브라우저(iOS 사파리 등)는
+   수동으로 하는 방법을 안내함. 이미 설치되어 실행 중이면 버튼 자체를 숨김 */
+let _deferredInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  _deferredInstallPrompt = e;
+  const card = document.getElementById('installAppCard');
+  if (card) card.style.display = '';
+});
+window.addEventListener('appinstalled', () => {
+  const card = document.getElementById('installAppCard');
+  if (card) card.style.display = 'none';
+  _deferredInstallPrompt = null;
+});
+function isRunningStandalone() {
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+async function triggerInstallApp() {
+  if (_deferredInstallPrompt) {
+    _deferredInstallPrompt.prompt();
+    const { outcome } = await _deferredInstallPrompt.userChoice;
+    _deferredInstallPrompt = null;
+    if (outcome === 'accepted') {
+      const card = document.getElementById('installAppCard');
+      if (card) card.style.display = 'none';
+    }
+    return;
+  }
+  // 설치 프롬프트를 지원 안 하는 브라우저(iOS 사파리 등) — 수동 안내
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  showConfirm(
+    '앱처럼 설치하기',
+    isIOS
+      ? '하단 공유 버튼(⬆️)을 누른 뒤 "홈 화면에 추가"를 선택해주세요.'
+      : '브라우저 메뉴(⋮)를 열어 "홈 화면에 추가" 또는 "앱 설치"를 선택해주세요.',
+    '확인',
+    () => {}
+  );
+}
+
 console.log('%c안전서류 단디 %c· 현장 안전관리, 단디하게 %c\nmade by jslee89 🦺',
   'color:#FF6B35;font-weight:900;font-size:16px;',
   'color:#888;font-size:11px;',
   'color:#06D6A0;font-size:11px;');
 (async () => {
   await loadDB();
+  applyFontScale();
   renderHome();
+  if (isRunningStandalone()) {
+    const card = document.getElementById('installAppCard');
+    if (card) card.style.display = 'none';
+  }
   // 등록된 현장이 하나도 없는 완전 신규 사용자에게만 자동으로 안내 표시
   if (!DB.sites.length) {
     setTimeout(() => openModal('modalOnboarding'), 400);
