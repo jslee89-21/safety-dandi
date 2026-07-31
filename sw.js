@@ -1,9 +1,10 @@
-/* 안전서류 단디 — 최소 서비스워커
-   앱 파일 자체가 이미 모든 라이브러리를 내장하고 있어(html2canvas 등)
-   별도 캐싱 없이도 대부분 오프라인에서 작동하지만, 이 서비스워커를 통해
-   "홈 화면에 추가"가 정식 PWA로 인식되게 하고, 페이지 자체도 캐싱해
-   완전한 오프라인 재실행을 보장한다. */
-const CACHE_NAME = 'safety-dandi-v1';
+/* 안전서류 단디 — 서비스워커
+   ⚠️ 이전 버전은 "저장된 파일을 무조건 먼저 보여주는" 방식이라, GitHub에
+   새 버전을 올려도 계속 예전 화면이 보이는 문제가 있었음. 이제는 "인터넷이
+   되면 항상 최신 파일을 받아오고, 인터넷이 안 될 때만 저장된 파일로 대체"
+   하는 방식으로 바꿔서, 평소엔 항상 최신 버전이 보이고 오프라인일 때만
+   저장된 버전으로 안전하게 작동하게 함 */
+const CACHE_NAME = 'safety-dandi-v2';
 const APP_SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (event) => {
@@ -24,6 +25,13 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((cached) => cached || fetch(event.request))
+    fetch(event.request)
+      .then((response) => {
+        // 최신 파일을 성공적으로 받아오면, 다음 오프라인 대비용으로 캐시도 갱신
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        return response;
+      })
+      .catch(() => caches.match(event.request))  // 인터넷 안 될 때만 저장된 파일 사용
   );
 });
