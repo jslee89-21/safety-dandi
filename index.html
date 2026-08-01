@@ -5037,21 +5037,29 @@ function sliceCanvasToA4(canvas, safeRanges, hardBreaks) {
   if (rawSlices.length === 0) rawSlices.push({ sliceStart: 0, sliceHeightPx: Math.min(idealPageHeightPx, canvas.height) });
 
   rawSlices.forEach(({ sliceStart, sliceHeightPx }, i) => {
+    // ⚠️ 표 헤더를 반복해서 보여주는 기능을 시도했으나, 헤더가 2줄 이상인
+    // 표(예: "위험성 추정" 상위행 + "가능성/중대성" 하위행)에서 높이 계산이
+    // 틀어져 글자가 겹쳐 보이는 심각한 문제가 있어 제거함. 페이지 시작 시
+    // 약간의 여백만 남기는 기능은 문제 없어 그대로 유지함
+    const topPadPx = i > 0 ? Math.round(canvas.width * 0.02) : 0; // 페이지 시작 시 약간의 여백
+
     const sliceCanvas = document.createElement('canvas');
     sliceCanvas.width = canvas.width;
     // ⚠️ 이전에는 실제 내용 높이에 딱 맞게 잘랐으나, 그러면 페이지마다
     // 가로세로 비율이 A4(210:297)에서 벗어나게 되어, 외부 인쇄/뷰어
     // 프로그램이 "맞춤 인쇄"할 때 비율을 세로 기준으로 늘리면서 오히려
     // 가로가 잘려나가는 문제가 있었음. 그래서 내용이 짧게 남아도 모든
-    // 페이지를 항상 정확한 A4 비율(빈 공간은 흰 여백)로 통일함
-    sliceCanvas.height = idealPageHeightPx;
+    // 페이지를 항상 정확한 A4 비율(빈 공간은 흰 여백)로 통일함.
+    // 상단 여백을 추가하는 페이지는 그만큼만 살짝 더 키움
+    sliceCanvas.height = idealPageHeightPx + topPadPx;
     const ctx = sliceCanvas.getContext('2d');
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, sliceCanvas.width, sliceCanvas.height);
+
     ctx.drawImage(
       canvas,
       0, sliceStart, canvas.width, sliceHeightPx,
-      0, 0, canvas.width, sliceHeightPx
+      0, topPadPx, canvas.width, sliceHeightPx
     );
 
     // 여러 페이지일 때만 하단 중앙에 쪽수 표시
