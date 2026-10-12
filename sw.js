@@ -4,7 +4,7 @@
    되면 항상 최신 파일을 받아오고, 인터넷이 안 될 때만 저장된 파일로 대체"
    하는 방식으로 바꿔서, 평소엔 항상 최신 버전이 보이고 오프라인일 때만
    저장된 버전으로 안전하게 작동하게 함 */
-const CACHE_NAME = 'safety-dandi-v2';
+const CACHE_NAME = 'safety-dandi-v3';
 const APP_SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (event) => {
@@ -24,6 +24,8 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  // 다른 사이트(방문 통계 등)나 GET이 아닌 요청은 서비스워커가 건드리지 않음
+  if (event.request.method !== 'GET' || new URL(event.request.url).origin !== self.location.origin) return;
   event.respondWith(
     fetch(event.request)
       .then((response) => {
