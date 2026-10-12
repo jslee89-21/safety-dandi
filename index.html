@@ -1282,6 +1282,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
     <div id="chkReadonlyNote"></div>
     <div id="chkItemsWrap"></div>
     <div id="chkTbmWrap"></div>
+    <div id="chkShareAllWrap"></div>
     <button class="btn btn-outline" style="margin-top:8px;min-height:54px;" onclick="openCheckReport()">🖨 이 점검표 출력 (A4)</button>
     <button class="btn btn-success" style="margin-top:8px;min-height:58px;font-size:17px;" onclick="finishCheck()">점검 마치기</button>
     <div style="font-size:11.5px;color:var(--c-muted);margin-top:8px;line-height:1.6;text-align:center;">
@@ -6708,6 +6709,12 @@ function renderCheckScreen() {
         <div class="cat-arrow">›</div></div>`
     : '';
 
+  // 4-2) 오늘 점검 전체 공유
+  const todayRecs = chkTodayRecords();
+  document.getElementById('chkShareAllWrap').innerHTML = todayRecs.length
+    ? `<button class="chk-share-btn" style="margin-top:8px;" onclick="shareTodayChecks()">📤 오늘 점검 ${todayRecs.length}개 공종 전부 카톡·문자로 보내기</button>`
+    : '';
+
   // 5) 지난 점검 기록
   chkEnsure();
   const hist = DB.checks.filter(c => c.siteId === curSiteId && c.id !== curCheck.id)
@@ -7039,6 +7046,50 @@ async function shareOpenChecks() {
   const files = [];
   open.forEach(({ item }, i) => { if (item.photo && files.length < 4) files.push(dataUrlToFile(item.photo, `점검사진_${i + 1}.jpg`)); });
   await shareContent('안전점검 미조치 사항', buildOpenChecksText(), files);
+}
+function chkTodayRecords() {
+  chkEnsure();
+  return DB.checks.filter(c => c.siteId === curSiteId && c.date === todayStr() && c.items.some(i => i.result));
+}
+function buildTodayChecksText(recs) {
+  const site = DB.sites.find(x => x.id === curSiteId) || {};
+  const d = todayStr();
+  const lines = [`[${site.name || '현장'}] ${d.slice(5).replace('.', '/')} 안전점검`];
+  recs.forEach(rec => {
+    const set = chkSetById(rec.setId);
+    const ok = rec.items.filter(i => i.result === 'ok').length;
+    const ngs = rec.items.filter(i => i.result === 'ng');
+    lines.push(`${set.icon} ${set.name} — ` + (ngs.length ? `양호 ${ok} · 불량 ${ngs.length}` : (ok ? '전부 양호' : '미확인')));
+    ngs.forEach(i => lines.push(` ↳ ${i.memo || i.label}${i.fixedAt ? ' (조치 완료)' : ' (미조치)'}`));
+  });
+  return lines.join('\n');
+}
+async function shareTodayChecks() {
+  const recs = chkTodayRecords();
+  if (!recs.length) { toast('오늘 점검한 기록이 없습니다'); return; }
+  try {
+    const files = [];
+    for (let r = 0; r < recs.length; r++) {
+      toast(`📄 점검표 만드는 중... (${r + 1}/${recs.length})`, 6000);
+      const rec = recs[r];
+      buildCheckReportDoc(rec);
+      const scale = 2;
+      const el = document.getElementById('checkReportDoc');
+      const ranges = getUnsplittableRanges(el, scale), hard = getHardBreakPoints(el, scale);
+      const canvas = await html2canvas(el, { scale, useCORS: true, backgroundColor: '#fff', logging: false, height: Math.ceil(el.getBoundingClientRect().height) });
+      const slices = sliceCanvasToA4(canvas, ranges, hard);
+      const setName = chkSetById(rec.setId).name;
+      for (let i = 0; i < slices.length; i++) {
+        const blob = await new Promise(res => slices[i].toBlob(res, 'image/png'));
+        files.push(new File([blob], `점검표_${setName}_${rec.date}_${i + 1}.png`, { type: 'image/png' }));
+      }
+    }
+    if (curCheck) buildCheckReportDoc(curCheck);
+    const site = DB.sites.find(x => x.id === curSiteId) || {};
+    await shareContent(`${site.name || '현장'} 오늘 안전점검`, buildTodayChecksText(recs), files);
+  } catch (e) {
+    toast('❌ 공유 실패: ' + e.message, 4000);
+  }
 }
 async function shareCheckReport() {
   if (!curCheck) return;
