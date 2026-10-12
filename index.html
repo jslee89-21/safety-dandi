@@ -6685,7 +6685,26 @@ function chkCardInner(desc, open, overdue, started, todayUnfixed) {
 function renderHomeCheckCard() {
   const card = document.getElementById('homeCheckCard');
   if (!card) return;
-  if (DB.sites.length !== 1) { card.style.display = 'none'; return; }
+  if (DB.sites.length === 0) { card.style.display = 'none'; return; }
+  if (DB.sites.length > 1) {
+    chkEnsure();
+    const todayS = todayStr();
+    const notYet = DB.sites.filter(x => !DB.checks.some(c => c.siteId === x.id && c.date === todayS && c.items.some(i => i.result)));
+    const unf = DB.sites.reduce((n, x) => n + chkOpenItems(x.id).length, 0);
+    const desc = notYet.length
+      ? `오늘 점검 전: ${notYet.map(x => escapeHtml(x.name || '현장')).join(', ')}`
+      : '오늘 모든 현장을 점검했습니다';
+    card.style.display = '';
+    card.innerHTML = `
+    <div class="csc-icon">✅</div>
+    <div class="csc-info">
+      <div class="csc-title">현장에 들어가서 오늘 점검을 시작하세요</div>
+      <div class="csc-desc">${desc}</div>
+      ${unf > 0 ? `<div class="csc-warn">⚠ 아직 조치 안 된 점검 ${unf}건 (전체 현장)</div>` : ''}
+    </div>
+    <div class="cat-arrow">↓</div>`;
+    return;
+  }
   const sid = DB.sites[0].id;
   chkEnsure();
   const today = todayStr();
@@ -6697,6 +6716,7 @@ function renderHomeCheckCard() {
   card.innerHTML = chkCardInner(desc, openList.length, overdue, (st.ok + st.ng) > 0, st.unfixed);
 }
 function startCheckFromHome() {
+  if (DB.sites.length > 1) { const l = document.getElementById('siteList'); if (l) l.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
   if (DB.sites.length !== 1) return;
   curSiteId = DB.sites[0].id;
   openTodayCheck();
