@@ -7,12 +7,12 @@
 <meta name="theme-color" content="#0F1117">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="안전서류 단디">
+<meta name="apple-mobile-web-app-title" content="현장 단디">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="icon-192.png">
-<title>안전서류 단디 — 건설현장 안전관리</title>
+<title>현장 단디 — 건설현장 안전점검·필수서류</title>
 <!-- 구글 폰트 의존성 제거 — 인터넷 연결 없이도 완전히 작동하도록,
      기기에 이미 설치된 한글 폰트(윈도우: 맑은고딕, 안드로이드/아이폰: 각 OS 기본 한글 폰트)를
      그대로 사용함. 시스템 폰트도 충분히 깔끔하고 가독성이 좋음 -->
@@ -1180,7 +1180,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 ══════════════════════════════════════════ -->
 <div class="screen show" id="scHome">
   <div class="topnav">
-    <span class="home-logo">안전서류 <span style="color:var(--c-text);">단디</span></span>
+    <span style="display:flex;flex-direction:column;line-height:1.15;"><span class="home-logo">현장 <span style="color:var(--c-text);">단디</span></span><span style="font-size:10.5px;color:var(--c-muted);margin-top:2px;white-space:nowrap;">건설현장 안전점검·필수서류</span></span>
     <button class="topnav-action ghost" onclick="openModal('modalOnboarding')" style="margin-left:auto;">❓ 도움말</button>
     <button class="topnav-action ghost" onclick="openModal('modalSettings')">⚙ 설정</button>
   </div>
@@ -1953,7 +1953,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
     </div>
     <div class="divider"></div>
     <div style="font-size:11.5px;color:var(--c-muted);line-height:1.8;text-align:center;">
-      <b style="color:var(--c-text);">안전서류 단디</b><br>
+      <b style="color:var(--c-text);">현장 단디</b><br>
       (건설현장 3단디 캠페인 지원 도구)<br>
       대구지방고용노동청 건설산재예방감독과 제작·배포<br>
       중소규모 건설현장 근로자 안전을 위한 무료 안전관리 도구
@@ -2118,8 +2118,8 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
     <div style="background:rgba(255,209,102,.08);border:1px solid rgba(255,209,102,.25);border-radius:8px;padding:12px 14px;font-size:12px;color:var(--c-yellow);line-height:1.7;">
       📌 휴대폰 설정에 따라 저장 직후 파일이 <b>자동으로 미리보기 화면</b>으로 열릴 수 있습니다.<br><br>
       이 화면에서는 <b>뒤로가기 버튼을 누르지 마시고</b>, 아래 방법으로 앱으로 돌아와주세요:<br>
-      · 화면 하단(또는 상단) <b>최근 앱 목록</b> 버튼으로 안전서류 단디 탭 선택<br>
-      · 또는 브라우저 <b>탭 목록 아이콘</b>에서 안전서류 단디 탭 선택
+      · 화면 하단(또는 상단) <b>최근 앱 목록</b> 버튼으로 현장 단디 탭 선택<br>
+      · 또는 브라우저 <b>탭 목록 아이콘</b>에서 현장 단디 탭 선택
     </div>
     <div class="btn-row">
       <button class="btn btn-primary" onclick="closeModal('modalPdfSaved')">확인했습니다</button>
@@ -3671,7 +3671,7 @@ function buildReportDoc(r) {
     <div class="rd-header">
       <div class="rd-brand">
         <div class="rd-brand-icon">🦺</div>
-        <div><div class="rd-brand-name">안전서류 단디</div><div class="rd-brand-sub">${escapeHtml(site.company) || ''}</div></div>
+        <div><div class="rd-brand-name">현장 단디</div><div class="rd-brand-sub">${escapeHtml(site.company) || ''}</div></div>
       </div>
       <div>
         <div class="rd-title">특별안전보건교육 실시확인서</div>
@@ -3752,7 +3752,7 @@ function buildReportDoc(r) {
 
     <div class="rd-footer">
       ${recordStampHtml(r)}
-      본 확인서는 안전서류 단디(건설현장 3단디 캠페인·대구지방고용노동청 건설산재예방감독과)에 의해 자동 생성되었습니다.<br>
+      본 확인서는 현장 단디(건설현장 3단디 캠페인·대구지방고용노동청 건설산재예방감독과)에 의해 자동 생성되었습니다.<br>
       산업안전보건법 제29조(근로자에 대한 안전보건교육) 및 같은 법 시행규칙 제26조·별표5 라목(특별교육 대상 작업별 교육) 준수
     </div>`;
 }
@@ -3854,7 +3854,7 @@ function exportAllData() {
     const base64 = btoa(unescape(encodeURIComponent(json)));
     const dateStr = todayStr().replace(/\./g, '-');
     const link = document.createElement('a');
-    link.download = `안전서류단디_백업_${dateStr}.json`;
+    link.download = `현장단디_백업_${dateStr}.json`;
     // JSON도 브라우저가 "바로 열어보는" 파일로 취급해 다운로드를 건너뛸 수 있어
     // 범용 바이너리로 위장해 무조건 다운로드되게 함 (PNG/PDF에서 검증된 방식)
     link.href = `data:application/octet-stream;base64,${base64}`;
@@ -4942,7 +4942,7 @@ function buildRiskReportDoc(r) {
   document.getElementById('riskReportDoc').innerHTML = `
     <div class="rrd-header">
       <div>
-        <div style="font-size:12px;font-weight:700;color:#EF4565;">안전서류 단디</div>
+        <div style="font-size:12px;font-weight:700;color:#EF4565;">현장 단디</div>
         <div style="font-size:10px;color:#888;">${escapeHtml(site.company)||''}</div>
       </div>
       <div style="text-align:right;">
@@ -5133,7 +5133,7 @@ function buildRiskReportDoc(r) {
         </td>
       </tr>
     </table>
-    <div class="rrd-footer">${recordStampHtml(r)}본 보고서는 안전서류 단디(건설현장 3단디 캠페인·대구지방고용노동청 건설산재예방감독과)에 의해 자동 생성되었습니다.<br>산업안전보건법 제36조 위험성평가 · 고용노동부 고시 제2023-19호(위험성평가 고시) · KOSHA GUIDE G-30-2023 준수</div>
+    <div class="rrd-footer">${recordStampHtml(r)}본 보고서는 현장 단디(건설현장 3단디 캠페인·대구지방고용노동청 건설산재예방감독과)에 의해 자동 생성되었습니다.<br>산업안전보건법 제36조 위험성평가 · 고용노동부 고시 제2023-19호(위험성평가 고시) · KOSHA GUIDE G-30-2023 준수</div>
     ${(r.attendees||[]).length>0 && !(r.rtype==='action' && r.linkedRiskId) ? `
     <div class="rd-signsheet-page">
       <div class="rrd-attendees">${attHtml}</div>
@@ -6520,13 +6520,6 @@ const CHECK_SETS = [
     '작업대의 안전난간과 출입문이 정상이고 닫혀 있다',
     '과상승 방지·과부하 방지·비상정지 장치가 정상이다',
     '작업대 아래에 사람이 들어오지 못하게 통제하고, 이동 시 신호수가 있다'
-  ]},
-  { id: 'people', icon: '👷', name: '근로자 확인', items: [
-    '오늘 새로 온 근로자의 기초안전보건교육 이수증을 확인했다',
-    '작업 전 안전 이야기(TBM)를 했다',
-    '고령 근로자·몸이 안 좋은 근로자의 상태를 확인했다',
-    '외국인 근로자에게 위험 내용이 전달되었다(통역·그림 등)',
-    '술을 마셨거나 몸이 안 좋아 보이는 사람은 작업에서 뺐다'
   ]}
 ];
 
@@ -7005,7 +6998,7 @@ function buildCheckReportDoc(rec) {
   document.getElementById('checkReportDoc').innerHTML = `
     <div class="rrd-header" style="border-bottom-color:#06b88a;">
       <div>
-        <div style="font-size:12px;font-weight:700;color:#EF4565;">안전서류 단디</div>
+        <div style="font-size:12px;font-weight:700;color:#EF4565;">현장 단디</div>
         <div style="font-size:10px;color:#888;">${escapeHtml(site.company) || ''}</div>
       </div>
       <div style="text-align:right;">
@@ -7029,7 +7022,7 @@ function buildCheckReportDoc(rec) {
     <table class="rrd-sign">
       <tr>${signCell('점검자', inspector)}${signCell('현장소장 확인', site.manager)}${hasSafety ? signCell('안전관리자 확인', site.safety || '') : ''}</tr>
     </table>
-    <div class="rrd-footer">${recordStampHtml(rec)}본 점검표는 안전서류 단디(건설현장 3단디 캠페인·대구지방고용노동청 건설산재예방감독과)에 의해 자동 생성되었습니다.<br>점검자·현장소장이 확인 서명하여 보관하시기 바랍니다.</div>`;
+    <div class="rrd-footer">${recordStampHtml(rec)}본 점검표는 현장 단디(건설현장 3단디 캠페인·대구지방고용노동청 건설산재예방감독과)에 의해 자동 생성되었습니다.<br>점검자·현장소장이 확인 서명하여 보관하시기 바랍니다.</div>`;
 }
 
 function openCheckReport() {
@@ -7335,7 +7328,7 @@ async function triggerInstallApp() {
   );
 }
 
-console.log('%c안전서류 단디 %c· 현장 안전관리, 단디하게 %c\nmade by jslee89 🦺',
+console.log('%c현장 단디 %c· 현장 안전관리, 단디하게 %c\nmade by jslee89 🦺',
   'color:#FF6B35;font-weight:900;font-size:16px;',
   'color:#888;font-size:11px;',
   'color:#06D6A0;font-size:11px;');
