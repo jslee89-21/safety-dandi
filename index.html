@@ -6569,29 +6569,44 @@ function chkDueText(it) {
 }
 
 /* 현장 화면 상단의 큰 "오늘 점검 시작" 카드 */
+/* 오늘 점검 현황: 확인(양호+불량), 양호, 불량, 오늘 조치 완료한 건수 */
+function chkTodayStats(siteId) {
+  chkEnsure();
+  const today = todayStr();
+  let ok = 0, ng = 0, fixed = 0, unfixed = 0;
+  DB.checks.filter(c => c.siteId === siteId).forEach(c => c.items.forEach(i => {
+    if (c.date === today) {
+      if (i.result === 'ok') ok++;
+      else if (i.result === 'ng') { ng++; if (!i.fixedAt) unfixed++; }
+    }
+    if (i.result === 'ng' && i.fixedAt === today) fixed++;
+  }));
+  return { ok, ng, fixed, unfixed };
+}
+function chkTodayDesc(st, emptyText) {
+  if (!(st.ok + st.ng) && !st.fixed) return emptyText;
+  return `오늘 ${st.ok + st.ng}개 확인 · 양호 ${st.ok} · 불량 ${st.ng} · <b style="${st.unfixed ? 'color:var(--c-red);' : ''}">미조치 ${st.unfixed}</b>`;
+}
 function renderCheckStartCard(siteId) {
   const card = document.getElementById('checkStartCard');
   if (!card) return;
   chkEnsure();
   const today = todayStr();
   const todays = DB.checks.filter(c => c.siteId === siteId && c.date === today);
-  let ok = 0, ng = 0;
-  todays.forEach(c => c.items.forEach(i => { if (i.result === 'ok') ok++; else if (i.result === 'ng') ng++; }));
+  const st = chkTodayStats(siteId);
   const openList = chkOpenItems(siteId);
   const open = openList.length;
   const overdue = openList.filter(x => chkIsOverdue(x.item)).length;
-  const desc = (ok + ng) === 0
-    ? '작업 시작 전, 현장을 돌며 핵심 5가지를 확인하세요'
-    : `오늘 ${ok + ng}개 확인 · 양호 ${ok} · 불량 ${ng}`;
-  card.innerHTML = chkCardInner(desc, open, overdue, (ok + ng) > 0);
+  const desc = chkTodayDesc(st, '작업 시작 전, 현장을 돌며 핵심 5가지를 확인하세요');
+  card.innerHTML = chkCardInner(desc, open, overdue, (st.ok + st.ng) > 0, st.unfixed);
 }
-function chkCardInner(desc, open, overdue, started) {
+function chkCardInner(desc, open, overdue, started, todayUnfixed) {
   return `
     <div class="csc-icon">✅</div>
     <div class="csc-info">
       <div class="csc-title">${started ? '오늘 점검 이어서 하기' : '오늘 점검 시작'}</div>
       <div class="csc-desc">${desc}</div>
-      ${open > 0 ? `<div class="csc-warn">⚠ 아직 조치 안 된 점검 ${open}건${overdue ? ` · 기한 초과 ${overdue}건` : ''}</div>` : ''}
+      ${open > 0 ? `<div class="csc-warn">⚠ 아직 조치 안 된 점검 ${open}건${(todayUnfixed != null && open > todayUnfixed) ? ' (지난 점검 포함)' : ''}${overdue ? ` · 기한 초과 ${overdue}건` : ''}</div>` : ''}
     </div>
     <div class="cat-arrow">›</div>`;
 }
@@ -6603,13 +6618,12 @@ function renderHomeCheckCard() {
   const sid = DB.sites[0].id;
   chkEnsure();
   const today = todayStr();
-  let ok = 0, ng = 0;
-  DB.checks.filter(c => c.siteId === sid && c.date === today).forEach(c => c.items.forEach(i => { if (i.result === 'ok') ok++; else if (i.result === 'ng') ng++; }));
+  const st = chkTodayStats(sid);
   const openList = chkOpenItems(sid);
   const overdue = openList.filter(x => chkIsOverdue(x.item)).length;
-  const desc = (ok + ng) === 0 ? '오늘 점검을 아직 하지 않았습니다' : `오늘 ${ok + ng}개 확인 · 양호 ${ok} · 불량 ${ng}`;
+  const desc = chkTodayDesc(st, '오늘 점검을 아직 하지 않았습니다');
   card.style.display = '';
-  card.innerHTML = chkCardInner(desc, openList.length, overdue, (ok + ng) > 0);
+  card.innerHTML = chkCardInner(desc, openList.length, overdue, (st.ok + st.ng) > 0, st.unfixed);
 }
 function startCheckFromHome() {
   if (DB.sites.length !== 1) return;
