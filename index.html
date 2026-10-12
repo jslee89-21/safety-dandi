@@ -1290,6 +1290,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
     <div id="chkTbmWrap"></div>
     <div id="chkShareAllWrap"></div>
     <button class="btn btn-outline" style="margin-top:8px;min-height:54px;" onclick="openCheckReport()">🖨 이 점검표 출력 (A4)</button>
+    <div id="chkDeleteWrap"></div>
     <button class="btn btn-success" style="margin-top:8px;min-height:58px;font-size:17px;" onclick="finishCheck()">점검 마치기</button>
     <div style="font-size:11.5px;color:var(--c-muted);margin-top:8px;line-height:1.6;text-align:center;">
       ○·× 를 누를 때마다 자동으로 저장됩니다.<br>
@@ -6769,6 +6770,12 @@ function renderCheckScreen() {
     ? `<button class="chk-share-btn" style="margin-top:8px;" onclick="shareTodayChecks()">📤 오늘 점검 ${todayRecs.length}개 공종 전부 카톡·문자로 보내기</button>`
     : '';
 
+  // 4-3) 점검 기록 지우기(초기화)
+  chkEnsure();
+  const saved = curCheck && DB.checks.includes(curCheck);
+  document.getElementById('chkDeleteWrap').innerHTML = saved
+    ? `<button class="btn btn-outline" style="margin-top:8px;min-height:50px;color:var(--c-red);border-color:rgba(239,69,101,.4);" onclick="confirmDeleteCheck()">${curCheckReadonly ? '🗑 이 날 점검 기록 삭제' : '↺ 오늘 이 점검 지우고 다시 하기'}</button>` : '';
+
   // 5) 지난 점검 기록
   chkEnsure();
   const hist = DB.checks.filter(c => c.siteId === curSiteId && c.id !== curCheck.id)
@@ -7204,6 +7211,29 @@ async function shareTodayAll() {
   } catch (e) { toast('❌ 공유 실패: ' + e.message, 4000); }
 }
 
+function confirmDeleteCheck() {
+  if (!curCheck) return;
+  const set = chkSetById(curCheck.setId);
+  const open = curCheck.items.filter(i => i.result === 'ng' && !i.fixedAt).length;
+  const msg = `${curCheck.date} ${set.name} 점검 기록(○/×, 사진, 메모, 조치 내용)이 모두 지워지고 복구할 수 없습니다.` +
+    (open ? `\n아직 조치 안 된 불량 ${open}건도 함께 사라집니다.` : '');
+  showConfirm(curCheckReadonly ? '이 날 점검 기록 삭제' : '오늘 점검 지우고 다시 하기', msg, '지우기', () => deleteCurrentCheck());
+}
+function deleteCurrentCheck() {
+  if (!curCheck) return;
+  chkEnsure();
+  const id = curCheck.id;
+  const wasPast = curCheckReadonly;
+  DB.checks = DB.checks.filter(c => c.id !== id);
+  saveDB();
+  toast('🗑 점검 기록을 지웠습니다');
+  curCheckReadonly = false;
+  if (wasPast) curCheckSetId = curCheckSetId || 'common';
+  chkLoadToday();
+  renderCheckScreen();
+  try { renderCheckStartCard(curSiteId); renderHomeCheckCard(); } catch (e) {}
+  window.scrollTo(0, 0);
+}
 function chkTodayRecords() {
   chkEnsure();
   return DB.checks.filter(c => c.siteId === curSiteId && c.date === todayStr() && c.items.some(i => i.result));
