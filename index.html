@@ -6524,6 +6524,60 @@ const CHECK_SETS = [
   ]}
 ];
 
+/* 불량(×)일 때 TBM·공유·미조치 목록에 쓰는 짧은 문구 (점검 문구는 "~있다" 형태라 불량일 때 읽기 어색함) */
+const CHECK_BAD = {
+ "개구부·단부에 덮개 또는 안전난간이 설치되어 있다": "개구부·단부 덮개/안전난간 미설치",
+ "작업발판·사다리가 튼튼하게 설치되어 있다": "작업발판·사다리 불안정",
+ "작업자가 안전모·안전대 등 보호구를 착용했다": "보호구(안전모·안전대 등) 미착용",
+ "중장비 작업반경에 사람이 들어가지 못하게 통제한다": "중장비 작업반경 출입통제 안 됨",
+ "전선·가스·화기 주변이 정리되어 있고 소화기가 있다": "전선·가스·화기 주변 정리 불량 또는 소화기 없음",
+ "비계·작업발판이 튼튼하고 벽이음·발판 고정이 되어 있다": "비계·작업발판 불안정(벽이음·발판 고정 불량)",
+ "안전난간(상부·중간·발끝막이)이 설치되어 있다": "안전난간 미설치 또는 부족",
+ "개구부 덮개가 고정되어 있고 표시가 되어 있다": "개구부 덮개 미고정 또는 표시 없음",
+ "추락방호망 또는 안전대 걸이 설비가 있다": "추락방호망·안전대 걸이 설비 없음",
+ "높은 곳 작업자가 안전대를 걸고 작업한다": "높은 곳 작업자 안전대 미체결",
+ "사다리가 미끄러지거나 넘어지지 않게 고정되어 있다": "사다리 고정 안 됨(미끄러짐·전도 위험)",
+ "발판 간격이 일정하고, 벽과 발판 사이가 15cm 이상 떨어져 있다": "사다리 발판 간격 불균일 또는 벽과 간격 부족",
+ "사다리 윗부분이 딛고 오르는 곳보다 60cm 이상 올라와 있다": "사다리 윗부분 60cm 이상 미돌출",
+ "사다리가 부러지거나 휜 곳 없이 튼튼하고, 접이식은 벌어지지 않게 잠겨 있다": "사다리 파손·휨 또는 접이식 잠금 불량",
+ "작업자가 맨 위 2칸에 올라서지 않고, 높이 2m 이상이면 안전대 등 추락방지조치를 했다": "사다리 맨 위 2칸 작업 또는 추락방지조치 미흡",
+ "바퀴에 브레이크·쐐기를 걸어 고정했고, 필요하면 아웃트리거를 설치했다": "이동식비계 바퀴 고정·아웃트리거 미흡",
+ "오르내리는 사다리가 비계에 견고하게 설치되어 있다": "이동식비계 승강 사다리 불안정",
+ "맨 위 작업발판에 안전난간이 설치되어 있다": "이동식비계 맨 위 안전난간 미설치",
+ "작업발판에 최대적재하중(250kg 이하)을 표시했고 그 이상 올리지 않았다": "이동식비계 최대적재하중 미표시 또는 초과 적재",
+ "작업발판 위에서 받침대·사다리를 쓰지 않는다": "이동식비계 작업발판 위 받침대·사다리 사용",
+ "비계를 옮길 때는 작업자가 모두 내려와 있다": "이동식비계 이동 시 작업자 탑승",
+ "흙막이·사면에 균열이나 붕괴 조짐이 없다": "흙막이·사면 균열·붕괴 조짐",
+ "굴착면 가장자리에 자재·장비를 쌓아두지 않았다": "굴착면 가장자리 자재·장비 적치",
+ "굴착 구간에 출입통제와 안전난간이 있다": "굴착 구간 출입통제·안전난간 미설치",
+ "장비 진입로가 안전하고 유도자가 배치되어 있다": "장비 진입로 위험 또는 유도자 미배치",
+ "지하 매설물(가스·전기·상하수도) 확인을 마쳤다": "지하 매설물 확인 안 함",
+ "장비 작업반경 안에 사람이 들어가지 못하게 통제한다": "장비 작업반경 출입통제 안 됨",
+ "신호수(유도자)가 배치되어 있다": "신호수(유도자) 미배치",
+ "후진경보기·브레이크 등 장비 상태가 이상 없다": "장비 후진경보기·브레이크 등 이상",
+ "양중물이 단단히 묶여 있고 줄걸이 상태가 좋다": "양중물 결속·줄걸이 불량",
+ "양중물 아래에 사람이 없다": "양중물 아래 사람 있음",
+ "같은 장소에서 다른 공종이 동시에 일하지 않거나, 구역을 나누고 신호수가 있다": "동시작업 구역 미분리",
+ "분전반 접지와 누전차단기가 정상이다": "분전반 접지·누전차단기 이상",
+ "전선이 물·바닥에 방치되어 있지 않다": "전선이 물·바닥에 방치",
+ "용접·용단 작업 장소에 불티 방지와 소화기가 있다": "용접·용단 장소 불티 방지·소화기 없음",
+ "가스용기가 넘어지지 않게 세워 고정되어 있다": "가스용기 미고정(전도 위험)",
+ "밀폐·환기 불량 장소 작업 시 환기를 확인했다": "밀폐·환기 불량 장소 환기 미확인",
+ "화기작업 중 감시자가 있고, 작업이 끝난 뒤 잔불을 확인한다": "화기작업 감시자 없음 또는 잔불 미확인",
+ "지붕 가장자리에 안전난간 또는 추락방호망이 설치되어 있다": "지붕 가장자리 안전난간·추락방호망 미설치",
+ "채광창·슬레이트 등 약한 곳에 덮개 또는 발판(폭 30cm 이상)이 설치되어 있다": "채광창·슬레이트 위 덮개·발판 미설치",
+ "지붕 위 작업자가 안전대를 걸고 있다": "지붕 작업자 안전대 미체결",
+ "비·강풍·결빙으로 지붕이 미끄러운 날은 작업하지 않는다": "미끄러운 지붕에서 작업",
+ "지붕으로 오르내리는 사다리 또는 승강설비가 안전하다": "지붕 승강 사다리·설비 불안정",
+ "평평하고 단단한 바닥에 설치했고, 아웃트리거를 끝까지 펼쳤다": "고소작업대 설치 바닥·아웃트리거 불량",
+ "탑승자가 안전대를 착용하고 걸이에 걸었다": "고소작업대 탑승자 안전대 미체결",
+ "작업대의 안전난간과 출입문이 정상이고 닫혀 있다": "고소작업대 안전난간·출입문 이상",
+ "과상승 방지·과부하 방지·비상정지 장치가 정상이다": "고소작업대 과상승·과부하·비상정지 장치 이상",
+ "작업대 아래에 사람이 들어오지 못하게 통제하고, 이동 시 신호수가 있다": "고소작업대 아래 통제·신호수 미흡"
+};
+function chkBad(it) { return CHECK_BAD[it.label] || (it.label + ' 불량'); }
+function chkBadLine(it) { return chkBad(it) + (it.memo ? ' — ' + it.memo : ''); }
+
 let curCheck = null;            // 지금 화면에 보여주는 점검 기록
 let curCheckSetId = 'common';   // 오늘 작업 종류
 let curCheckReadonly = false;   // 지난 기록이면 true
@@ -6685,7 +6739,7 @@ function renderCheckScreen() {
           ${item.photo ? `<img class="chk-open-thumb" src="${item.photo}" onclick="chkViewPhoto('${rec.id}','${item.key}','photo')" alt="점검 사진">` : ''}
           <div class="chk-open-info">
             <div class="chk-open-meta">${rec.date} · ${set.icon} ${escapeHtml(set.name)}</div>
-            <div class="chk-open-label">${escapeHtml(item.label)}</div>
+            <div class="chk-open-label">${escapeHtml(chkBad(item))}</div>
             ${item.memo ? `<div class="chk-open-memo">📝 ${escapeHtml(item.memo)}</div>` : ''}
             ${chkDueText(item) ? `<div class="chk-open-memo">${chkDueText(item)}</div>` : ''}
           </div>
@@ -6907,7 +6961,7 @@ function openCheckFix(recId, key) {
   if (!it) return;
   _chkFixCtx = { recId, key };
   _chkFixPhoto = it.fixPhoto || null;
-  document.getElementById('chkFixTarget').textContent = `${rec.date} · ${it.label}`;
+  document.getElementById('chkFixTarget').textContent = `${rec.date} · ${chkBad(it)}`;
   document.getElementById('chkFixDate').value = todayStrDash();
   document.getElementById('chkFixNote').value = it.fixNote || '';
   renderChkFixPhoto();
@@ -6943,7 +6997,7 @@ function startTbmFromCheck() {
   if (!curCheck) return;
   const ng = curCheck.items.filter(i => i.result === 'ng');
   if (!ng.length) return;
-  const lines = ng.map(i => `· ${i.label}${i.memo ? ' (' + i.memo + ')' : ''}`).join('\n');
+  const lines = ng.map(i => `· [불량] ${chkBad(i)}${i.memo ? ' (' + i.memo + ')' : ''}`).join('\n');
   curRiskType = 'action';
   curActionKind = 'share';
   linkedSourceId = null;
@@ -7097,7 +7151,7 @@ function buildOpenChecksText() {
     const bits = [];
     if (item.memo) bits.push(item.memo);
     if (item.due) bits.push('기한 ' + item.due.slice(5).replace('.', '/') + (chkIsOverdue(item) ? '(초과)' : ''));
-    return `${i + 1}) ${item.label}${bits.length ? ' — ' + bits.join(' · ') : ''}`;
+    return `${i + 1}) ${chkBad(item)}${bits.length ? ' — ' + bits.join(' · ') : ''}`;
   });
   return `[${site.name || '현장'}] 안전점검 미조치 ${open.length}건\n` + lines.join('\n') + '\n\n확인 후 조치 바랍니다.';
 }
@@ -7205,7 +7259,7 @@ async function shareTodayAll() {
       files.push(...await docToFiles('checkReportDoc', `점검표_${chkSetById(rec.setId).name}_${rec.date}_${k}`));
       const ng = rec.items.filter(i => i.result === 'ng');
       lines.push(`✅ 점검 ${chkSetById(rec.setId).name} — ` + (ng.length ? `불량 ${ng.length}건` : '전부 양호'));
-      ng.forEach(i => lines.push(` ↳ ${i.memo || i.label}${i.fixedAt ? ' (조치 완료)' : ' (미조치)'}`));
+      ng.forEach(i => lines.push(` ↳ ${chkBadLine(i)}${i.fixedAt ? ' (조치 완료)' : ' (미조치)'}`));
     }
     await shareContent(`${site.name || '현장'} 오늘 안전서류`, lines.join('\n'), files);
   } catch (e) { toast('❌ 공유 실패: ' + e.message, 4000); }
@@ -7247,7 +7301,7 @@ function buildTodayChecksText(recs) {
     const ok = rec.items.filter(i => i.result === 'ok').length;
     const ngs = rec.items.filter(i => i.result === 'ng');
     lines.push(`${set.icon} ${set.name} — ` + (ngs.length ? `양호 ${ok} · 불량 ${ngs.length}` : (ok ? '전부 양호' : '미확인')));
-    ngs.forEach(i => lines.push(` ↳ ${i.memo || i.label}${i.fixedAt ? ' (조치 완료)' : ' (미조치)'}`));
+    ngs.forEach(i => lines.push(` ↳ ${chkBadLine(i)}${i.fixedAt ? ' (조치 완료)' : ' (미조치)'}`));
   });
   return lines.join('\n');
 }
