@@ -247,6 +247,9 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
   display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all .15s;
 }
 .backup-reminder-banner:hover { background: rgba(255,209,102,.16); }
+.backup-reminder-banner.ok { background: rgba(6,214,160,.07); border-color: rgba(6,214,160,.3); }
+.backup-reminder-banner.ok:hover { background: rgba(6,214,160,.13); }
+.backup-reminder-banner.ok .brb-text b { color: var(--c-green); }
 .brb-icon { font-size: 20px; flex-shrink: 0; }
 .brb-text { font-size: 12px; color: var(--c-text); flex: 1; line-height: 1.5; }
 .brb-text b { color: var(--c-yellow); }
@@ -674,6 +677,76 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 .cat-counts { margin-top: 6px; display: flex; gap: 6px; flex-wrap: wrap; }
 .cat-arrow { font-size: 24px; color: var(--c-muted); flex-shrink: 0; }
 
+/* ════════════════ 오늘 점검 ════════════════ */
+.check-start-card {
+  background: rgba(6,214,160,.10); border: 2px solid var(--c-green);
+  border-radius: 14px; padding: 18px 16px; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 14px; cursor: pointer; transition: all .15s;
+}
+.check-start-card:hover { background: rgba(6,214,160,.16); }
+.csc-icon { font-size: 40px; flex-shrink: 0; }
+.csc-info { flex: 1; min-width: 0; }
+.csc-title { font-size: 20px; font-weight: 800; font-family: var(--font-title); }
+.csc-desc { font-size: 14.5px; color: var(--c-muted); margin-top: 4px; line-height: 1.5; }
+.csc-warn { font-size: 14.5px; color: var(--c-red); font-weight: 700; margin-top: 4px; }
+.chk-section-title { font-size: 15px; font-weight: 800; margin: 18px 0 10px; font-family: var(--font-title); }
+.chk-set-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.chk-set-chip {
+  padding: 11px 14px; border-radius: 22px; border: 1px solid var(--c-border2, var(--c-border));
+  background: var(--c-card); font-size: 14px; font-weight: 700; cursor: pointer;
+}
+.chk-set-chip.active { background: var(--c-green); color: #0f1117; border-color: var(--c-green); }
+.chk-item {
+  background: var(--c-card); border: 1px solid var(--c-border);
+  border-radius: 12px; padding: 14px; margin-bottom: 10px;
+}
+.chk-item.ng { border-color: var(--c-red); background: rgba(239,69,101,.07); }
+.chk-item.ok { border-color: rgba(6,214,160,.45); }
+.chk-label { font-size: 17px; font-weight: 700; line-height: 1.5; margin-bottom: 10px; word-break: keep-all; }
+.chk-btn-row { display: flex; gap: 8px; }
+.chk-btn {
+  flex: 1; min-height: 64px; border-radius: 10px; border: 2px solid var(--c-border);
+  background: var(--c-bg); color: var(--c-text); font-size: 18px; font-weight: 800; cursor: pointer;
+  font-family: var(--font-body);
+}
+.chk-btn.ok.on { background: var(--c-green); border-color: var(--c-green); color: #0f1117; }
+.chk-btn.ng.on { background: var(--c-red); border-color: var(--c-red); color: #fff; }
+.chk-photo-btn {
+  min-width: 64px; min-height: 64px; border-radius: 10px; border: 2px dashed var(--c-border);
+  background: var(--c-bg); font-size: 22px; cursor: pointer; color: var(--c-text);
+}
+.chk-photo-btn.has { border-style: solid; border-color: var(--c-blue); padding: 0; overflow: hidden; }
+.chk-photo-btn img { width: 64px; height: 64px; object-fit: cover; display: block; }
+.chk-extra { margin-top: 10px; }
+.chk-extra input[type=text], .chk-extra input[type=date] {
+  width: 100%; background: var(--c-bg); border: 1px solid var(--c-border); border-radius: 8px;
+  padding: 13px 12px; min-height: 50px; color: var(--c-text); font-size: 16px; font-family: var(--font-body); box-sizing: border-box;
+}
+.chk-open-item {
+  background: rgba(239,69,101,.07); border: 1px solid rgba(239,69,101,.35);
+  border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; display: flex; gap: 10px; align-items: center;
+}
+.chk-open-info { flex: 1; min-width: 0; }
+.chk-open-meta { font-size: 13.5px; color: var(--c-muted); }
+.chk-open-label { font-size: 16px; font-weight: 700; margin-top: 2px; line-height: 1.4; word-break: keep-all; }
+.chk-open-memo { font-size: 14px; color: var(--c-muted); margin-top: 2px; }
+.chk-open-thumb { width: 62px; height: 62px; object-fit: cover; border-radius: 8px; flex-shrink: 0; cursor: pointer; }
+.chk-fix-btn {
+  background: var(--c-green); color: #0f1117; border: none; border-radius: 10px;
+  padding: 16px 14px; min-width: 76px; font-size: 15.5px; font-weight: 800; cursor: pointer; flex-shrink: 0; font-family: var(--font-body);
+}
+.chk-tip { background: rgba(255,209,102,.12); border: 1px solid rgba(255,209,102,.4); border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; font-size: 14.5px; line-height: 1.6; }
+.chk-share-btn { width: 100%; min-height: 56px; border-radius: 12px; border: 2px solid var(--c-blue); background: rgba(74,158,255,.1); color: var(--c-text); font-size: 16px; font-weight: 800; cursor: pointer; margin-bottom: 14px; font-family: var(--font-body); }
+.chk-hist-item {
+  background: var(--c-card); border: 1px solid var(--c-border); border-radius: 12px;
+  padding: 12px 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; cursor: pointer;
+}
+.chk-photo-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.92); z-index: 900;
+  display: flex; align-items: center; justify-content: center; padding: 12px;
+}
+.chk-photo-overlay img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
 /* ════════════════ RISK TYPE CARDS ════════════════ */
 .risk-type-card {
   background: var(--c-card); border: 1px solid var(--c-border);
@@ -823,7 +896,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 .att-badge-work:hover { background: rgba(255,107,53,.15); color: var(--c-orange); border-color: var(--c-orange); }
 
 /* ════════════════ RISK REPORT DOC ════════════════ */
-#riskReportDoc {
+#riskReportDoc, #checkReportDoc {
   background: #fff; color: #111;
   font-family: '맑은 고딕', 'Malgun Gothic', -apple-system, sans-serif;
   width: 794px; padding: 48px 54px;
@@ -1120,6 +1193,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
       </div>
       <div class="cat-arrow">›</div>
     </div>
+    <div class="check-start-card" id="homeCheckCard" onclick="startCheckFromHome()" style="display:none;"></div>
     <div class="home-stats">
       <div class="stat-box"><div class="stat-num" id="statSites">0</div><div class="stat-lbl">등록 현장</div></div>
       <div class="stat-box"><div class="stat-num" id="statReports">0</div><div class="stat-lbl">총 기록 (교육+평가)</div></div>
@@ -1155,6 +1229,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
   </div>
   <div class="scroll-body">
     <div class="site-header-card" id="siteHeaderCard"></div>
+    <div class="check-start-card" id="checkStartCard" onclick="openTodayCheck()"></div>
     <div class="last-assess-card" id="lastAssessCard" style="display:none;"></div>
     <div class="pending-overview-card" id="pendingOverviewCard" onclick="goScreen('scPendingOverview');renderPendingOverview()" style="display:none;">
       <div class="poc-icon">⚠️</div>
@@ -1184,6 +1259,93 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
         </div>
         <div class="cat-arrow">›</div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN — 오늘 점검 (작업 전 핵심 점검 ○/× + 사진)
+══════════════════════════════════════════ -->
+<div class="screen" id="scCheck">
+  <div class="topnav">
+    <button class="topnav-back" onclick="openSite(curSiteId)">←</button>
+    <div style="flex:1; min-width:0;">
+      <div class="topnav-title">✅ 오늘 점검</div>
+      <div class="topnav-sub" id="scCheckSub"></div>
+    </div>
+    <button class="topnav-action ghost home-btn" onclick="goScreen('scHome')" title="처음으로">🏠 처음으로</button>
+  </div>
+  <div class="scroll-body">
+    <div id="chkOpenWrap"></div>
+    <div class="chk-section-title">오늘 하는 작업을 고르세요</div>
+    <div class="chk-set-wrap" id="chkSetWrap"></div>
+    <div id="chkReadonlyNote"></div>
+    <div id="chkItemsWrap"></div>
+    <div id="chkTbmWrap"></div>
+    <button class="btn btn-outline" style="margin-top:8px;min-height:54px;" onclick="openCheckReport()">🖨 이 점검표 출력 (A4)</button>
+    <button class="btn btn-success" style="margin-top:8px;min-height:58px;font-size:17px;" onclick="finishCheck()">점검 마치기</button>
+    <div style="font-size:11.5px;color:var(--c-muted);margin-top:8px;line-height:1.6;text-align:center;">
+      ○·× 를 누를 때마다 자동으로 저장됩니다.<br>
+      기본 항목은 참고용이며, 실제 현장 상황에 맞게 판단해 주세요.
+    </div>
+    <div id="chkHistWrap"></div>
+  </div>
+</div>
+<!-- 오늘 점검표 A4 출력 화면 -->
+<div class="screen" id="scCheckReport">
+  <div class="topnav">
+    <button class="topnav-back" onclick="goScreen('scCheck')">←</button>
+    <div style="flex:1;">
+      <div class="topnav-title">작업 전 안전점검표</div>
+      <div class="topnav-sub" id="scCheckReportSub"></div>
+    </div>
+    <button class="topnav-action ghost home-btn" onclick="goScreen('scHome')" title="처음으로">🏠 처음으로</button>
+    <button class="topnav-action" style="background:var(--c-green);color:#0f1117;" onclick="downloadCheckReport()">⬇ 저장</button>
+  </div>
+  <div class="scroll-body">
+    <div class="report-viewer-wrap">
+      <div class="report-viewer-label">📄 PRE-WORK SAFETY CHECK</div>
+      <div class="report-scale-wrap"><div id="checkReportScaleWrap"></div></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-success" onclick="downloadCheckReport()">⬇ 이미지 저장 (A4)</button>
+    </div>
+    <div class="btn-row" style="margin-top:8px;">
+      <button class="btn btn-outline" style="min-height:54px;" onclick="shareCheckReport()">📤 카톡·문자로 점검표 보내기</button>
+    </div>
+    <div style="font-size:11.5px;color:var(--c-muted);margin-top:10px;line-height:1.6;text-align:center;">
+      인쇄해서 점검자와 현장소장이 서명하면 점검 증빙이 됩니다.
+    </div>
+  </div>
+</div>
+<input type="file" id="chkPhotoInput" accept="image/*" style="display:none;" onchange="chkHandlePhoto(event)">
+
+<!-- 점검 조치 완료 입력 -->
+<div class="modal-backdrop" id="modalCheckFix">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-title">
+      <span>🛠️ 조치 완료 기록</span>
+      <button class="modal-close" onclick="closeModal('modalCheckFix')">✕</button>
+    </div>
+    <div id="chkFixTarget" style="font-size:14px;font-weight:700;line-height:1.5;margin-bottom:12px;"></div>
+    <div class="field">
+      <label>조치한 날짜</label>
+      <input type="date" id="chkFixDate">
+    </div>
+    <div class="field">
+      <label>어떻게 조치했나요 (선택)</label>
+      <input type="text" id="chkFixNote" placeholder="예: 개구부 덮개 설치, 안전난간 보강">
+    </div>
+    <div class="field">
+      <label>조치 후 사진 (선택)</label>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button class="chk-photo-btn" id="chkFixPhotoBtn" onclick="chkPickPhoto('fix')">📷</button>
+        <span style="font-size:12px;color:var(--c-muted);">조치한 모습을 찍어두면 증빙이 됩니다</span>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="closeModal('modalCheckFix')">취소</button>
+      <button class="btn btn-success" onclick="saveCheckFix()">조치 완료로 저장</button>
     </div>
   </div>
 </div>
@@ -1705,7 +1867,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
         </button>
         <button type="button" class="safety-toggle-btn" id="btnNoSafety" onclick="setSafetyMode(false)">
           <span class="stb-icon">👷</span>
-          <span class="stb-label">안전관리자 없음</span>
+          <span class="stb-label">현장소장이 담당</span>
         </button>
       </div>
     </div>
@@ -1966,6 +2128,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 <!-- OFFSCREEN REPORT -->
 <div class="offscreen"><div id="reportDoc"></div></div>
 <div class="offscreen"><div id="riskReportDoc"></div></div>
+<div class="offscreen"><div id="checkReportDoc"></div></div>
 
 <!-- ══════════════════════════════════════════
      JAVASCRIPT
@@ -2602,6 +2765,13 @@ function purgeOldTrash() {
     DB.trash[key] = DB.trash[key].filter(item => new Date(item.deletedAt).getTime() > cutoff);
     if (DB.trash[key].length < before) purged = true;
   });
+  // 완전히 삭제된 현장에 딸려 있던 점검 기록도 함께 정리 (휴지통에 현장이 남아있는 동안은 보존)
+  if (Array.isArray(DB.checks) && DB.checks.length) {
+    const valid = new Set([...DB.sites.map(s => s.id), ...DB.trash.sites.map(s => s.id)]);
+    const before = DB.checks.length;
+    DB.checks = DB.checks.filter(c => valid.has(c.siteId));
+    if (DB.checks.length < before) purged = true;
+  }
   if (purged) saveDB();
 }
 
@@ -2738,16 +2908,22 @@ function renderHome() {
     const hasData = DB.sites.length > 0;
     const lastBackup = DB.settings.lastBackupAt ? new Date(DB.settings.lastBackupAt) : null;
     const daysSinceBackup = lastBackup ? Math.floor((Date.now() - lastBackup.getTime()) / (24*60*60*1000)) : null;
-    if (hasData && (daysSinceBackup === null || daysSinceBackup >= 14)) {
+    // 데이터가 있으면 백업 상태를 항상 보여줌 — 14일 이상 지났거나 한 적이 없으면 경고색, 최근이면 안심색
+    if (hasData) {
+      const stale = (daysSinceBackup === null || daysSinceBackup >= 14);
       brBanner.style.display = '';
-      document.getElementById('backupReminderText').innerHTML = lastBackup
-        ? `백업한 지 <b>${daysSinceBackup}일</b>이 지났습니다. 데이터 보호를 위해 지금 백업해두세요.`
-        : `아직 <b>백업한 적이 없습니다</b>. 기기 문제로 데이터가 사라질 수 있으니 지금 백업해두세요.`;
+      brBanner.classList.toggle('ok', !stale);
+      document.getElementById('backupReminderText').innerHTML = !lastBackup
+        ? `아직 <b>백업한 적이 없습니다</b>. 기기 문제로 데이터가 사라질 수 있으니 지금 백업해두세요.`
+        : stale
+          ? `마지막 백업 <b>${daysSinceBackup}일 전</b>. 데이터 보호를 위해 지금 백업해두세요.`
+          : `마지막 백업 <b>${daysSinceBackup === 0 ? '오늘' : daysSinceBackup + '일 전'}</b> · 데이터가 안전하게 보관돼 있습니다.`;
     } else {
       brBanner.style.display = 'none';
     }
   }
 
+  renderHomeCheckCard();
   const list = document.getElementById('siteList');
   if (!DB.sites.length) {
     list.innerHTML = `<div class="empty-state"><div class="icon">🏗</div><p>등록된 현장이 없습니다.<br>아래 + 버튼을 눌러 현장을 추가하세요.</p></div>`;
@@ -2935,6 +3111,7 @@ function renderSiteScreen(id) {
       pocCard.style.display = 'none';
     }
   }
+  renderCheckStartCard(id);
   // work types grid rendered by renderWorkTypesScreen()
 }
 
@@ -3550,6 +3727,7 @@ function buildReportDoc(r) {
     </div>` : ''}
 
     <div class="rd-footer">
+      ${recordStampHtml(r)}
       본 확인서는 안전서류 단디(건설현장 3단디 캠페인·대구지방고용노동청 건설산재예방감독과)에 의해 자동 생성되었습니다.<br>
       산업안전보건법 제29조(근로자에 대한 안전보건교육) 및 같은 법 시행규칙 제26조·별표5 라목(특별교육 대상 작업별 교육) 준수
     </div>`;
@@ -3662,8 +3840,7 @@ function exportAllData() {
     DB.settings.lastBackupAt = new Date().toISOString();
     saveDB();
     toast('✅ 백업 파일 저장 완료');
-    const banner = document.getElementById('backupReminderBanner');
-    if (banner) banner.style.display = 'none';
+    renderHome();   // 홈의 백업 상태 표시를 "마지막 백업 오늘"로 갱신
   } catch (e) {
     toast('❌ 백업 실패: ' + e.message, 4000);
   }
@@ -3706,6 +3883,9 @@ function importAllData(event) {
         incSites.forEach(s => { if (!existingSiteIds.has(s.id)) { DB.sites.push(s); addedSites++; } });
         incReports.forEach(r => { if (!existingReportIds.has(r.id)) { DB.reports.push(r); addedReports++; } });
         incRisks.forEach(r => { if (!existingRiskIds.has(r.id)) { DB.risks.push(r); addedRisks++; } });
+        chkEnsure();
+        const existingCheckIds = new Set(DB.checks.map(x => x.id));
+        (incoming.checks || []).forEach(c => { if (!existingCheckIds.has(c.id)) DB.checks.push(c); });
 
         saveDB();
         renderHome();
@@ -3809,6 +3989,20 @@ function todayStrDash() {
 }
 function dotToDash(s) { return (s || '').replace(/\./g, '-'); }
 function dashToDot(s) { return (s || '').replace(/-/g, '.'); }
+
+/* 보고서 하단 "전산 기록" 한 줄 — 작성일자는 사용자가 고칠 수 있으므로,
+   앱이 자동으로 남긴 최초 저장·최종 수정 시각을 따로 찍어 기록의 신뢰성을 높임 */
+function recordStampHtml(rec) {
+  const f = iso => {
+    if (!iso) return null;
+    const d = new Date(iso), p = n => String(n).padStart(2, '0');
+    return `${d.getFullYear()}.${p(d.getMonth()+1)}.${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+  };
+  const c = f(rec.createdAt || rec.savedAt);
+  if (!c) return '';
+  const u = f(rec.updatedAt);
+  return `<div style="color:#777;font-size:9px;margin-bottom:4px;">전산 기록 — 최초 저장 ${c}${u && u !== c ? ` · 최종 수정 ${u}` : ''} (작성일자와 별개로 앱이 자동 기록)</div>`;
+}
 
 /* 최초작성일자(최종수정: 일자) 형식 문자열 생성 */
 function formatCreatedModified(rec) {
@@ -4257,17 +4451,17 @@ function renderHazardList() {
           <div class="hazard-field">
             <label>② 가능성</label>
             <select onchange="hazardRows[${i}].freq=+this.value;updateRiskLevel(${i})">
-              <option value="1" ${h.freq===1?'selected':''}>상 (1)</option>
+              <option value="3" ${h.freq===3?'selected':''}>상 (3)</option>
               <option value="2" ${h.freq===2?'selected':''}>중 (2)</option>
-              <option value="3" ${h.freq===3?'selected':''}>하 (3)</option>
+              <option value="1" ${h.freq===1?'selected':''}>하 (1)</option>
             </select>
           </div>
           <div class="hazard-field">
             <label>② 중대성</label>
             <select onchange="hazardRows[${i}].severity=+this.value;updateRiskLevel(${i})">
-              <option value="1" ${h.severity===1?'selected':''}>상 (1)</option>
+              <option value="3" ${h.severity===3?'selected':''}>상 (3)</option>
               <option value="2" ${h.severity===2?'selected':''}>중 (2)</option>
-              <option value="3" ${h.severity===3?'selected':''}>하 (3)</option>
+              <option value="1" ${h.severity===1?'selected':''}>하 (1)</option>
             </select>
           </div>
           <div class="hazard-field">
@@ -4352,7 +4546,7 @@ function updateRiskLevel(i) {
   if(hdr) { hdr.style.cssText='padding:2px 8px;font-size:10px;'; }
 }
 
-// KOSHA G-30-2023: 가능성(상1·중2·하3) × 중대성(상1·중2·하3) = 1~9
+// KOSHA G-30-2023: 가능성(상3·중2·하1) × 중대성(상3·중2·하1) = 1~9  (클수록 위험)
 // 1~2: 허용가능(Low) / 3~4: 낮음(Mid) / 6: 높음(High) / 9: 매우높음(Very High)
 function getRLClass(s) { if(s<=2) return 'rl-low'; if(s<=4) return 'rl-mid'; if(s<=6) return 'rl-high'; return 'rl-very'; }
 function getRLText(s)  { if(s<=2) return '허용 가능'; if(s<=4) return '낮음'; if(s<=6) return '높음'; return '매우 높음'; }
@@ -4685,8 +4879,8 @@ function buildRiskReportDoc(r) {
       return `<tr>
         <td class="tc rrd-hno" style="width:22px;">${i+1}</td>
         <td class="tl" style="min-width:110px;font-size:10px;">${escapeHtml(h.desc)||'—'}</td>
-        <td class="tc" style="width:28px;">${h.freq===1?'상':h.freq===2?'중':'하'}</td>
-        <td class="tc" style="width:28px;">${h.severity===1?'상':h.severity===2?'중':'하'}</td>
+        <td class="tc" style="width:28px;">${h.freq===3?'상':h.freq===2?'중':'하'}</td>
+        <td class="tc" style="width:28px;">${h.severity===3?'상':h.severity===2?'중':'하'}</td>
         <td class="tc ${rlc}" style="width:46px;font-size:9px;">${rlt}<br>(${s}점)</td>
         <td class="tl" style="min-width:130px;">${ckHtml}</td>
         <td class="tc ${doneItems.length===checks.length&&checks.length>0?'rrd-rl-low':pendItems.length>0?'rrd-rl-very':''}" style="width:44px;font-size:10px;font-weight:700;">${ckSummary}</td>
@@ -4715,7 +4909,7 @@ function buildRiskReportDoc(r) {
         <tbody>${rows}</tbody>
       </table>
       <div style="font-size:9px;color:#888;margin-top:4px;line-height:1.7;">
-        ※ 가능성·중대성: 상(1)·중(2)·하(3) &nbsp;|&nbsp; 위험성 수준: 매우높음(9)·높음(6)·낮음(3~4)·허용가능(1~2)<br>
+        ※ 가능성·중대성: 상(3)·중(2)·하(1) &nbsp;|&nbsp; 위험성 수준: 매우높음(9)·높음(6)·낮음(3~4)·허용가능(1~2)<br>
         ✔ 이행 완료 &nbsp; ✘ 미이행(개선 필요) — 미이행 항목은 조치결과에서 별도 등록
       </div>
     </div>`;
@@ -4914,7 +5108,7 @@ function buildRiskReportDoc(r) {
         </td>
       </tr>
     </table>
-    <div class="rrd-footer">본 보고서는 안전서류 단디(건설현장 3단디 캠페인·대구지방고용노동청 건설산재예방감독과)에 의해 자동 생성되었습니다.<br>산업안전보건법 제36조 위험성평가 · 고용노동부 고시 제2023-19호(위험성평가 고시) · KOSHA GUIDE G-30-2023 준수</div>
+    <div class="rrd-footer">${recordStampHtml(r)}본 보고서는 안전서류 단디(건설현장 3단디 캠페인·대구지방고용노동청 건설산재예방감독과)에 의해 자동 생성되었습니다.<br>산업안전보건법 제36조 위험성평가 · 고용노동부 고시 제2023-19호(위험성평가 고시) · KOSHA GUIDE G-30-2023 준수</div>
     ${(r.attendees||[]).length>0 && !(r.rtype==='action' && r.linkedRiskId) ? `
     <div class="rd-signsheet-page">
       <div class="rrd-attendees">${attHtml}</div>
@@ -4950,6 +5144,7 @@ function getUnsplittableRanges(sourceEl, scale) {
     '.ahi-pending-item',      // 조치 입력 폼의 체크리스트 항목
     '.rd-sign-table',         // 서명란 전체
     '.rrd-sign',
+    '.chk-rpt-photorow',      // 점검표 사진 행 (사진이 중간에 잘리지 않게)
   ].join(', ');
   const containerRect = sourceEl.getBoundingClientRect();
   const containerTop = containerRect.top;
@@ -6102,7 +6297,7 @@ function applyPresets() {
     const wi = +cb.dataset.wi;
     const hi = +cb.dataset.hi;
     const h  = KOSHA_HAZARDS[wi].hazards[hi];
-    // KOSHA 4단계→3단계 변환: 1→1(상), 2→2(중), 3~4→3(하)
+    // KOSHA 4단계→3단계 변환: 1→1(하), 2→2(중), 3~4→3(상)  (숫자가 클수록 위험)
     const toKosha = v => v <= 1 ? 1 : v <= 2 ? 2 : 3;
     const site2 = DB.sites.find(x => x.id === curSiteId) || {};
     hazardRows.push({
@@ -6226,6 +6421,647 @@ function showPdfSavedGuide() {
   openModal('modalPdfSaved');
 }
 
+/* ══════════════════════════════════════════════════════
+   오늘 점검 — 현장을 돌며 핵심 항목을 ○/× + 사진으로 확인
+   · 서류를 따로 쓰는 게 아니라 순회 결과가 그대로 기록이 됨
+   · ○/×를 누를 때마다 자동 저장 (저장 버튼을 잊어도 유실 없음)
+   · ×(불량) 항목은 "조치 완료"를 기록할 때까지 미조치로 남아
+     현장 화면과 다음 점검 화면 맨 위에 계속 표시됨
+   · 당일 기록만 수정 가능, 지난 기록은 조회와 조치 완료 입력만 가능
+══════════════════════════════════════════════════════ */
+const CHECK_SETS = [
+  { id: 'common', icon: '🦺', name: '기본 5가지', items: [
+    '개구부·단부에 덮개 또는 안전난간이 설치되어 있다',
+    '작업발판·사다리가 튼튼하게 설치되어 있다',
+    '작업자가 안전모·안전대 등 보호구를 착용했다',
+    '중장비 작업반경에 사람이 들어가지 못하게 통제한다',
+    '전선·가스·화기 주변이 정리되어 있고 소화기가 있다'
+  ]},
+  { id: 'height', icon: '⬆️', name: '고소·비계·거푸집', items: [
+    '비계·작업발판이 튼튼하고 벽이음·발판 고정이 되어 있다',
+    '안전난간(상부·중간·발끝막이)이 설치되어 있다',
+    '개구부 덮개가 고정되어 있고 표시가 되어 있다',
+    '추락방호망 또는 안전대 걸이 설비가 있다',
+    '높은 곳 작업자가 안전대를 걸고 작업한다'
+  ]},
+  { id: 'ladder', icon: '🪜', name: '사다리', law: '안전보건규칙 제24조(사다리식 통로 등의 구조)·제42조(추락의 방지)', items: [
+    '사다리가 미끄러지거나 넘어지지 않게 고정되어 있다',
+    '발판 간격이 일정하고, 벽과 발판 사이가 15cm 이상 떨어져 있다',
+    '사다리 윗부분이 딛고 오르는 곳보다 60cm 이상 올라와 있다',
+    '사다리가 부러지거나 휜 곳 없이 튼튼하고, 접이식은 벌어지지 않게 잠겨 있다',
+    '작업자가 맨 위 2칸에 올라서지 않고, 높이 2m 이상이면 안전대 등 추락방지조치를 했다'
+  ]},
+  { id: 'mscaf', icon: '🏗️', name: '이동식비계', law: '안전보건규칙 제68조(이동식비계)', items: [
+    '바퀴에 브레이크·쐐기를 걸어 고정했고, 필요하면 아웃트리거를 설치했다',
+    '오르내리는 사다리가 비계에 견고하게 설치되어 있다',
+    '맨 위 작업발판에 안전난간이 설치되어 있다',
+    '작업발판에 최대적재하중(250kg 이하)을 표시했고 그 이상 올리지 않았다',
+    '작업발판 위에서 받침대·사다리를 쓰지 않는다',
+    '비계를 옮길 때는 작업자가 모두 내려와 있다'
+  ]},
+  { id: 'dig', icon: '⛏️', name: '굴착·토공', items: [
+    '흙막이·사면에 균열이나 붕괴 조짐이 없다',
+    '굴착면 가장자리에 자재·장비를 쌓아두지 않았다',
+    '굴착 구간에 출입통제와 안전난간이 있다',
+    '장비 진입로가 안전하고 유도자가 배치되어 있다',
+    '지하 매설물(가스·전기·상하수도) 확인을 마쳤다'
+  ]},
+  { id: 'heavy', icon: '🚜', name: '중장비·양중·운반', items: [
+    '장비 작업반경 안에 사람이 들어가지 못하게 통제한다',
+    '신호수(유도자)가 배치되어 있다',
+    '후진경보기·브레이크 등 장비 상태가 이상 없다',
+    '양중물이 단단히 묶여 있고 줄걸이 상태가 좋다',
+    '양중물 아래에 사람이 없다'
+  ]},
+  { id: 'fire', icon: '⚡', name: '전기·용접·화재', items: [
+    '분전반 접지와 누전차단기가 정상이다',
+    '전선이 물·바닥에 방치되어 있지 않다',
+    '용접·용단 작업 장소에 불티 방지와 소화기가 있다',
+    '가스용기가 넘어지지 않게 세워 고정되어 있다',
+    '밀폐·환기 불량 장소 작업 시 환기를 확인했다'
+  ]}
+];
+
+let curCheck = null;            // 지금 화면에 보여주는 점검 기록
+let curCheckSetId = 'common';   // 오늘 작업 종류
+let curCheckReadonly = false;   // 지난 기록이면 true
+let _chkPhotoTarget = null;     // {kind:'item', key} | {kind:'fix'}
+let _chkFixCtx = null;          // 조치 완료 입력 중인 {recId, key}
+let _chkFixPhoto = null;
+let _chkMemoTimer = null;
+
+function chkEnsure() { if (!Array.isArray(DB.checks)) DB.checks = []; }
+function chkSetById(id) { return CHECK_SETS.find(s => s.id === id) || CHECK_SETS[0]; }
+function chkFind(siteId, date, setId) {
+  chkEnsure();
+  return DB.checks.find(c => c.siteId === siteId && c.date === date && c.setId === setId);
+}
+function chkNewRecord(setId) {
+  const set = chkSetById(setId);
+  return {
+    id: 'chk' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    siteId: curSiteId,
+    date: todayStr(),
+    setId: set.id,
+    items: set.items.map((label, i) => ({
+      key: set.id + i, label, result: null, photo: null, memo: '',
+      assignee: '', due: '',
+      fixedAt: null, fixNote: '', fixPhoto: null
+    })),
+    createdAt: new Date().toISOString(),
+    savedAt: null
+  };
+}
+function chkPersist(rec) {
+  chkEnsure();
+  if (!rec.items.some(i => i.result)) return;   // 아직 아무것도 체크하지 않았으면 저장 안 함
+  rec.savedAt = new Date().toISOString();
+  if (!DB.checks.includes(rec)) DB.checks.push(rec);
+  saveDB();
+}
+function chkLoadToday() {
+  curCheck = chkFind(curSiteId, todayStr(), curCheckSetId) || chkNewRecord(curCheckSetId);
+  curCheckReadonly = false;
+}
+/* 이 현장에서 ×(불량)로 기록됐고 아직 조치 완료가 없는 항목 목록 */
+function chkOpenItems(siteId) {
+  chkEnsure();
+  const out = [];
+  DB.checks.filter(c => c.siteId === siteId).forEach(c => {
+    c.items.forEach(it => { if (it.result === 'ng' && !it.fixedAt) out.push({ rec: c, item: it }); });
+  });
+  out.sort((a, b) => b.rec.date.localeCompare(a.rec.date));
+  return out;
+}
+
+function chkIsOverdue(it) {
+  return it.result === 'ng' && !it.fixedAt && !!it.due && it.due < todayStr();
+}
+function chkDueText(it) {
+  const parts = [];
+  if (it.due) parts.push((chkIsOverdue(it) ? '⏰ <b style="color:var(--c-red);">기한 초과 ' : '⏰ 기한 ') + it.due.slice(5) + (chkIsOverdue(it) ? '</b>' : ''));
+  return parts.join(' · ');
+}
+
+/* 현장 화면 상단의 큰 "오늘 점검 시작" 카드 */
+function renderCheckStartCard(siteId) {
+  const card = document.getElementById('checkStartCard');
+  if (!card) return;
+  chkEnsure();
+  const today = todayStr();
+  const todays = DB.checks.filter(c => c.siteId === siteId && c.date === today);
+  let ok = 0, ng = 0;
+  todays.forEach(c => c.items.forEach(i => { if (i.result === 'ok') ok++; else if (i.result === 'ng') ng++; }));
+  const openList = chkOpenItems(siteId);
+  const open = openList.length;
+  const overdue = openList.filter(x => chkIsOverdue(x.item)).length;
+  const desc = (ok + ng) === 0
+    ? '작업 시작 전, 현장을 돌며 핵심 5가지를 확인하세요'
+    : `오늘 ${ok + ng}개 확인 · 양호 ${ok} · 불량 ${ng}`;
+  card.innerHTML = chkCardInner(desc, open, overdue, (ok + ng) > 0);
+}
+function chkCardInner(desc, open, overdue, started) {
+  return `
+    <div class="csc-icon">✅</div>
+    <div class="csc-info">
+      <div class="csc-title">${started ? '오늘 점검 이어서 하기' : '오늘 점검 시작'}</div>
+      <div class="csc-desc">${desc}</div>
+      ${open > 0 ? `<div class="csc-warn">⚠ 아직 조치 안 된 점검 ${open}건${overdue ? ` · 기한 초과 ${overdue}건` : ''}</div>` : ''}
+    </div>
+    <div class="cat-arrow">›</div>`;
+}
+/* 현장이 하나뿐이면 홈 화면에서 바로 점검을 시작할 수 있게 함 (현장이 여러 개면 숨김) */
+function renderHomeCheckCard() {
+  const card = document.getElementById('homeCheckCard');
+  if (!card) return;
+  if (DB.sites.length !== 1) { card.style.display = 'none'; return; }
+  const sid = DB.sites[0].id;
+  chkEnsure();
+  const today = todayStr();
+  let ok = 0, ng = 0;
+  DB.checks.filter(c => c.siteId === sid && c.date === today).forEach(c => c.items.forEach(i => { if (i.result === 'ok') ok++; else if (i.result === 'ng') ng++; }));
+  const openList = chkOpenItems(sid);
+  const overdue = openList.filter(x => chkIsOverdue(x.item)).length;
+  const desc = (ok + ng) === 0 ? '오늘 점검을 아직 하지 않았습니다' : `오늘 ${ok + ng}개 확인 · 양호 ${ok} · 불량 ${ng}`;
+  card.style.display = '';
+  card.innerHTML = chkCardInner(desc, openList.length, overdue, (ok + ng) > 0);
+}
+function startCheckFromHome() {
+  if (DB.sites.length !== 1) return;
+  curSiteId = DB.sites[0].id;
+  openTodayCheck();
+}
+
+function openTodayCheck() {
+  if (!CHECK_SETS.some(s => s.id === curCheckSetId)) curCheckSetId = 'common';
+  chkLoadToday();
+  goScreen('scCheck');
+  renderCheckScreen();
+}
+function setCheckSet(id) {
+  curCheckSetId = id;
+  chkLoadToday();
+  renderCheckScreen();
+}
+function openPastCheck(recId) {
+  chkEnsure();
+  const rec = DB.checks.find(c => c.id === recId);
+  if (!rec) return;
+  curCheck = rec;
+  curCheckSetId = rec.setId;
+  curCheckReadonly = rec.date !== todayStr();
+  renderCheckScreen();
+  window.scrollTo(0, 0);
+}
+
+function renderCheckScreen() {
+  const site = DB.sites.find(x => x.id === curSiteId) || {};
+  document.getElementById('scCheckSub').textContent = `${site.name || ''} · ${curCheck ? curCheck.date : todayStr()}`;
+
+  // 1) 미조치 점검 항목 (맨 위에 고정)
+  const open = chkOpenItems(curSiteId);
+  const openWrap = document.getElementById('chkOpenWrap');
+  if (open.length) {
+    openWrap.innerHTML = `<div class="chk-section-title" style="color:var(--c-red);margin-top:0;">⚠ 아직 조치 안 된 점검 ${open.length}건</div>` +
+      open.map(({ rec, item }) => {
+        const set = chkSetById(rec.setId);
+        return `<div class="chk-open-item">
+          ${item.photo ? `<img class="chk-open-thumb" src="${item.photo}" onclick="chkViewPhoto('${rec.id}','${item.key}','photo')" alt="점검 사진">` : ''}
+          <div class="chk-open-info">
+            <div class="chk-open-meta">${rec.date} · ${set.icon} ${escapeHtml(set.name)}</div>
+            <div class="chk-open-label">${escapeHtml(item.label)}</div>
+            ${item.memo ? `<div class="chk-open-memo">📝 ${escapeHtml(item.memo)}</div>` : ''}
+            ${chkDueText(item) ? `<div class="chk-open-memo">${chkDueText(item)}</div>` : ''}
+          </div>
+          <button class="chk-fix-btn" onclick="openCheckFix('${rec.id}','${item.key}')">✅ 조치<br>완료</button>
+        </div>`;
+      }).join('') +
+      `<button class="chk-share-btn" onclick="shareOpenChecks()">📤 미조치 ${open.length}건 카톡·문자로 공유</button>`;
+  } else {
+    openWrap.innerHTML = '';
+  }
+
+  // 2) 작업 종류 선택
+  document.getElementById('chkSetWrap').innerHTML = CHECK_SETS.map(s =>
+    `<div class="chk-set-chip ${s.id === curCheckSetId ? 'active' : ''}" onclick="setCheckSet('${s.id}')">${s.icon} ${escapeHtml(s.name)}</div>`
+  ).join('');
+
+  // 3) 점검 항목
+  const ro = curCheckReadonly;
+  document.getElementById('chkReadonlyNote').innerHTML = ro
+    ? `<div class="last-assess-card warn"><div class="lac-icon">🔒</div><div class="lac-text"><b>${curCheck.date}</b> 지난 기록입니다. 내용은 고칠 수 없고, 불량 항목의 조치 완료만 기록할 수 있습니다.</div></div>`
+    : (curCheck.items.some(i => i.result === 'ng' && !i.fixedAt)
+        ? `<div class="chk-tip">💡 불량은 <b>바로 조치하고, 위쪽 목록에서 '조치 완료'를 눌러 기록</b>해 두는 것이 가장 좋습니다. 조치 기록까지 남아 있으면 점검의 가치가 가장 큽니다.</div>`
+        : '');
+  const done = curCheck.items.filter(i => i.result && !i.extra).length;
+  const totalN = curCheck.items.filter(i => !i.extra).length;
+  const savedAt = curCheck.savedAt ? new Date(curCheck.savedAt) : null;
+  const timeTxt = savedAt ? ` · 마지막 저장 ${String(savedAt.getHours()).padStart(2,'0')}:${String(savedAt.getMinutes()).padStart(2,'0')}` : '';
+  const head = `<div class="label-sm" style="margin-bottom:10px;">${chkSetById(curCheck.setId).icon} ${escapeHtml(chkSetById(curCheck.setId).name)} — ${done}/${totalN}개 확인${timeTxt}${chkSetById(curCheck.setId).law ? `<div style="margin-top:4px;font-weight:400;opacity:.85;">근거: ${escapeHtml(chkSetById(curCheck.setId).law)}</div>` : ''}</div>${ro ? '' : `<div style="font-size:14px;line-height:1.5;margin:-2px 0 12px;color:var(--c-muted);">현장을 한 바퀴 돌며 <b style="color:var(--c-text);">모두 확인했으면 ○</b>, <b style="color:var(--c-text);">한 곳이라도 문제면 ×</b>를 누르세요.</div>`}`;
+  const itemsHtml = curCheck.items.map(it => {
+    const cls = it.result === 'ng' ? 'ng' : it.result === 'ok' ? 'ok' : '';
+    const photoBtn = it.photo
+      ? `<button class="chk-photo-btn has" onclick="chkViewPhoto('${curCheck.id}','${it.key}','photo')" aria-label="사진 보기"><img src="${it.photo}" alt=""></button>`
+      : (ro ? '' : `<button class="chk-photo-btn" onclick="chkPickPhoto('item','${it.key}')" aria-label="사진 찍기">📷</button>`);
+    const retake = (it.photo && !ro) ? `<button class="chk-photo-btn" style="min-width:44px;font-size:16px;" onclick="chkPickPhoto('item','${it.key}')" aria-label="사진 다시 찍기">🔄</button>` : '';
+    let extra = '';
+    if (it.result === 'ng') {
+      if (ro) {
+        extra = (it.memo ? `<div class="chk-open-memo" style="margin-top:8px;">📝 ${escapeHtml(it.memo)}</div>` : '') +
+          (chkDueText(it) ? `<div class="chk-open-memo" style="margin-top:4px;">${chkDueText(it)}</div>` : '') +
+          (it.fixedAt
+            ? `<div style="margin-top:8px;font-size:13px;color:var(--c-green);font-weight:700;">✅ ${it.fixedAt} 조치 완료${it.fixNote ? ' · ' + escapeHtml(it.fixNote) : ''}</div>`
+            : `<div style="margin-top:8px;"><button class="chk-fix-btn" onclick="openCheckFix('${curCheck.id}','${it.key}')">✅ 조치 완료 기록</button></div>`);
+      } else {
+        extra = `<div class="chk-extra"><input type="text" placeholder="어디가 문제인가요? (예: 3층 동측 사다리)" value="${escapeHtml(it.memo)}" oninput="chkSetMemo('${it.key}',this.value)">` +
+          (it.fixedAt ? `<div style="margin-top:8px;font-size:13px;color:var(--c-green);font-weight:700;">✅ ${it.fixedAt} 조치 완료${it.fixNote ? ' · ' + escapeHtml(it.fixNote) : ''}</div>` : '') +
+          `</div>`;
+      }
+    }
+    const btns = ro
+      ? `<div class="chk-btn-row"><div class="chk-btn ${it.result === 'ok' ? 'ok on' : it.result === 'ng' ? 'ng on' : ''}" style="display:flex;align-items:center;justify-content:center;cursor:default;">${it.result === 'ok' ? '○ 양호' : it.result === 'ng' ? '× 불량' : '미확인'}</div>${photoBtn}</div>`
+      : `<div class="chk-btn-row">
+          <button class="chk-btn ok ${it.result === 'ok' ? 'on' : ''}" onclick="setCheckResult('${it.key}','ok')">○ 양호</button>
+          <button class="chk-btn ng ${it.result === 'ng' ? 'on' : ''}" onclick="setCheckResult('${it.key}','ng')">× 불량</button>
+          ${photoBtn}${retake}
+        </div>`;
+    let more = '';
+    if (!ro && it.result === 'ng' && !it.fixedAt) {
+      more = `<div style="display:flex;gap:8px;margin-top:10px;"><button class="btn btn-outline btn-sm" style="flex:1;min-height:46px;font-size:15px;" onclick="chkAddSpot('${it.key}')">+ 불량 한 곳 더</button>` +
+        (it.extra ? `<button class="btn btn-outline btn-sm" style="min-height:46px;font-size:15px;" onclick="chkRemoveSpot('${it.key}')">이 줄 빼기</button>` : '') + `</div>`;
+    }
+    return `<div class="chk-item ${cls}" ${it.extra ? 'style="margin-left:14px;"' : ''}><div class="chk-label">${it.extra ? '↳ (같은 항목, 다른 위치) ' : ''}${escapeHtml(it.label)}</div>${btns}${extra}${more}</div>`;
+  }).join('');
+  const addBox = ro ? '' : `<div class="chk-extra" style="margin-bottom:10px;display:flex;gap:8px;">
+      <input type="text" id="chkCustomInput" placeholder="이 현장만의 점검 항목 직접 추가">
+      <button class="btn btn-outline btn-sm" style="flex-shrink:0;" onclick="addCheckCustom()">+ 추가</button>
+    </div>`;
+  document.getElementById('chkItemsWrap').innerHTML = head + itemsHtml + addBox;
+
+  // 4) 오늘 발견된 불량 → 근로자공유(TBM)로 연결
+  const ngItems = curCheck.items.filter(i => i.result === 'ng');
+  document.getElementById('chkTbmWrap').innerHTML = (ngItems.length && !ro)
+    ? `<div class="pending-overview-card" style="background:rgba(74,158,255,.08);border-color:rgba(74,158,255,.35);" onclick="startTbmFromCheck()">
+        <div class="poc-icon">📢</div>
+        <div class="poc-info"><div class="poc-title" style="color:var(--c-blue);">발견된 위험을 TBM으로 알리기</div>
+        <div class="poc-desc">불량 ${ngItems.length}건 내용이 근로자공유 기록에 자동으로 채워집니다</div></div>
+        <div class="cat-arrow">›</div></div>`
+    : '';
+
+  // 5) 지난 점검 기록
+  chkEnsure();
+  const hist = DB.checks.filter(c => c.siteId === curSiteId && c.id !== curCheck.id)
+    .sort((a, b) => (b.date + (b.savedAt || '')).localeCompare(a.date + (a.savedAt || ''))).slice(0, 15);
+  document.getElementById('chkHistWrap').innerHTML = hist.length
+    ? `<div class="chk-section-title">지난 점검 기록</div>` + hist.map(c => {
+        const set = chkSetById(c.setId);
+        const okN = c.items.filter(i => i.result === 'ok').length;
+        const ngN = c.items.filter(i => i.result === 'ng').length;
+        const openN = c.items.filter(i => i.result === 'ng' && !i.fixedAt).length;
+        return `<div class="chk-hist-item" onclick="openPastCheck('${c.id}')">
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:14px;font-weight:700;">${c.date} · ${set.icon} ${escapeHtml(set.name)}</div>
+            <div style="font-size:12px;color:var(--c-muted);margin-top:3px;">양호 ${okN} · 불량 ${ngN}${openN ? ` · <span style="color:var(--c-red);font-weight:700;">미조치 ${openN}</span>` : ''}</div>
+          </div>
+          <div class="cat-arrow">›</div></div>`;
+      }).join('')
+    : '';
+}
+
+function setCheckResult(key, res) {
+  if (curCheckReadonly || !curCheck) return;
+  const it = curCheck.items.find(i => i.key === key);
+  if (!it) return;
+  it.result = (it.result === res) ? null : res;
+  if (it.result !== 'ng') { it.fixedAt = null; it.fixNote = ''; it.fixPhoto = null; }
+  if (it.extra && it.result !== 'ng') curCheck.items = curCheck.items.filter(i => i.key !== key);
+  chkPersist(curCheck);
+  renderCheckScreen();
+}
+function chkSetMemo(key, v) {
+  if (curCheckReadonly || !curCheck) return;
+  const it = curCheck.items.find(i => i.key === key);
+  if (!it) return;
+  it.memo = v;
+  clearTimeout(_chkMemoTimer);
+  _chkMemoTimer = setTimeout(() => chkPersist(curCheck), 500);
+}
+function addCheckCustom() {
+  if (curCheckReadonly || !curCheck) return;
+  const inp = document.getElementById('chkCustomInput');
+  const label = (inp.value || '').trim();
+  if (!label) { toast('❌ 추가할 점검 내용을 입력하세요'); return; }
+  curCheck.items.push({
+    key: 'c' + Date.now().toString(36), label, result: null, photo: null, memo: '',
+    assignee: '', due: '',
+    fixedAt: null, fixNote: '', fixPhoto: null
+  });
+  chkPersist(curCheck);
+  renderCheckScreen();
+}
+
+function chkAddSpot(key) {
+  if (curCheckReadonly || !curCheck) return;
+  const idx = curCheck.items.findIndex(i => i.key === key);
+  if (idx < 0) return;
+  const src = curCheck.items[idx];
+  let at = idx + 1;
+  while (at < curCheck.items.length && curCheck.items[at].extra && curCheck.items[at].baseKey === (src.baseKey || src.key)) at++;
+  curCheck.items.splice(at, 0, {
+    key: (src.baseKey || src.key) + 'x' + Date.now().toString(36), baseKey: src.baseKey || src.key, extra: true,
+    label: src.label, result: 'ng', photo: null, memo: '', assignee: '', due: '',
+    fixedAt: null, fixNote: '', fixPhoto: null
+  });
+  chkPersist(curCheck);
+  renderCheckScreen();
+}
+function chkRemoveSpot(key) {
+  if (curCheckReadonly || !curCheck) return;
+  const it = curCheck.items.find(i => i.key === key);
+  if (!it || !it.extra) return;
+  curCheck.items = curCheck.items.filter(i => i.key !== key);
+  chkPersist(curCheck);
+  renderCheckScreen();
+}
+
+function chkSetField(key, field, v) {
+  if (curCheckReadonly || !curCheck) return;
+  const it = curCheck.items.find(i => i.key === key);
+  if (!it) return;
+  it[field] = v;
+  clearTimeout(_chkMemoTimer);
+  _chkMemoTimer = setTimeout(() => chkPersist(curCheck), 400);
+}
+
+/* 사진 */
+function chkPickPhoto(kind, key) {
+  _chkPhotoTarget = { kind, key: key || null };
+  document.getElementById('chkPhotoInput').click();
+}
+async function chkHandlePhoto(e) {
+  const file = e.target.files[0];
+  e.target.value = '';
+  if (!file || !_chkPhotoTarget) return;
+  try {
+    const p = await readAndCompressPhoto(file);
+    const small = await compressImageDataUrl(p.dataUrl, 960, 0.7);   // 매일 쌓이는 사진이라 용량을 한 번 더 줄임
+    if (_chkPhotoTarget.kind === 'fix') {
+      _chkFixPhoto = small;
+      renderChkFixPhoto();
+    } else if (curCheck && !curCheckReadonly) {
+      const it = curCheck.items.find(i => i.key === _chkPhotoTarget.key);
+      if (it) { it.photo = small; chkPersist(curCheck); renderCheckScreen(); }
+    }
+  } catch (err) {
+    toast('❌ 사진을 불러오지 못했습니다');
+  }
+}
+function chkViewPhoto(recId, key, field) {
+  chkEnsure();
+  const rec = (curCheck && curCheck.id === recId) ? curCheck : DB.checks.find(c => c.id === recId);
+  const it = rec && rec.items.find(i => i.key === key);
+  const src = it && it[field];
+  if (!src) return;
+  const ov = document.createElement('div');
+  ov.className = 'chk-photo-overlay';
+  ov.onclick = () => ov.remove();
+  const img = document.createElement('img');
+  img.src = src;
+  ov.appendChild(img);
+  document.body.appendChild(ov);
+}
+
+/* 조치 완료 기록 */
+function openCheckFix(recId, key) {
+  chkEnsure();
+  const rec = DB.checks.find(c => c.id === recId) || (curCheck && curCheck.id === recId ? curCheck : null);
+  const it = rec && rec.items.find(i => i.key === key);
+  if (!it) return;
+  _chkFixCtx = { recId, key };
+  _chkFixPhoto = it.fixPhoto || null;
+  document.getElementById('chkFixTarget').textContent = `${rec.date} · ${it.label}`;
+  document.getElementById('chkFixDate').value = todayStrDash();
+  document.getElementById('chkFixNote').value = it.fixNote || '';
+  renderChkFixPhoto();
+  openModal('modalCheckFix');
+}
+function renderChkFixPhoto() {
+  const btn = document.getElementById('chkFixPhotoBtn');
+  if (!btn) return;
+  if (_chkFixPhoto) { btn.className = 'chk-photo-btn has'; btn.innerHTML = `<img src="${_chkFixPhoto}" alt="">`; }
+  else { btn.className = 'chk-photo-btn'; btn.textContent = '📷'; }
+}
+function saveCheckFix() {
+  if (!_chkFixCtx) return;
+  chkEnsure();
+  const rec = DB.checks.find(c => c.id === _chkFixCtx.recId);
+  const it = rec && rec.items.find(i => i.key === _chkFixCtx.key);
+  if (!it) { closeModal('modalCheckFix'); return; }
+  const dateVal = document.getElementById('chkFixDate').value;
+  it.fixedAt = dateVal ? dashToDot(dateVal) : todayStr();
+  it.fixNote = document.getElementById('chkFixNote').value.trim();
+  it.fixPhoto = _chkFixPhoto || null;
+  rec.savedAt = new Date().toISOString();
+  saveDB();
+  closeModal('modalCheckFix');
+  _chkFixCtx = null; _chkFixPhoto = null;
+  toast('✅ 조치 완료로 기록했습니다');
+  renderCheckScreen();
+  renderCheckStartCard(curSiteId);
+}
+
+/* 오늘 발견된 불량 → 근로자공유(TBM) 기록에 내용 미리 채우기 */
+function startTbmFromCheck() {
+  if (!curCheck) return;
+  const ng = curCheck.items.filter(i => i.result === 'ng');
+  if (!ng.length) return;
+  const lines = ng.map(i => `· ${i.label}${i.memo ? ' (' + i.memo + ')' : ''}`).join('\n');
+  curRiskType = 'action';
+  curActionKind = 'share';
+  linkedSourceId = null;
+  goNewRisk();
+  document.getElementById('rInpActionType').value = '근로자공유';
+  document.getElementById('rInpWork').value = '작업 전 점검 결과 공유';
+  document.getElementById('rInpMemo').value = `[오늘 점검에서 발견된 위험]\n${lines}`;
+}
+
+function finishCheck() {
+  const ng = curCheck ? curCheck.items.filter(i => i.result === 'ng').length : 0;
+  const done = curCheck ? curCheck.items.filter(i => i.result).length : 0;
+  if (!curCheckReadonly) {
+    toast(done === 0 ? '확인한 항목이 없습니다' : (ng ? `✅ 점검 저장 · 불량 ${ng}건은 조치 완료 때까지 표시됩니다` : '✅ 점검 저장 · 모두 양호'), 3200);
+  }
+  openSite(curSiteId);
+}
+
+
+/* ══════════ 오늘 점검표 A4 출력 ══════════ */
+function buildCheckReportDoc(rec) {
+  const site = DB.sites.find(x => x.id === rec.siteId) || {};
+  const set = chkSetById(rec.setId);
+  const inspector = (DB.settings && DB.settings.userName) || site.manager || '';
+  const docNo = `CHK-${rec.date.replace(/\./g, '')}-${rec.id.slice(-4).toUpperCase()}`;
+  const okN = rec.items.filter(i => i.result === 'ok').length;
+  const ngN = rec.items.filter(i => i.result === 'ng').length;
+  const noN = rec.items.length - okN - ngN;
+  const rows = rec.items.map((it, i) => {
+    const res = it.result === 'ok' ? '<b style="color:#1e8449;font-size:13px;">○</b>'
+      : it.result === 'ng' ? '<b style="color:#c0392b;font-size:13px;">×</b>' : '<span style="color:#aaa;">—</span>';
+    const fix = it.result !== 'ng' ? ''
+      : it.fixedAt ? `<span style="color:#1e8449;font-weight:700;">✔ ${it.fixedAt} 조치 완료</span>${it.fixNote ? '<br>' + escapeHtml(it.fixNote) : ''}`
+      : `<span style="color:#c0392b;font-weight:700;">미조치</span>${it.due ? '<br>기한 ' + it.due : ''}`;
+    return `<tr>
+      <td class="tc">${i + 1}</td>
+      <td class="tl">${escapeHtml(it.label)}</td>
+      <td class="tc">${res}</td>
+      <td class="tl">${escapeHtml(it.memo || '')}</td>
+      <td class="tl">${fix}</td>
+    </tr>`;
+  }).join('');
+
+  // 사진: 불량 항목 사진(조치 후 사진 포함)을 3장씩 한 줄로
+  const photos = [];
+  rec.items.forEach((it, i) => {
+    if (it.photo) photos.push({ src: it.photo, cap: `${i + 1}. ${it.result === 'ng' ? '불량' : it.result === 'ok' ? '양호' : '점검'} 사진` });
+    if (it.fixPhoto) photos.push({ src: it.fixPhoto, cap: `${i + 1}. 조치 후 사진` });
+  });
+  let photoHtml = '';
+  for (let k = 0; k < photos.length; k += 3) {
+    photoHtml += `<div class="rrd-photos chk-rpt-photorow" style="margin-bottom:8px;">` +
+      photos.slice(k, k + 3).map(ph => `<div class="rrd-photo"><img src="${ph.src}" style="height:150px;"><div class="rrd-photo-cap">${escapeHtml(ph.cap)}</div></div>`).join('') + `</div>`;
+  }
+  const signCell = (label, name) => `<td style="width:33%;"><span class="sl">${label}</span>
+      <div class="sign-row"><span class="sr-label">성명</span><span class="sr-line">${escapeHtml(name || '')}</span></div>
+      <div class="sign-row sig"><span class="sr-label">서명</span><span class="sr-line"></span></div></td>`;
+  const hasSafety = site.hasSafetyManager !== false;
+  document.getElementById('checkReportDoc').innerHTML = `
+    <div class="rrd-header" style="border-bottom-color:#06b88a;">
+      <div>
+        <div style="font-size:12px;font-weight:700;color:#EF4565;">안전서류 단디</div>
+        <div style="font-size:10px;color:#888;">${escapeHtml(site.company) || ''}</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="rrd-title">작업 전 안전점검표</div>
+        <span class="rrd-type-badge rrd-action">${set.icon} ${escapeHtml(set.name)}</span><br>${set.law ? `<span style="font-size:10px;color:#666;">근거: ${escapeHtml(set.law)}</span><br>` : ''}
+        <span style="font-size:10px;color:#aaa;">${docNo}</span>
+      </div>
+    </div>
+    <table class="rrd-table">
+      <tr><td class="lbl">현장명</td><td>${escapeHtml(site.name) || '—'}</td><td class="lbl">점검일</td><td>${rec.date}</td></tr>
+      <tr><td class="lbl">점검자</td><td>${escapeHtml(inspector) || '—'}</td><td class="lbl">점검 결과</td><td>양호 ${okN} · 불량 ${ngN}${noN ? ` · 미확인 ${noN}` : ''}</td></tr>
+    </table>
+    <div class="rrd-section">
+      <div class="rrd-section-title">점검 항목</div>
+      <table class="rrd-hazard-table">
+        <thead><tr><th style="width:5%;">No</th><th style="width:38%;">점검 항목</th><th style="width:8%;">결과<br>(○양호 ×불량)</th><th style="width:23%;">문제 내용</th><th style="width:26%;">조치</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    ${photoHtml ? `<div class="rrd-section"><div class="rrd-section-title">현장 사진</div>${photoHtml}</div>` : ''}
+    <table class="rrd-sign">
+      <tr>${signCell('점검자', inspector)}${signCell('현장소장 확인', site.manager)}${hasSafety ? signCell('안전관리자 확인', site.safety || '') : ''}</tr>
+    </table>
+    <div class="rrd-footer">${recordStampHtml(rec)}본 점검표는 안전서류 단디(건설현장 3단디 캠페인·대구지방고용노동청 건설산재예방감독과)에 의해 자동 생성되었습니다.<br>점검자·현장소장이 확인 서명하여 보관하시기 바랍니다.</div>`;
+}
+
+function openCheckReport() {
+  if (!curCheck) return;
+  if (!curCheck.items.some(i => i.result)) { toast('❌ 확인한 항목이 없습니다. ○ 또는 ×를 먼저 눌러주세요'); return; }
+  const site = DB.sites.find(x => x.id === curSiteId) || {};
+  document.getElementById('scCheckReportSub').textContent = `${site.name || ''} · ${curCheck.date}`;
+  buildCheckReportDoc(curCheck);
+  const scale = Math.min((window.innerWidth - 40) / 794, 1);
+  const wrap = document.getElementById('checkReportScaleWrap');
+  const clone = document.getElementById('checkReportDoc').cloneNode(true);
+  clone.removeAttribute('id');
+  clone.style.cssText = `transform:scale(${scale});transform-origin:top left;display:block;width:794px;background:#fff;`;
+  wrap.innerHTML = '';
+  wrap.appendChild(clone);
+  requestAnimationFrame(() => { wrap.style.height = (clone.offsetHeight * scale + 20) + 'px'; });
+  goScreen('scCheckReport');
+}
+
+async function downloadCheckReport() {
+  if (!curCheck) return;
+  buildCheckReportDoc(curCheck);
+  const site = DB.sites.find(x => x.id === curCheck.siteId) || {};
+  const nm = (site.name || '현장').replace(/[\\/:*?"<>|]/g, '');
+  await captureAndDownloadA4('checkReportDoc', `작업전_안전점검표_${nm}_${curCheck.date}_${chkSetById(curCheck.setId).name}`);
+}
+
+
+/* ══════════ 카톡·문자 공유 (휴대폰 기본 공유 기능) ══════════
+   앱이 자동으로 보낼 수는 없고, 공유 창에서 소장님이 받는 사람을 고르는 방식.
+   공유 창이 없는 환경(PC 등)에서는 내용을 복사해 줌 */
+function dataUrlToFile(dataUrl, name) {
+  const [head, b64] = dataUrl.split(',');
+  const mime = (head.match(/data:(.*?);/) || [])[1] || 'image/jpeg';
+  const bin = atob(b64);
+  const arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+  return new File([arr], name, { type: mime });
+}
+async function shareContent(title, text, files) {
+  try {
+    if (navigator.share) {
+      if (files && files.length && navigator.canShare && navigator.canShare({ files })) {
+        await navigator.share({ title, text, files });
+      } else {
+        await navigator.share({ title, text });
+      }
+      return;
+    }
+  } catch (e) {
+    if (e && e.name === 'AbortError') return;   // 사용자가 공유 창을 닫음
+  }
+  // 공유 창을 쓸 수 없으면 내용을 복사
+  try {
+    await navigator.clipboard.writeText(text);
+    toast('📋 내용을 복사했습니다. 카톡이나 문자에 붙여넣어 보내세요', 4000);
+  } catch (e) {
+    showConfirm('공유할 내용', text, '확인', () => {});
+  }
+}
+function buildOpenChecksText() {
+  const site = DB.sites.find(x => x.id === curSiteId) || {};
+  const open = chkOpenItems(curSiteId);
+  const lines = open.map(({ rec, item }, i) => {
+    const bits = [];
+    if (item.memo) bits.push(item.memo);
+    if (item.due) bits.push('기한 ' + item.due.slice(5).replace('.', '/') + (chkIsOverdue(item) ? '(초과)' : ''));
+    return `${i + 1}) ${item.label}${bits.length ? ' — ' + bits.join(' · ') : ''}`;
+  });
+  return `[${site.name || '현장'}] 안전점검 미조치 ${open.length}건\n` + lines.join('\n') + '\n\n확인 후 조치 바랍니다.';
+}
+async function shareOpenChecks() {
+  const open = chkOpenItems(curSiteId);
+  if (!open.length) { toast('공유할 미조치 항목이 없습니다'); return; }
+  const files = [];
+  open.forEach(({ item }, i) => { if (item.photo && files.length < 4) files.push(dataUrlToFile(item.photo, `점검사진_${i + 1}.jpg`)); });
+  await shareContent('안전점검 미조치 사항', buildOpenChecksText(), files);
+}
+async function shareCheckReport() {
+  if (!curCheck) return;
+  try {
+    toast('📄 점검표 이미지 만드는 중...');
+    buildCheckReportDoc(curCheck);
+    const scale = 2;
+    const el = document.getElementById('checkReportDoc');
+    const ranges = getUnsplittableRanges(el, scale), hard = getHardBreakPoints(el, scale);
+    const canvas = await html2canvas(el, { scale, useCORS: true, backgroundColor: '#fff', logging: false, height: Math.ceil(el.getBoundingClientRect().height) });
+    const slices = sliceCanvasToA4(canvas, ranges, hard);
+    const files = [];
+    for (let i = 0; i < slices.length; i++) {
+      const blob = await new Promise(res => slices[i].toBlob(res, 'image/png'));
+      files.push(new File([blob], `안전점검표_${curCheck.date}_${i + 1}.png`, { type: 'image/png' }));
+    }
+    const site = DB.sites.find(x => x.id === curCheck.siteId) || {};
+    await shareContent('작업 전 안전점검표', `[${site.name || '현장'}] ${curCheck.date} 작업 전 안전점검표`, files);
+  } catch (e) {
+    toast('❌ 공유 실패: ' + e.message, 4000);
+  }
+}
+
 /* ══════════════ WIRE UP ══════════════ */
 document.querySelector('.fab').onclick = openModal_NewSite;
 
@@ -6288,8 +7124,18 @@ console.log('%c안전서류 단디 %c· 현장 안전관리, 단디하게 %c\nma
   'color:#FF6B35;font-weight:900;font-size:16px;',
   'color:#888;font-size:11px;',
   'color:#06D6A0;font-size:11px;');
+/* 브라우저가 저장공간이 부족할 때 이 앱의 기록을 임의로 지우지 못하게 "영구 저장"을 요청.
+   (크롬 등이 사용 이력을 보고 승인 여부를 정하며, 거부될 수 있으므로 백업은 계속 필요함) */
+function requestPersistentStorage() {
+  try {
+    if (navigator.storage && navigator.storage.persist) {
+      navigator.storage.persist().then(granted => { window._storagePersisted = !!granted; }).catch(() => {});
+    }
+  } catch (e) {}
+}
 (async () => {
   await loadDB();
+  requestPersistentStorage();
   applyFontScale();
   renderHome();
   if (isRunningStandalone()) {
