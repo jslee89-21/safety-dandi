@@ -746,6 +746,11 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
   background: var(--c-card); border: 1px solid var(--c-border); border-radius: 12px;
   padding: 12px 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; cursor: pointer;
 }
+.photo-src-back { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 9999; display: flex; align-items: flex-end; justify-content: center; }
+.photo-src-sheet { background: #fff; width: 100%; max-width: 520px; border-radius: 16px 16px 0 0; padding: 14px 14px calc(14px + env(safe-area-inset-bottom)); }
+.photo-src-title { text-align: center; font-weight: 700; color: #555; font-size: 14px; margin-bottom: 10px; }
+.photo-src-btn { display: block; width: 100%; padding: 17px 10px; margin-bottom: 8px; font-size: 18px; font-weight: 700; border-radius: 12px; border: 1.5px solid #cbd3df; background: #f5f7fa; color: #1a1a1a; }
+.photo-src-btn.cancel { background: #fff; color: #666; font-weight: 600; font-size: 16px; }
 .chk-photo-overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,.92); z-index: 900;
   display: flex; align-items: center; justify-content: center; padding: 12px;
@@ -1606,7 +1611,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
         여기서는 회의 현장 사진이나 조치결과 공유용 추가 증빙 사진을 첨부하세요.
       </div>
       <div class="card">
-        <div class="photo-zone" onclick="document.getElementById('riskPhotoInput').click()">
+        <div class="photo-zone" onclick="pickPhotoSource('riskPhotoInput')">
           <input type="file" id="riskPhotoInput" accept="image/*" multiple onchange="handleRiskPhoto(event)">
           <div style="font-size:32px;">📷</div>
           <p>탭하여 사진 추가 (최대 9장)</p>
@@ -1814,7 +1819,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
     </div>
     <div class="label-sm" style="margin-bottom:10px;">교육 현장 사진 <span style="color:var(--c-muted);font-size:10px;">(1장만 첨부 · 보고서 날짜는 위의 교육일자를 따름)</span></div>
     <div class="card">
-      <div class="photo-zone" id="eduPhotoZone" onclick="document.getElementById('photoInput').click()">
+      <div class="photo-zone" id="eduPhotoZone" onclick="pickPhotoSource('photoInput')">
         <input type="file" id="photoInput" accept="image/*" onchange="handlePhotoUpload(event)">
         <div style="font-size:32px;">📷</div>
         <p>탭하여 사진 추가 (1장)</p>
@@ -6935,10 +6940,31 @@ function chkSetField(key, field, v) {
   _chkMemoTimer = setTimeout(() => chkPersist(curCheck), 400);
 }
 
+/* 사진: 카메라 / 사진첩 선택 */
+function pickPhotoSource(inputId) {
+  const inp = document.getElementById(inputId);
+  if (!inp) return;
+  if (!inp._noBubble) { inp._noBubble = true; inp.addEventListener('click', e => e.stopPropagation()); }
+  const back = document.createElement('div');
+  back.className = 'photo-src-back';
+  back.innerHTML = `<div class="photo-src-sheet">
+    <div class="photo-src-title">사진 가져오기</div>
+    <button type="button" class="photo-src-btn" data-m="cam">📷 카메라로 촬영</button>
+    <button type="button" class="photo-src-btn" data-m="gal">🖼 사진첩에서 선택</button>
+    <button type="button" class="photo-src-btn cancel" data-m="x">취소</button></div>`;
+  back.addEventListener('click', ev => {
+    const m = ev.target && ev.target.getAttribute && ev.target.getAttribute('data-m');
+    if (ev.target !== back && !m) return;
+    back.remove();
+    if (m === 'cam') { inp.setAttribute('capture', 'environment'); inp.click(); setTimeout(() => inp.removeAttribute('capture'), 500); }
+    else if (m === 'gal') { inp.removeAttribute('capture'); inp.click(); }
+  });
+  document.body.appendChild(back);
+}
 /* 사진 */
 function chkPickPhoto(kind, key) {
   _chkPhotoTarget = { kind, key: key || null };
-  document.getElementById('chkPhotoInput').click();
+  pickPhotoSource('chkPhotoInput');
 }
 async function chkHandlePhoto(e) {
   const file = e.target.files[0];
