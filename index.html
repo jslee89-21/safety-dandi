@@ -300,15 +300,19 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 .site-card-actions { display: flex; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--c-border); }
 .site-card-actions .icon-btn { flex: 1; font-size: 13px; gap: 6px; }
 .icon-btn { background: none; border: 1px solid var(--c-border); color: var(--c-muted); border-radius: 8px; padding: 9px 12px; cursor: pointer; font-size: 16px; transition: all .15s; min-width: 40px; min-height: 40px; display: inline-flex; align-items: center; justify-content: center; }
+.icon-btn.lbl { flex-direction: column; gap: 2px; padding: 6px 8px; min-width: 54px; min-height: 54px; font-size: 20px; line-height: 1.1; }
+.icon-btn.lbl small { font-size: 12px; font-weight: 700; }
+.modal-close small { font-size: 14px; font-weight: 700; margin-left: 3px; }
+.chk-photo-btn small { display: block; font-size: 13px; font-weight: 700; margin-top: 2px; }
 .icon-btn:hover { color: var(--c-text); border-color: var(--c-text); }
 .empty-state { text-align: center; padding: 48px 20px; color: var(--c-muted); }
 .empty-state .icon { font-size: 44px; margin-bottom: 12px; }
 .empty-state p { font-size: 13px; line-height: 1.7; }
 .fab {
-  position: fixed; bottom: 24px; right: 24px;
-  width: 54px; height: 54px; border-radius: 50%;
+  position: fixed; bottom: 24px; right: 20px;
+  height: 58px; padding: 0 22px; border-radius: 29px;
   background: var(--c-orange); border: none; color: #fff;
-  font-size: 26px; cursor: pointer; z-index: 100;
+  font-size: 20px; font-weight: 800; letter-spacing: -.3px; gap: 6px; cursor: pointer; z-index: 100;
   box-shadow: 0 4px 20px rgba(255,107,53,.4);
   transition: transform .15s, box-shadow .15s;
   display: flex; align-items: center; justify-content: center;
@@ -389,7 +393,10 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 .report-item-date { font-size: 14.5px; font-weight: 700; }
 .report-item-meta { font-size: 12.5px; color: var(--c-muted); margin-top: 3px; }
 .report-item-timestamp { font-size: 11px; color: var(--c-muted); margin-top: 4px; font-family: var(--font-mono); opacity: .85; }
-.report-item-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.report-item { flex-wrap: wrap; }
+.report-item-info { flex: 1 1 0; }
+.report-item-actions { display: flex; gap: 6px; flex: 1 0 100%; justify-content: flex-end; padding-top: 4px; }
+.report-item-actions .icon-btn.lbl { flex: 1; }
 
 /* ════════════════════════════════════════════════════════════════════════
    SCREEN 3 — NEW EDUCATION FORM
@@ -1217,11 +1224,11 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
     <div class="site-list" id="siteList">
       <div class="empty-state">
         <div class="icon">🏗</div>
-        <p>등록된 현장이 없습니다.<br>아래 + 버튼을 눌러 현장을 추가하세요.</p>
+        <p>등록된 현장이 없습니다.<br>아래 <b>현장추가</b> 버튼을 눌러 현장을 추가하세요.</p>
       </div>
     </div>
   </div>
-  <button class="fab" onclick="openModal('modalNewSite')">+</button>
+  <button class="fab" onclick="openModal('modalNewSite')"><span style="font-size:26px;line-height:1;">+</span> 현장추가</button>
 </div>
 
 <!-- ══════════════════════════════════════════
@@ -1235,7 +1242,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
       <div class="topnav-sub" id="scSiteCompany"></div>
     </div>
     <button class="topnav-action ghost home-btn" onclick="goScreen('scHome')" title="처음으로">🏠 처음으로</button>
-    <button class="topnav-action ghost" onclick="openEditSite()">수정</button>
+    <button class="topnav-action ghost" onclick="openEditSite()">✏️ 현장 수정</button>
   </div>
   <div class="scroll-body">
     <div class="site-header-card" id="siteHeaderCard"></div>
@@ -1313,7 +1320,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
       <div class="topnav-sub" id="scCheckReportSub"></div>
     </div>
     <button class="topnav-action ghost home-btn" onclick="goScreen('scHome')" title="처음으로">🏠 처음으로</button>
-    <button class="topnav-action" style="background:var(--c-green);color:#0f1117;" onclick="downloadCheckReport()">⬇ 저장</button>
+    <button class="topnav-action" style="background:var(--c-green);color:#0f1117;" onclick="downloadCheckReport()">⬇ 이미지 저장</button>
   </div>
   <div class="scroll-body">
     <div class="report-viewer-wrap">
@@ -1338,7 +1345,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
   <div class="modal" style="max-width:480px;">
     <div class="modal-title">
       <span>🛠️ 조치 완료 기록</span>
-      <button class="modal-close" onclick="closeModal('modalCheckFix')">✕</button>
+      <button class="modal-close" onclick="closeModal('modalCheckFix')">✕<small>닫기</small></button>
     </div>
     <div id="chkFixTarget" style="font-size:14px;font-weight:700;line-height:1.5;margin-bottom:12px;"></div>
     <div class="field">
@@ -1352,7 +1359,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
     <div class="field">
       <label>조치 후 사진 (선택)</label>
       <div style="display:flex;align-items:center;gap:10px;">
-        <button class="chk-photo-btn" id="chkFixPhotoBtn" onclick="chkPickPhoto('fix')">📷</button>
+        <button class="chk-photo-btn" id="chkFixPhotoBtn" onclick="chkPickPhoto('fix')">📷<small>사진</small></button>
         <span style="font-size:12px;color:var(--c-muted);">조치한 모습을 찍어두면 증빙이 됩니다</span>
       </div>
     </div>
@@ -1467,7 +1474,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
       <div class="topnav-sub" id="scRiskListSub"></div>
     </div>
     <button class="topnav-action ghost home-btn" onclick="goScreen('scHome')" title="처음으로">🏠 처음으로</button>
-    <button class="topnav-action" onclick="goNewRiskEntry()">+ 새 기록</button>
+    <button class="topnav-action" onclick="goNewRiskEntry()">+ 평가 쓰기</button>
   </div>
   <div class="scroll-body">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
@@ -1540,7 +1547,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
             <div style="font-size:13px;font-weight:700;margin-bottom:2px;">KOSHA 기준 위험요인 자동 입력</div>
             <div style="font-size:11px;color:var(--c-muted);">산업안전보건공단 위험성평가 지침 기준 공종별 기본 위험요인을 불러올 수 있습니다.</div>
           </div>
-          <button class="btn btn-primary btn-sm" style="white-space:nowrap;" onclick="openPresetModal()">불러오기</button>
+          <button class="btn btn-primary btn-sm" style="white-space:nowrap;" onclick="openPresetModal()">📋 자동 입력</button>
         </div>
       </div>
       <div id="hazardList"></div>
@@ -1644,7 +1651,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
       <div class="topnav-sub" id="scRiskReportSub"></div>
     </div>
     <button class="topnav-action ghost home-btn" onclick="goScreen('scHome')" title="처음으로">🏠 처음으로</button>
-    <button class="topnav-action" style="background:var(--c-green);color:#0f1117;" onclick="downloadRiskReport()">⬇ 저장</button>
+    <button class="topnav-action" style="background:var(--c-green);color:#0f1117;" onclick="downloadRiskReport()">⬇ 이미지 저장</button>
   </div>
   <div class="scroll-body">
     <div class="report-viewer-wrap">
@@ -1713,7 +1720,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
       <div class="topnav-sub" id="scEduAllSub"></div>
     </div>
     <button class="topnav-action ghost home-btn" onclick="goScreen('scHome')" title="처음으로">🏠 처음으로</button>
-    <button class="topnav-action" onclick="goScreen('scWorkTypes');renderWorkTypesScreen()">+ 신규추가</button>
+    <button class="topnav-action" onclick="goScreen('scWorkTypes');renderWorkTypesScreen()">+ 교육 추가</button>
   </div>
   <div class="scroll-body">
     <div class="label-sm" style="margin-bottom:8px;">공종 필터</div>
@@ -1850,7 +1857,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
       <div class="topnav-sub" id="scReportSub"></div>
     </div>
     <button class="topnav-action ghost home-btn" onclick="goScreen('scHome')" title="처음으로">🏠 처음으로</button>
-    <button class="topnav-action" style="background:var(--c-green);color:#0f1117;" onclick="downloadCurrentReport()">⬇ 저장</button>
+    <button class="topnav-action" style="background:var(--c-green);color:#0f1117;" onclick="downloadCurrentReport()">⬇ 이미지 저장</button>
   </div>
   <div class="scroll-body">
     <div class="report-viewer-wrap">
@@ -1875,7 +1882,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
   <div class="modal">
     <div class="modal-title">
       <span id="modalSiteTitle">🏗 새 현장 등록</span>
-      <button class="modal-close" onclick="closeModal('modalNewSite')">✕</button>
+      <button class="modal-close" onclick="closeModal('modalNewSite')">✕<small>닫기</small></button>
     </div>
     <input type="hidden" id="editingSiteId">
     <div class="field"><label>현장명 *</label><input type="text" id="mSiteName" placeholder="예: ○○아파트 신축공사 현장"></div>
@@ -1915,7 +1922,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
   <div class="modal">
     <div class="modal-title">
       ⚙ 앱 설정
-      <button class="modal-close" onclick="closeModal('modalSettings')">✕</button>
+      <button class="modal-close" onclick="closeModal('modalSettings')">✕<small>닫기</small></button>
     </div>
     <div class="label-sm" style="margin-bottom:8px;">🔠 글자 크기</div>
     <div class="font-scale-row" id="fontScaleRow">
@@ -1976,29 +1983,33 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
   <div class="modal" style="max-width:460px;">
     <div class="modal-title">
       👋 처음 오셨나요?
-      <button class="modal-close" onclick="closeModal('modalOnboarding')">✕</button>
+      <button class="modal-close" onclick="closeModal('modalOnboarding')">✕<small>닫기</small></button>
     </div>
     <div style="background:rgba(255,209,102,.1);border:1px solid rgba(255,209,102,.3);border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:12px;line-height:1.7;color:var(--c-text);">
-      ⚠️ 이 앱은 현장의 안전서류 작성을 <b>도와드리는 보조 도구</b>이며, 안전관리를 대신해주는
+      ⚠️ 이 앱은 현장의 안전점검과 서류 작성을 <b>도와드리는 보조 도구</b>이며, 안전관리를 대신해주는
       완벽한 도구는 아닙니다. 실제 현장 위험요인 확인, 순회점검, 근로자 안전교육 등에는
       계속 세심한 주의를 기울여주시기 바랍니다.
     </div>
     <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:16px;">
       <div style="display:flex;gap:12px;align-items:flex-start;">
         <div style="font-size:24px;flex-shrink:0;">1️⃣</div>
-        <div style="font-size:13px;line-height:1.6;"><b>현장 등록</b> — 오른쪽 아래 <b>+ 버튼</b>을 눌러 현재 관리하는 건설현장을 먼저 등록하세요.</div>
+        <div style="font-size:14px;line-height:1.6;"><b>현장 등록</b> — 오른쪽 아래 <b>현장추가</b> 버튼을 눌러 현장을 먼저 등록하세요.</div>
       </div>
       <div style="display:flex;gap:12px;align-items:flex-start;">
         <div style="font-size:24px;flex-shrink:0;">2️⃣</div>
-        <div style="font-size:13px;line-height:1.6;"><b>위험성평가 / 특별안전교육</b> — 현장을 누르면 두 가지 큰 카테고리가 나옵니다. 매일 하는 특별교육은 오른쪽, 위험성평가·조치·회의는 왼쪽입니다.</div>
+        <div style="font-size:14px;line-height:1.6;"><b>오늘 점검</b> — 현장을 누르면 맨 위에 <b>오늘 점검 시작</b>이 있습니다. 현장을 돌며 <b>○ 양호 / × 불량</b>을 누르고, 불량이면 위치와 사진을 남기세요. 고친 뒤에는 <b>조치 완료</b>를 누릅니다. 누르지 않으면 내일도 표시됩니다.</div>
       </div>
       <div style="display:flex;gap:12px;align-items:flex-start;">
         <div style="font-size:24px;flex-shrink:0;">3️⃣</div>
-        <div style="font-size:13px;line-height:1.6;"><b>사진 · 저장</b> — 기록을 작성하면서 사진을 첨부하고, "⬇ 저장" 버튼으로 보고서를 이미지 파일(A4 규격)로 내려받을 수 있습니다.</div>
+        <div style="font-size:14px;line-height:1.6;"><b>서류 만들기</b> — <b>위험성평가</b>와 <b>특별안전교육</b>은 필요할 때만 작성합니다. 작성하면 A4 보고서가 만들어집니다.</div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="font-size:24px;flex-shrink:0;">4️⃣</div>
+        <div style="font-size:14px;line-height:1.6;"><b>보내기 · 저장</b> — <b>📤 카톡·문자로 보내기</b>로 사진과 함께 바로 전송하거나, <b>⬇ 이미지 저장</b>으로 A4 이미지를 내려받습니다.</div>
       </div>
       <div style="display:flex;gap:12px;align-items:flex-start;">
         <div style="font-size:24px;flex-shrink:0;">💾</div>
-        <div style="font-size:13px;line-height:1.6;"><b>데이터 백업</b> — 모든 기록은 이 기기 안에만 저장됩니다. 설정(⚙) 화면에서 주기적으로 "백업 파일로 저장"을 눌러 안전하게 보관하세요.</div>
+        <div style="font-size:14px;line-height:1.6;"><b>데이터 백업</b> — 모든 기록은 이 기기 안에만 저장됩니다. 화면 위 <b>⚙ 설정</b>에서 <b>백업 파일로 저장</b>을 한 달에 한 번 이상 눌러 보관하세요.</div>
       </div>
     </div>
     <div style="border-top:1px solid var(--c-border);padding-top:12px;margin-bottom:14px;text-align:center;">
@@ -2016,7 +2027,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
   <div class="modal" style="max-width:480px;">
     <div class="modal-title">
       🗑 휴지통
-      <button class="modal-close" onclick="closeModal('modalTrash')">✕</button>
+      <button class="modal-close" onclick="closeModal('modalTrash')">✕<small>닫기</small></button>
     </div>
     <p style="font-size:11.5px;color:var(--c-muted);margin-bottom:14px;line-height:1.6;">
       삭제된 항목은 30일간 여기에 보관되며, 그 이후에는 자동으로 완전히 삭제됩니다.
@@ -2030,7 +2041,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
   <div class="modal" style="max-width:380px;">
     <div class="modal-title">
       📅 촬영 날짜 수정
-      <button class="modal-close" onclick="closeModal('modalPhotoDate')">✕</button>
+      <button class="modal-close" onclick="closeModal('modalPhotoDate')">✕<small>닫기</small></button>
     </div>
     <div id="photoDateSourceInfo" style="font-size:12px;color:var(--c-muted);margin-bottom:14px;line-height:1.6;"></div>
     <div class="field">
@@ -2053,7 +2064,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
   <div class="modal" style="max-width:420px;">
     <div class="modal-title">
       <span id="atpModalTitleText">✅ 어떤 기록을 남기시겠어요?</span>
-      <button class="modal-close" onclick="closeModal('modalActionTypePicker')">✕</button>
+      <button class="modal-close" onclick="closeModal('modalActionTypePicker')">✕<small>닫기</small></button>
     </div>
     <div class="atp-option atp-remediation" id="atpRemediationOption" onclick="pickActionKind('remediation')">
       <div class="atp-icon">🛠️</div>
@@ -2087,7 +2098,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
   <div class="modal" style="max-width:460px;">
     <div class="modal-title">
       🔗 연계할 위험성평가 선택
-      <button class="modal-close" onclick="closeModal('modalRiskPicker')">✕</button>
+      <button class="modal-close" onclick="closeModal('modalRiskPicker')">✕<small>닫기</small></button>
     </div>
     <p style="font-size:12px;color:var(--c-muted);margin-bottom:12px;line-height:1.6;">
       이 조치결과가 어떤 위험성평가에 대한 개선 조치인지 선택하세요.
@@ -2101,7 +2112,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
   <div class="modal" style="max-width:460px;">
     <div class="modal-title">
       ✅ 조치결과 선택
-      <button class="modal-close" onclick="closeModal('modalLinkedActions')">✕</button>
+      <button class="modal-close" onclick="closeModal('modalLinkedActions')">✕<small>닫기</small></button>
     </div>
     <p style="font-size:12px;color:var(--c-muted);margin-bottom:12px;line-height:1.6;">
       이 위험성평가에 연계된 조치결과가 여러 건입니다. 확인할 기록을 선택하세요.
@@ -2116,7 +2127,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
   <div class="modal" style="max-width:400px;">
     <div class="modal-title">
       ✅ 저장 완료
-      <button class="modal-close" onclick="closeModal('modalPdfSaved')">✕</button>
+      <button class="modal-close" onclick="closeModal('modalPdfSaved')">✕<small>닫기</small></button>
     </div>
     <p style="font-size:13px;line-height:1.7;margin-bottom:14px;">
       파일이 다운로드 폴더에 저장되었습니다.
@@ -2837,7 +2848,7 @@ function renderTrashList() {
         <div class="shared-risk-meta">${left}일 후 완전 삭제</div>
       </div>
       <button class="icon-btn" style="color:var(--c-blue);" title="복원" onclick="restoreTrashItem('${kind}','${item.id}')">↩ 복원</button>
-      <button class="icon-btn" style="color:var(--c-red);" title="완전 삭제" onclick="permanentDeleteTrashItem('${kind}','${item.id}')">🗑</button>
+      <button class="icon-btn" style="color:var(--c-red);" title="완전 삭제" onclick="permanentDeleteTrashItem('${kind}','${item.id}')">🗑 완전삭제</button>
     </div>`;
   }).join('');
 }
@@ -2949,7 +2960,7 @@ function renderHome() {
   renderHomeCheckCard();
   const list = document.getElementById('siteList');
   if (!DB.sites.length) {
-    list.innerHTML = `<div class="empty-state"><div class="icon">🏗</div><p>등록된 현장이 없습니다.<br>아래 + 버튼을 눌러 현장을 추가하세요.</p></div>`;
+    list.innerHTML = `<div class="empty-state"><div class="icon">🏗</div><p>등록된 현장이 없습니다.<br>아래 <b>현장추가</b> 버튼을 눌러 현장을 추가하세요.</p></div>`;
     return;
   }
   list.innerHTML = DB.sites.map(s => {
@@ -3214,6 +3225,7 @@ function setEduFilter(workId) {
 }
 
 function listLegendHtml(withAction) {
+  return '';
   return `<div style="display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:flex-end;font-size:13px;color:var(--c-muted);padding:2px 4px 10px;">` +
     (withAction ? `<span>✅ 조치결과 쓰기</span>` : '') +
     `<span>📤 카톡·문자로 보내기</span><span>⬇ 이미지 저장</span><span>🗑 삭제</span></div>`;
@@ -3226,7 +3238,7 @@ function renderEduAllListItems() {
   document.getElementById('reportCountBadge').textContent = reports.length + ' 건';
   const wrap = document.getElementById('reportListWrap');
   if (!reports.length) {
-    wrap.innerHTML = `<div class="empty-state"><div class="icon">📄</div><p>아직 교육 기록이 없습니다.<br>우측 상단 "+ 신규추가"를 눌러 추가하세요.</p></div>`;
+    wrap.innerHTML = `<div class="empty-state"><div class="icon">📄</div><p>아직 교육 기록이 없습니다.<br>우측 상단 "+ 교육 추가"를 눌러 추가하세요.</p></div>`;
     return;
   }
   wrap.innerHTML = listLegendHtml(false) + reports.map(r => {
@@ -3241,9 +3253,9 @@ function renderEduAllListItems() {
         <div class="report-item-timestamp">${formatCreatedModified(r)}</div>
       </div>
       <div class="report-item-actions" onclick="event.stopPropagation()">
-        <button class="icon-btn" title="카톡·문자로 보내기" onclick="shareEduById('${r.id}')">📤</button>
-        <button class="icon-btn" title="PNG 다운로드" onclick="downloadReportById('${r.id}')">⬇</button>
-        <button class="icon-btn" title="삭제" onclick="confirmDeleteReportQuick('${r.id}')">🗑</button>
+        <button class="icon-btn lbl" title="카톡·문자로 보내기" onclick="shareEduById('${r.id}')">📤<small>보내기</small></button>
+        <button class="icon-btn lbl" title="이미지 저장" onclick="downloadReportById('${r.id}')">⬇<small>저장</small></button>
+        <button class="icon-btn lbl" title="삭제" onclick="confirmDeleteReportQuick('${r.id}')">🗑<small>삭제</small></button>
       </div>
     </div>`;
   }).join('');
@@ -4135,7 +4147,7 @@ function renderRiskList() {
   }).sort((a,b) => b.reportDate.localeCompare(a.reportDate));
   document.getElementById('riskCountBadge').textContent = list.length + '건';
   const wrap = document.getElementById('riskListWrap');
-  if (!list.length) { wrap.innerHTML = `<div class="empty-state"><div class="icon">📋</div><p>기록이 없습니다.<br>상단 "+ 새 기록"을 눌러 추가하세요.</p></div>`; return; }
+  if (!list.length) { wrap.innerHTML = `<div class="empty-state"><div class="icon">📋</div><p>기록이 없습니다.<br>상단 "+ 평가 쓰기"를 눌러 추가하세요.</p></div>`; return; }
   wrap.innerHTML = listLegendHtml(list.some(r => r.rtype !== 'action')) + list.map(r => {
     const isEval = r.rtype !== 'action';
     // 연계된 조치 수 카운트
@@ -4160,10 +4172,10 @@ function renderRiskList() {
         <div class="report-item-timestamp">${formatCreatedModified(r)}</div>
       </div>
       <div class="report-item-actions" onclick="event.stopPropagation()">
-        ${isEval ? `<button class="icon-btn" title="조치결과 등록" onclick="curRiskId='${r.id}';goActionFromReport()" style="color:var(--c-green);">✅</button>` : ''}
-        <button class="icon-btn" title="카톡·문자로 보내기" onclick="shareRiskById('${r.id}')">📤</button>
-        <button class="icon-btn" title="이미지 저장" onclick="downloadRiskById('${r.id}')">⬇</button>
-        <button class="icon-btn" title="삭제" onclick="confirmDeleteRiskQuick('${r.id}')">🗑</button>
+        ${isEval ? `<button class="icon-btn lbl" title="조치결과 등록" onclick="curRiskId='${r.id}';goActionFromReport()" style="color:var(--c-green);">✅<small>조치</small></button>` : ''}
+        <button class="icon-btn lbl" title="카톡·문자로 보내기" onclick="shareRiskById('${r.id}')">📤<small>보내기</small></button>
+        <button class="icon-btn lbl" title="이미지 저장" onclick="downloadRiskById('${r.id}')">⬇<small>저장</small></button>
+        <button class="icon-btn lbl" title="삭제" onclick="confirmDeleteRiskQuick('${r.id}')">🗑<small>삭제</small></button>
       </div>
     </div>`;
   }).join('');
@@ -4450,7 +4462,7 @@ function renderHazardList() {
             <span>${ck}</span>
           </label>`).join('')
       : `<label class="hz-check-item" style="color:var(--c-muted);font-size:11px;">
-           ※ KOSHA 프리셋 불러오기 또는 아래에서 직접 추가하세요
+           ※ 위의 "자동 입력" 또는 아래에서 직접 추가하세요
          </label>`;
     // 미이행 항목 카운트
     const totalCk = checkList.length;
@@ -4464,7 +4476,7 @@ function renderHazardList() {
         <span class="hazard-num">No.${i+1}</span>
         <div class="risk-level-badge ${rlc}" id="rl_${i}" style="padding:2px 8px;font-size:10px;">${rlt}&nbsp;(${s}점)</div>
         ${ckBadge}
-        <button class="hazard-del" onclick="removeHazardRow(${h.id})">✕</button>
+        <button class="hazard-del" onclick="removeHazardRow(${h.id})">✕ 삭제</button>
       </div>
       <div class="hazard-body">
 
@@ -4801,7 +4813,7 @@ function showSharedByList(riskId) {
     </div>`;
   }).join('');
   document.querySelector('#modalLinkedActions .modal-title').innerHTML =
-    `📢 공유·회의 기록 선택 <button class="modal-close" onclick="closeModal('modalLinkedActions')">✕</button>`;
+    `📢 공유·회의 기록 선택 <button class="modal-close" onclick="closeModal('modalLinkedActions')">✕<small>닫기</small></button>`;
   document.querySelector('#modalLinkedActions p').textContent =
     '이 기록이 공유·논의된 회의/공유 기록이 여러 건입니다. 확인할 기록을 선택하세요.';
   openModal('modalLinkedActions');
@@ -4834,7 +4846,7 @@ function showLinkedActions(riskId) {
     </div>`;
   }).join('');
   document.querySelector('#modalLinkedActions .modal-title').innerHTML =
-    `✅ 조치결과 선택 <button class="modal-close" onclick="closeModal('modalLinkedActions')">✕</button>`;
+    `✅ 조치결과 선택 <button class="modal-close" onclick="closeModal('modalLinkedActions')">✕<small>닫기</small></button>`;
   document.querySelector('#modalLinkedActions p').textContent =
     '이 위험성평가에 연계된 조치결과가 여러 건입니다. 확인할 기록을 선택하세요.';
   openModal('modalLinkedActions');
@@ -6797,8 +6809,8 @@ function renderCheckScreen() {
     const cls = it.result === 'ng' ? 'ng' : it.result === 'ok' ? 'ok' : '';
     const photoBtn = it.photo
       ? `<button class="chk-photo-btn has" onclick="chkViewPhoto('${curCheck.id}','${it.key}','photo')" aria-label="사진 보기"><img src="${it.photo}" alt=""></button>`
-      : (ro ? '' : `<button class="chk-photo-btn" onclick="chkPickPhoto('item','${it.key}')" aria-label="사진 찍기">📷</button>`);
-    const retake = (it.photo && !ro) ? `<button class="chk-photo-btn" style="min-width:44px;font-size:16px;" onclick="chkPickPhoto('item','${it.key}')" aria-label="사진 다시 찍기">🔄</button>` : '';
+      : (ro ? '' : `<button class="chk-photo-btn" onclick="chkPickPhoto('item','${it.key}')" aria-label="사진 찍기">📷<small>사진</small></button>`);
+    const retake = (it.photo && !ro) ? `<button class="chk-photo-btn" style="min-width:44px;font-size:16px;" onclick="chkPickPhoto('item','${it.key}')" aria-label="사진 다시 찍기">🔄<small>다시</small></button>` : '';
     let extra = '';
     if (it.result === 'ng') {
       if (ro) {
@@ -6823,7 +6835,7 @@ function renderCheckScreen() {
     let more = '';
     if (!ro && it.result === 'ng' && !it.fixedAt) {
       more = `<div style="display:flex;gap:8px;margin-top:10px;"><button class="btn btn-outline btn-sm" style="flex:1;min-height:46px;font-size:15px;" onclick="chkAddSpot('${it.key}')">+ 불량 한 곳 더</button>` +
-        (it.extra ? `<button class="btn btn-outline btn-sm" style="min-height:46px;font-size:15px;" onclick="chkRemoveSpot('${it.key}')">이 줄 빼기</button>` : '') + `</div>`;
+        (it.extra ? `<button class="btn btn-outline btn-sm" style="min-height:46px;font-size:15px;" onclick="chkRemoveSpot('${it.key}')">🗑 이 줄 지우기</button>` : '') + `</div>`;
     }
     return `<div class="chk-item ${cls}" ${it.extra ? 'style="margin-left:14px;"' : ''}><div class="chk-label">${it.extra ? '↳ (같은 항목, 다른 위치) ' : ''}${escapeHtml(it.label)}</div>${btns}${extra}${more}</div>`;
   }).join('');
@@ -7401,6 +7413,43 @@ async function shareCheckReport() {
 }
 
 /* ══════════════ WIRE UP ══════════════ */
+
+/* ══════════════ 폰의 '뒤로가기' 버튼 처리 (안드로이드) ══════════════
+   앱 안에서 한 단계씩 뒤로 가고, 첫 화면에서는 두 번 눌러야 종료됩니다. */
+(function () {
+  let lastHomeBack = 0;
+  function arm() { try { history.pushState({ dandi: 1 }, ''); } catch (e) {} }
+  try { history.replaceState({ dandi: 0 }, ''); arm(); } catch (e) { return; }
+  function closeTopLayer() {
+    const a = document.querySelector('.photo-src-back');
+    if (a) { a.remove(); return true; }
+    const b = document.querySelector('.chk-photo-overlay');
+    if (b) { b.remove(); return true; }
+    const c = document.getElementById('confirmBox');
+    if (c && c.classList.contains('show')) { closeConfirm(); return true; }
+    const mods = document.querySelectorAll('.modal-backdrop.show');
+    if (mods.length) {
+      const m = mods[mods.length - 1];
+      const x = m.querySelector('.modal-close');
+      if (x) x.click(); else m.classList.remove('show');
+      return true;
+    }
+    return false;
+  }
+  window.addEventListener('popstate', () => {
+    if (closeTopLayer()) { arm(); return; }
+    const scr = document.querySelector('.screen.show');
+    const back = scr && scr.querySelector('.topnav-back');
+    if (back) { back.click(); arm(); return; }
+    // 첫 화면: 2.5초 안에 한 번 더 누르면 종료
+    const now = Date.now();
+    if (now - lastHomeBack < 2500) { history.back(); return; }
+    lastHomeBack = now;
+    toast('한 번 더 누르면 앱이 종료됩니다');
+    arm();
+  });
+})();
+
 document.querySelector('.fab').onclick = openModal_NewSite;
 
 /* close modals on backdrop click */
@@ -7492,7 +7541,7 @@ function requestPersistentStorage() {
   <div class="preset-modal">
     <div class="preset-modal-header">
       <h3>📋 KOSHA 기준 위험요인 선택</h3>
-      <button class="modal-close" onclick="closePresetModal()">✕</button>
+      <button class="modal-close" onclick="closePresetModal()">✕<small>닫기</small></button>
     </div>
     <div class="preset-modal-body" id="presetModalBody"></div>
     <div class="preset-modal-footer">
