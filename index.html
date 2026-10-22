@@ -334,9 +334,11 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 .site-header-card {
   background: linear-gradient(135deg, #1a2240 0%, var(--c-card) 100%);
   border: 1px solid var(--c-border); border-radius: var(--r);
-  padding: 20px; margin-bottom: 14px;
+  padding: 14px 16px; margin-bottom: 14px;
 }
-.site-header-name { font-size: 20px; font-weight: 900; margin-bottom: 8px; }
+.site-header-name { font-size: 20px; font-weight: 900; margin-bottom: 6px; }
+.site-header-line { display: flex; flex-wrap: wrap; gap: 2px 14px; font-size: 14px; color: var(--c-muted); line-height: 1.6; }
+.site-header-line span { white-space: nowrap; }
 .site-header-info { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .info-item { font-size: 12px; color: var(--c-muted); }
 .info-item strong { color: var(--c-text); font-weight: 500; }
@@ -707,6 +709,13 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
   display: flex; align-items: center; gap: 14px; cursor: pointer; transition: all .15s;
 }
 .check-start-card:hover { background: rgba(6,214,160,.16); }
+.chk-split-card { margin-bottom: 14px; }
+.csp-row { display: flex; gap: 10px; }
+.csp-btn { flex: 1; min-width: 0; min-height: 82px; border-radius: 14px; border: 2px solid transparent; cursor: pointer; font-family: var(--font-title); font-size: 19px; font-weight: 800; line-height: 1.25; padding: 8px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center; }
+.csp-btn small { font-size: 13.5px; font-weight: 700; font-family: var(--font-body); opacity: .85; }
+.csp-btn.full { background: var(--c-green); color: #0f1117; border-color: var(--c-green); }
+.csp-btn.add { background: #9FD3FF; color: #0B2540; border-color: #9FD3FF; }
+.csp-info { margin-top: 10px; text-align: center; }
 .csc-icon { font-size: 40px; flex-shrink: 0; }
 .csc-info { flex: 1; min-width: 0; }
 .csc-title { font-size: 20px; font-weight: 800; font-family: var(--font-title); }
@@ -718,7 +727,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 .chk-mode-tab { flex: 1; min-height: 56px; border-radius: 12px; border: 2px solid var(--c-border2); background: var(--c-bg); color: var(--c-muted); font-size: 15px; font-weight: 800; line-height: 1.25; cursor: pointer; font-family: var(--font-body); padding: 6px 4px; }
 .chk-mode-tab small { display: block; font-size: 11.5px; font-weight: 600; opacity: .9; }
 .chk-mode-tab.active.full { background: var(--c-green); color: #0f1117; border-color: var(--c-green); }
-.chk-mode-tab.active.add { background: #FFE58A; color: #2B2100; border-color: #FFE58A; }
+.chk-mode-tab.active.add { background: #9FD3FF; color: #0B2540; border-color: #9FD3FF; }
 .chk-set-chip {
   padding: 11px 14px; border-radius: 22px; border: 1px solid var(--c-border2, var(--c-border));
   background: var(--c-card); font-size: 14px; font-weight: 700; cursor: pointer;
@@ -1229,7 +1238,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
       </div>
       <div class="cat-arrow">›</div>
     </div>
-    <div class="check-start-card" id="homeCheckCard" onclick="startCheckFromHome()" style="display:none;"></div>
+    <div class="check-start-card" id="homeCheckCard" style="display:none;"></div>
     <div class="home-stats">
       <div class="stat-box"><div class="stat-num" id="statSites">0</div><div class="stat-lbl">등록 현장</div></div>
       <div class="stat-box"><div class="stat-num" id="statReports">0</div><div class="stat-lbl">총 기록 (교육+평가)</div></div>
@@ -1265,7 +1274,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
   </div>
   <div class="scroll-body">
     <div class="site-header-card" id="siteHeaderCard"></div>
-    <div class="check-start-card" id="checkStartCard" onclick="openTodayCheck()"></div>
+    <div class="chk-split-card" id="checkStartCard"></div>
     <div id="siteShareAllWrap"></div>
     <div class="last-assess-card" id="lastAssessCard" style="display:none;"></div>
     <div class="pending-overview-card" id="pendingOverviewCard" onclick="goScreen('scPendingOverview');renderPendingOverview()" style="display:none;">
@@ -1910,8 +1919,6 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
     <div class="safety-no-notice" id="safetyNoNotice" style="display:none;">
       <span>ℹ️</span> 이 현장은 안전관리자를 별도로 선임하지 않았습니다. 보고서의 안전관리자 항목은 "안전관리자 없음"으로 표시되고, 서명란도 공란으로 남습니다.
     </div>
-    <div class="field"><label>현장 주소</label><input type="text" id="mAddress" placeholder="서울시 강남구 ..."></div>
-    <div class="field"><label>현장 전화</label><input type="text" id="mPhone" placeholder="02-0000-0000"></div>
     <div class="btn-row">
       <button class="btn btn-outline btn-sm" style="flex:none;" onclick="closeModal('modalNewSite')">취소</button>
       <button class="btn btn-primary" onclick="saveSite()">저장</button>
@@ -1973,7 +1980,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
       대구지방고용노동청 건설산재예방감독과 제작·배포<br>
       중소규모 건설현장 근로자 안전을 위한 무료 안전관리 도구
     </div>
-    <div id="appBuildLabel" style="font-size:12px;color:var(--c-muted);text-align:center;margin-top:8px;letter-spacing:.3px;user-select:all;">build · 20261022_16 · jslee89</div>
+    <div id="appBuildLabel" style="font-size:12px;color:var(--c-muted);text-align:center;margin-top:8px;letter-spacing:.3px;user-select:all;">build · 20261022_20 · jslee89</div>
     <div class="btn-row">
       <button class="btn btn-primary" onclick="saveSettings()">저장</button>
     </div>
@@ -2974,7 +2981,7 @@ function renderHome() {
       <div class="site-card-meta">
         <span>🏢 ${s.company || '—'}</span>
         <span>👷 소장: ${s.manager}</span>
-        ${s.hasSafetyManager===false ? '<span class="no-safety-badge">⚠️ 안전관리자 없음</span>' : '<span class="has-safety-badge">🦺 안전관리자 있음</span>'}
+        ${s.hasSafetyManager===false ? '' : '<span class="has-safety-badge">🦺 안전관리자 있음</span>'}
         <span class="badge badge-orange">${cnt}건 보고서 (교육 ${eduCnt}·평가/조치 ${riskCnt})</span>
       </div>
       <div class="site-card-actions" onclick="event.stopPropagation()">
@@ -2989,7 +2996,7 @@ function renderHome() {
 function openModal_NewSite() {
   document.getElementById('editingSiteId').value = '';
   document.getElementById('modalSiteTitle').textContent = '🏗 새 현장 등록';
-  ['mSiteName','mCompany','mManager','mAddress','mPhone'].forEach(id => document.getElementById(id).value = '');
+  ['mSiteName','mCompany','mManager'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('mSafety').value = '';
   setSafetyMode(true);
   // Pre-fill from settings — 소규모 현장은 사용자 본인이 현장소장과 안전관리자를
@@ -3011,8 +3018,6 @@ function openEditSiteById(id) {
   document.getElementById('mManager').value   = s.manager || '';
   setSafetyMode(s.hasSafetyManager !== false);
   document.getElementById('mSafety').value = s.hasSafetyManager !== false ? (s.safety||'') : '';
-  document.getElementById('mAddress').value   = s.address || '';
-  document.getElementById('mPhone').value     = s.phone   || '';
   openModal('modalNewSite');
 }
 
@@ -3041,8 +3046,6 @@ function saveSite() {
     company: document.getElementById('mCompany').value.trim(),
     safety:  hasSafety ? safetyName : '',
     safetyLabel: hasSafety ? safetyName : '',
-    address: document.getElementById('mAddress').value.trim(),
-    phone:   document.getElementById('mPhone').value.trim(),
     createdAt: new Date().toISOString()
   };
   if (editId) {
@@ -3101,15 +3104,13 @@ function renderSiteScreen(id) {
   const catEdu  = document.getElementById('catEduCounts');
   if(catRisk) catRisk.innerHTML = `<span class="badge badge-red">${riskCnt.initial}건 최초</span><span class="badge badge-yellow">${riskCnt.periodic}건 수시</span><span class="badge badge-green">${riskCnt.action}건 조치</span>`;
   if(catEdu)  catEdu.innerHTML  = `<span class="badge badge-blue">${totalEdu}건 기록</span>`;
+  const _safetyName = s.hasSafetyManager === false ? '' : (s.safetyLabel || s.safety || '');
   document.getElementById('siteHeaderCard').innerHTML = `
-    <div class="site-header-name">🏗 ${s.name}</div>
-    <div class="site-header-info">
-      <div class="info-item">🏢 시공사<br><strong>${s.company || '—'}</strong></div>
-      <div class="info-item">👷 현장소장<br><strong>${s.manager}</strong></div>
-      <div class="info-item">🦺 안전관리자<br><strong>${s.hasSafetyManager === false ? '안전관리자 없음' : (s.safetyLabel || s.safety || '—')}</strong></div>
-      <div class="info-item">📍 주소<br><strong>${s.address || '—'}</strong></div>
-      <div class="info-item">📞 전화<br><strong>${s.phone || '—'}</strong></div>
-      <div class="info-item">📋 총 기록<br><strong>${DB.reports.filter(r=>r.siteId===id).length + DB.risks.filter(r=>r.siteId===id).length}건</strong></div>
+    <div class="site-header-name">🏗 ${escapeHtml(s.name)}</div>
+    <div class="site-header-line">
+      ${s.company ? `<span>🏢 ${escapeHtml(s.company)}</span>` : ''}
+      <span>👷 소장 ${escapeHtml(s.manager || '')}</span>
+      ${_safetyName ? `<span>🦺 안전관리자 ${escapeHtml(_safetyName)}</span>` : ''}
     </div>`;
   // 마지막 위험성평가(최초·수시) 이후 며칠 지났는지 — 재평가 주기를 놓치지 않도록 안내
   const lacCard = document.getElementById('lastAssessCard');
@@ -3702,7 +3703,7 @@ function buildReportDoc(r) {
     <table class="rd-table">
       <tr><td class="lbl">교육일자</td><td><strong>${r.reportDate}</strong></td>
           <td class="lbl">현장명</td><td>${escapeHtml(site.name) || '—'}</td></tr>
-      <tr><td class="lbl">교육 장소</td><td>${escapeHtml(site.address || site.name) || '현장 내'}</td>
+      <tr><td class="lbl">교육 장소</td><td>${escapeHtml(site.name) || '현장 내'}</td>
           <td class="lbl">시공사</td><td>${escapeHtml(site.company) || '—'}</td></tr>
       <tr><td class="lbl">현장 소장</td><td>${escapeHtml(site.manager) || '—'}</td>
           <td class="lbl">안전관리자</td><td>${site.hasSafetyManager===false?'안전관리자 없음':escapeHtml(site.safetyLabel||site.safety)||'—'}</td></tr>
@@ -6716,17 +6717,22 @@ function renderCheckStartCard(siteId) {
   const open = openList.length;
   const overdue = openList.filter(x => chkIsOverdue(x.item)).length;
   const desc = chkTodayDesc(st, '작업 시작 전, 현장을 돌며 핵심 5가지를 확인하세요');
-  card.innerHTML = chkCardInner(desc, open, overdue, (st.ok + st.ng) > 0, st.unfixed);
+  card.innerHTML = chkCardInner(desc, open, overdue, (st.ok + st.ng) > 0, st.unfixed, false);
 }
-function chkCardInner(desc, open, overdue, started, todayUnfixed) {
+function chkCardInner(desc, open, overdue, started, todayUnfixed, home) {
+  const goFull = home ? "startCheckFromHome('full')" : 'openTodayCheck()';
+  const goAdd = home ? "startCheckFromHome('add')" : 'openAddCheck()';
   return `
-    <div class="csc-icon">✅</div>
-    <div class="csc-info">
-      <div class="csc-title">${started ? '오늘 점검 이어서 하기' : '오늘 점검 시작'}</div>
-      <div class="csc-desc">${desc}</div>
-      ${open > 0 ? `<div class="csc-warn">⚠ 아직 조치 안 된 점검 ${open}건${(todayUnfixed != null && open > todayUnfixed) ? ' (지난 점검 포함)' : ''}${overdue ? ` · 기한 초과 ${overdue}건` : ''}</div>` : ''}
+    <div class="csp-row">
+      ${started
+        ? `<button class="csp-btn full" onclick="${goFull}">✅ 점검<small>이어서 하기</small></button>
+      <button class="csp-btn add" onclick="${goAdd}">➕ 추가 점검<small>문제 생긴 것만</small></button>`
+        : `<button class="csp-btn full" onclick="${goFull}">✅ 오늘 점검 시작</button>`}
     </div>
-    <div class="cat-arrow">›</div>`;
+    <div class="csp-info">
+      <div class="csc-desc" style="margin-top:0;">${desc}</div>
+      ${open > 0 ? `<div class="csc-warn">⚠ 아직 조치 안 된 점검 ${open}건${(todayUnfixed != null && open > todayUnfixed) ? ' (지난 점검 포함)' : ''}${overdue ? ` · 기한 초과 ${overdue}건` : ''}</div>` : ''}
+    </div>`;
 }
 /* 현장이 하나뿐이면 홈 화면에서 바로 점검을 시작할 수 있게 함 (현장이 여러 개면 숨김) */
 function renderHomeCheckCard() {
@@ -6742,6 +6748,8 @@ function renderHomeCheckCard() {
       ? `오늘 점검 전: ${notYet.map(x => escapeHtml(x.name || '현장')).join(', ')}`
       : '오늘 모든 현장을 점검했습니다';
     card.style.display = '';
+    card.className = 'check-start-card';
+    card.onclick = startCheckFromHome;
     card.innerHTML = `
     <div class="csc-icon">✅</div>
     <div class="csc-info">
@@ -6760,13 +6768,15 @@ function renderHomeCheckCard() {
   const overdue = openList.filter(x => chkIsOverdue(x.item)).length;
   const desc = chkTodayDesc(st, '오늘 점검을 아직 하지 않았습니다');
   card.style.display = '';
-  card.innerHTML = chkCardInner(desc, openList.length, overdue, (st.ok + st.ng) > 0, st.unfixed);
+  card.className = 'chk-split-card';
+  card.onclick = null;
+  card.innerHTML = chkCardInner(desc, openList.length, overdue, (st.ok + st.ng) > 0, st.unfixed, true);
 }
-function startCheckFromHome() {
+function startCheckFromHome(mode) {
   if (DB.sites.length > 1) { const l = document.getElementById('siteList'); if (l) l.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
   if (DB.sites.length !== 1) return;
   curSiteId = DB.sites[0].id;
-  openTodayCheck();
+  if (mode === 'add') openAddCheck(); else openTodayCheck();
 }
 
 function openTodayCheck() {
