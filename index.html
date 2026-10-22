@@ -7417,9 +7417,17 @@ async function shareCheckReport() {
 /* ══════════════ 폰의 '뒤로가기' 버튼 처리 (안드로이드) ══════════════
    앱 안에서 한 단계씩 뒤로 가고, 첫 화면에서는 두 번 눌러야 종료됩니다. */
 (function () {
-  let lastHomeBack = 0;
-  function arm() { try { history.pushState({ dandi: 1 }, ''); } catch (e) {} }
-  try { history.replaceState({ dandi: 0 }, ''); arm(); } catch (e) { return; }
+  /* 안드로이드 크롬은 '사용자가 직접 누르지 않고' 만든 기록은 뒤로가기에서 건너뜁니다.
+     그래서 화면을 누를 때마다 여분의 기록을 여러 겹 쌓아 두고, 뒤로가기를 눌러도 앱이 바로 꺼지지 않게 합니다. */
+  const MAX = 5;
+  let cur = 0, exiting = false;
+  try { history.replaceState({ dandi: 0 }, ''); } catch (e) { return; }
+  function arm() {
+    try {
+      while (cur < MAX) { cur++; history.pushState({ dandi: cur }, ''); }
+    } catch (e) {}
+  }
+  ['click', 'touchend', 'pointerup', 'keydown'].forEach(ev => document.addEventListener(ev, arm, true));
   function closeTopLayer() {
     const a = document.querySelector('.photo-src-back');
     if (a) { a.remove(); return true; }
@@ -7436,18 +7444,25 @@ async function shareCheckReport() {
     }
     return false;
   }
-  window.addEventListener('popstate', () => {
+  window.addEventListener('popstate', (e) => {
+    cur = (e.state && typeof e.state.dandi === 'number') ? e.state.dandi : 0;
+    if (exiting) {                     // 종료 처리 중: 맨 처음 기록까지 내려간 뒤 한 번 더 뒤로 → 앱 종료
+      if (cur === 0) history.back(); else history.go(-cur);
+      return;
+    }
     if (closeTopLayer()) { arm(); return; }
     const scr = document.querySelector('.screen.show');
     const back = scr && scr.querySelector('.topnav-back');
     if (back) { back.click(); arm(); return; }
-    // 첫 화면: 2.5초 안에 한 번 더 누르면 종료
-    const now = Date.now();
-    if (now - lastHomeBack < 2500) { history.back(); return; }
-    lastHomeBack = now;
-    toast('한 번 더 누르면 앱이 종료됩니다');
+    // 첫 화면: 앱을 끌지 물어봄
     arm();
+    showConfirm('앱 끄기', '앱을 끄시겠습니까?', '앱 끄기', () => {
+      exiting = true;
+      if (cur === 0) history.back(); else history.go(-cur);
+    });
+    return;
   });
+  arm();
 })();
 
 document.querySelector('.fab').onclick = openModal_NewSite;
