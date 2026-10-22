@@ -63,7 +63,11 @@
   --font-title: '맑은 고딕', 'Malgun Gothic', 'Noto Sans CJK KR', sans-serif;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 15px; }
+html { font-size: 15px; max-width: 100%; overflow-x: hidden; }
+/* 어떤 글자 크기·기기에서도 좌우 스크롤이 생기지 않도록 (위아래 스크롤만 허용) */
+.screen, .scroll-body, .modal, .modal-backdrop { overflow-x: hidden; max-width: 100%; }
+.scroll-body > *, .modal > * { min-width: 0; }
+input, select, textarea, button { max-width: 100%; }
 body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-text); min-height: 100vh; overflow-x: hidden; word-break: keep-all; overflow-wrap: break-word; }
 
 /* ═══════════════════════════════ SCREEN SYSTEM ═══════════════════════════════ */
@@ -74,11 +78,12 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 .topnav {
   background: var(--c-surface);
   border-bottom: 1px solid var(--c-border);
-  padding: 0 16px;
-  height: 56px;
+  padding: 4px 12px;
+  min-height: 56px;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
+  gap: 6px 8px;
   position: sticky; top: 0; z-index: 200;
   flex-shrink: 0;
 }
@@ -93,13 +98,13 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 }
 .topnav-back span { font-size: 13px; font-weight: 700; line-height: 1; font-family: var(--font-body); }
 .topnav-back:active { background: var(--c-border); }
-.topnav-title { font-size: 16.5px; font-weight: 700; flex: 1; font-family: var(--font-title); }
+.topnav-title { font-size: 16.5px; font-weight: 700; flex: 1 1 90px; min-width: 0; overflow-wrap: anywhere; font-family: var(--font-title); }
 .topnav-sub { font-size: 11px; color: var(--c-muted); font-family: var(--font-mono); }
 .topnav-action {
   background: var(--c-orange); border: none; color: #fff;
   font-size: 13.5px; font-weight: 700; font-family: var(--font-body);
-  padding: 10px 16px; border-radius: 8px; cursor: pointer; transition: opacity .15s;
-  white-space: nowrap; min-height: 40px;
+  padding: 10px 12px; border-radius: 8px; cursor: pointer; transition: opacity .15s;
+  white-space: nowrap; min-height: 40px; flex-shrink: 0;
 }
 .topnav-action:hover { opacity: .85; }
 .topnav-action.ghost {
@@ -165,7 +170,9 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 .btn-sm { padding: 7px 12px; font-size: 12px; width: auto; }
 .btn-row { display: flex; gap: 8px; margin-top: 16px; }
 .report-save-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: var(--c-bg); border-top: 1px solid var(--c-border); }
-.report-save-bar .btn { display: block; width: 100%; max-width: 520px; margin: 0 auto; min-height: 58px; font-size: 19px; font-weight: 800; }
+.report-save-bar .rsb-row { display: flex; gap: 10px; max-width: 520px; margin: 0 auto; }
+.report-save-bar .rsb-btn { flex: 1; min-width: 0; min-height: 66px; padding: 6px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 16px; font-weight: 800; line-height: 1.2; text-align: center; }
+.report-save-bar .rsb-ic { font-size: 22px; line-height: 1; }
 .btn-row .btn { flex: 1; }
 
 /* ═══════════════════════════════ BADGE / TAG ═══════════════════════════════ */
@@ -213,8 +220,8 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 .toast {
   position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
   background: var(--c-card); border: 1px solid var(--c-border2);
-  color: var(--c-text); padding: 11px 20px; border-radius: 30px;
-  font-size: 13px; font-weight: 500; z-index: 999; white-space: nowrap;
+  color: var(--c-text); padding: 11px 20px; border-radius: 22px;
+  font-size: 13px; font-weight: 500; z-index: 999; white-space: normal; width: max-content; max-width: calc(100% - 32px); text-align: center; line-height: 1.5;
   opacity: 0; transition: opacity .25s; pointer-events: none;
   box-shadow: 0 8px 32px rgba(0,0,0,.4);
 }
@@ -398,7 +405,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 .report-item { flex-wrap: wrap; }
 .report-item-info { flex: 1 1 0; }
 .report-item-actions { display: flex; gap: 6px; flex: 1 0 100%; justify-content: flex-end; padding-top: 4px; }
-.report-item-actions .icon-btn.lbl { flex: 1; }
+.report-item-actions .icon-btn.lbl { flex: 1 1 0; min-width: 0; padding: 6px 2px; }
 
 /* ════════════════════════════════════════════════════════════════════════
    SCREEN 3 — NEW EDUCATION FORM
@@ -472,7 +479,9 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 .att-add-row1 { display: flex; gap: 8px; margin-bottom: 8px; }
 .att-add-row1 input { flex: 1; background: var(--c-surface); border: 1px solid var(--c-border); border-radius: 8px; padding: 11px 12px; color: var(--c-text); font-family: var(--font-body); font-size: 15px; outline: none; transition: border-color .15s; min-height: 44px; }
 .att-add-row1 input:focus { border-color: var(--c-orange); }
-.att-add-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.att-add-row2 { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 8px; margin-bottom: 8px; }
+.att-add-row2 > *, .att-add-row2 input, .att-add-row2 select { min-width: 0; width: 100%; box-sizing: border-box; }
+.att-add-row1 input { min-width: 0; }
 .att-add-row2 input, .att-add-row2 select {
   background: var(--c-surface); border: 1px solid var(--c-border);
   border-radius: 8px; padding: 11px 12px; color: var(--c-text);
@@ -705,6 +714,11 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 .csc-warn { font-size: 14.5px; color: var(--c-red); font-weight: 700; margin-top: 4px; }
 .chk-section-title { font-size: 15px; font-weight: 800; margin: 18px 0 10px; font-family: var(--font-title); }
 .chk-set-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.chk-mode-row { display: flex; gap: 8px; margin: 0 0 14px; }
+.chk-mode-tab { flex: 1; min-height: 56px; border-radius: 12px; border: 2px solid var(--c-border2); background: var(--c-bg); color: var(--c-muted); font-size: 15px; font-weight: 800; line-height: 1.25; cursor: pointer; font-family: var(--font-body); padding: 6px 4px; }
+.chk-mode-tab small { display: block; font-size: 11.5px; font-weight: 600; opacity: .9; }
+.chk-mode-tab.active.full { background: var(--c-green); color: #0f1117; border-color: var(--c-green); }
+.chk-mode-tab.active.add { background: #FFE58A; color: #2B2100; border-color: #FFE58A; }
 .chk-set-chip {
   padding: 11px 14px; border-radius: 22px; border: 1px solid var(--c-border2, var(--c-border));
   background: var(--c-card); font-size: 14px; font-weight: 700; cursor: pointer;
@@ -1262,7 +1276,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
       </div>
       <div class="cat-arrow">›</div>
     </div>
-    <div class="label-sm" style="margin-bottom:12px;">관리 카테고리</div>
+    <div class="label-sm" style="margin-bottom:12px;">관리 카테고리 <span style="color:var(--c-orange);font-weight:700;">(법정 의무)</span></div>
     <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:24px;">
       <div class="cat-card cat-risk" onclick="goScreen('scRisk');renderRiskScreen()">
         <div class="cat-icon">⚠️</div>
@@ -1293,14 +1307,15 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
   <div class="topnav">
     <button class="topnav-back" onclick="openSite(curSiteId)">←<span>뒤로</span></button>
     <div style="flex:1; min-width:0;">
-      <div class="topnav-title">✅ 오늘 점검</div>
+      <div class="topnav-title" id="scCheckTitle">✅ 오늘 점검</div>
       <div class="topnav-sub" id="scCheckSub"></div>
     </div>
     <button class="topnav-action ghost home-btn" onclick="goScreen('scHome')" title="처음으로">🏠 처음으로</button>
   </div>
   <div class="scroll-body">
+    <div id="chkModeWrap"></div>
     <div id="chkOpenWrap"></div>
-    <div class="chk-section-title">오늘 하는 작업을 고르세요</div>
+    <div class="chk-section-title" id="chkSetTitle">오늘 하는 작업을 고르세요</div>
     <div class="chk-set-wrap" id="chkSetWrap"></div>
     <div id="chkReadonlyNote"></div>
     <div id="chkItemsWrap"></div>
@@ -1326,14 +1341,11 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
     </div>
     <button class="topnav-action ghost home-btn" onclick="goScreen('scHome')" title="처음으로">🏠 처음으로</button>
   </div>
-  <div class="report-save-bar"><button class="btn btn-success" onclick="downloadCheckReport()">⬇ 이미지 저장 (A4)</button></div>
+  <div class="report-save-bar"><div class="rsb-row"><button class="btn btn-success rsb-btn" onclick="downloadCheckReport()"><span class="rsb-ic">⬇</span><span>이미지 저장</span></button><button class="btn btn-share rsb-btn" onclick="shareCheckReport()">  <span class="rsb-ic">📤</span><span>카톡·문자 보내기</span></button></div></div>
   <div class="scroll-body" style="padding-bottom:120px;">
     <div class="report-viewer-wrap">
       <div class="report-viewer-label">📄 PRE-WORK SAFETY CHECK</div>
       <div class="report-scale-wrap"><div id="checkReportScaleWrap"></div></div>
-    </div>
-    <div class="btn-row" style="margin-top:8px;">
-      <button class="btn btn-share" onclick="shareCheckReport()">📤 카톡·문자로 점검표 보내기</button>
     </div>
     <div style="font-size:11.5px;color:var(--c-muted);margin-top:10px;line-height:1.6;text-align:center;">
       인쇄해서 점검자와 현장소장이 서명하면 점검 증빙이 됩니다.
@@ -1543,11 +1555,11 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
     <div id="riskHazardSection">
       <div class="label-sm" style="margin-bottom:10px;">위험요인 및 평가 <span style="color:var(--c-muted);font-size:10px;">위험도 = 빈도×강도</span></div>
       <div id="initialPresetBanner" style="display:none;margin-bottom:10px;">
-        <div style="background:rgba(239,69,101,.08);border:1px solid rgba(239,69,101,.25);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:10px;">
+        <div style="background:rgba(239,69,101,.08);border:1px solid rgba(239,69,101,.25);border-radius:8px;padding:12px 14px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;">
           <span style="font-size:22px;">📋</span>
-          <div style="flex:1;">
+          <div style="flex:1 1 140px;min-width:0;">
             <div style="font-size:13px;font-weight:700;margin-bottom:2px;">KOSHA 기준 위험요인 자동 입력</div>
-            <div style="font-size:11px;color:var(--c-muted);">산업안전보건공단 위험성평가 지침 기준 공종별 기본 위험요인을 불러올 수 있습니다.</div>
+            <div id="presetBannerDesc" style="font-size:11px;color:var(--c-muted);">산업안전보건공단 위험성평가 지침 기준 공종별 기본 위험요인을 불러올 수 있습니다.</div>
           </div>
           <button class="btn btn-primary btn-sm" style="white-space:nowrap;" onclick="openPresetModal()">📋 자동 입력</button>
         </div>
@@ -1654,7 +1666,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
     </div>
     <button class="topnav-action ghost home-btn" onclick="goScreen('scHome')" title="처음으로">🏠 처음으로</button>
   </div>
-  <div class="report-save-bar"><button class="btn btn-success" onclick="downloadRiskReport()">⬇ 이미지 저장 (A4)</button></div>
+  <div class="report-save-bar"><div class="rsb-row"><button class="btn btn-success rsb-btn" onclick="downloadRiskReport()"><span class="rsb-ic">⬇</span><span>이미지 저장</span></button><button class="btn btn-share rsb-btn" onclick="shareRiskById(curRiskId)">  <span class="rsb-ic">📤</span><span>카톡·문자 보내기</span></button></div></div>
   <div class="scroll-body" style="padding-bottom:120px;">
     <div class="report-viewer-wrap">
       <div class="report-viewer-label">📄 RISK ASSESSMENT REPORT</div>
@@ -1665,14 +1677,6 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
     <div class="risk-action-panel" id="rapEval" style="display:none;">
       <div class="risk-action-panel-title">이 평가 기록으로 할 수 있는 작업</div>
       <div class="rap-btns">
-        <button class="rap-btn rap-btn-action rap-share" onclick="shareRiskById(curRiskId)">
-          <span class="rap-btn-icon">📤</span>
-          <div class="rap-btn-text">
-            <div class="rb-title">카톡·문자로 보내기</div>
-            <div class="rb-desc">이 평가 보고서를 이미지로 보냅니다</div>
-          </div>
-          <span style="color:var(--c-muted);">›</span>
-        </button>
         <button class="rap-btn rap-btn-action" onclick="goActionFromReport()">
           <span class="rap-btn-icon">✅</span>
           <div class="rap-btn-text">
@@ -1701,7 +1705,6 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 
     <!-- 조치 기록일 때는 단순 버튼 -->
     <div id="rapAction" style="display:none;">
-      <button class="btn btn-share" style="margin-bottom:8px;" onclick="shareRiskById(curRiskId)">📤 카톡·문자로 보내기</button>
       <div class="btn-row">
         <button class="btn btn-outline" onclick="confirmDeleteRisk()">🗑 삭제</button>
         <button class="btn btn-outline rap-btn-edit" style="color:var(--c-blue);border-color:rgba(74,158,255,.3);" onclick="goEditRisk()">✏️ 수정</button>
@@ -1859,13 +1862,12 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
     </div>
     <button class="topnav-action ghost home-btn" onclick="goScreen('scHome')" title="처음으로">🏠 처음으로</button>
   </div>
-  <div class="report-save-bar"><button class="btn btn-success" onclick="downloadCurrentReport()">⬇ 이미지 저장 (A4)</button></div>
+  <div class="report-save-bar"><div class="rsb-row"><button class="btn btn-success rsb-btn" onclick="downloadCurrentReport()"><span class="rsb-ic">⬇</span><span>이미지 저장</span></button><button class="btn btn-share rsb-btn" onclick="shareEduById(curReportId)">  <span class="rsb-ic">📤</span><span>카톡·문자 보내기</span></button></div></div>
   <div class="scroll-body" style="padding-bottom:120px;">
     <div class="report-viewer-wrap">
       <div class="report-viewer-label">📄 REPORT PREVIEW</div>
       <div class="report-scale-wrap"><div id="reportScaleWrap"></div></div>
     </div>
-    <button class="btn btn-share" style="margin-bottom:8px;" onclick="shareEduById(curReportId)">📤 카톡·문자로 보내기</button>
     <div class="btn-row">
       <button class="btn btn-outline" onclick="confirmDeleteReport()">🗑 삭제</button>
       <button class="btn btn-outline" style="color:var(--c-blue);border-color:rgba(74,158,255,.3);" onclick="goEditEducation()">✏️ 수정</button>
@@ -1971,7 +1973,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
       대구지방고용노동청 건설산재예방감독과 제작·배포<br>
       중소규모 건설현장 근로자 안전을 위한 무료 안전관리 도구
     </div>
-    <div id="appBuildLabel" style="font-size:12px;color:var(--c-muted);text-align:center;margin-top:8px;letter-spacing:.3px;user-select:all;">build · 20261022_07 · jslee89</div>
+    <div id="appBuildLabel" style="font-size:12px;color:var(--c-muted);text-align:center;margin-top:8px;letter-spacing:.3px;user-select:all;">build · 20261022_16 · jslee89</div>
     <div class="btn-row">
       <button class="btn btn-primary" onclick="saveSettings()">저장</button>
     </div>
@@ -4184,6 +4186,16 @@ function renderRiskList() {
 }
 
 /* ══════════════ 신규 기록 진입 라우팅 ══════════════ */
+/* KOSHA 자동 입력 박스: 최초·수시 위험성평가에서 표시 (수시평가는 바뀐 작업만 골라 쓰도록 안내) */
+function setPresetBanner(rtype) {
+  const box = document.getElementById('initialPresetBanner');
+  if (!box) return;
+  box.style.display = (rtype === 'initial' || rtype === 'periodic') ? '' : 'none';
+  const d = document.getElementById('presetBannerDesc');
+  if (d) d.textContent = rtype === 'periodic'
+    ? '새로 시작하거나 바뀐 작업에 해당하는 공종만 골라, 필요한 위험요인만 불러오세요.'
+    : '산업안전보건공단 위험성평가 지침 기준 공종별 기본 위험요인을 불러올 수 있습니다.';
+}
 function goNewRiskEntry() {
   if (curRiskType === 'action') {
     if (curActionCategory === 'remediation') {
@@ -4295,7 +4307,7 @@ function goNewRisk() {
   // Show/hide sections based on type
   document.getElementById('riskActionFields').style.display   = isAction ? '' : 'none';
   document.getElementById('riskHazardSection').style.display  = isAction ? 'none' : '';
-  document.getElementById('initialPresetBanner').style.display = (curRiskType==='initial') ? '' : 'none';
+  setPresetBanner(curRiskType);
   document.getElementById('hazardClearBtn').style.display = 'none';
   document.getElementById('riskMemoLabel').textContent = isAction ? '조치 내용 / 메모' : curRiskType==='initial' ? '평가 총평 (종합 의견)' : '평가 결과 / 메모';
   updateRiskPhotoSectionLabel(isAction);
@@ -5574,7 +5586,7 @@ function goEditRisk() {
   document.getElementById('riskHazardSection').style.display = isAction ? 'none' : '';
   updateRiskPhotoSectionLabel(isAction);
   applyActionKindFields(isAction);
-  document.getElementById('initialPresetBanner').style.display = r.rtype==='initial' ? '' : 'none';
+  setPresetBanner(r.rtype);
   document.getElementById('hazardClearBtn').style.display = hazardRows.length > 0 ? '' : 'none';
   document.getElementById('riskAttendeeInputName').value = '';
   document.getElementById('riskAttendeeInputWork').value = '';
@@ -6600,6 +6612,8 @@ function chkBadLine(it) { return chkBad(it) + (it.memo ? ' — ' + it.memo : '')
 let curCheck = null;            // 지금 화면에 보여주는 점검 기록
 let curCheckSetId = 'common';   // 오늘 작업 종류
 let curCheckReadonly = false;   // 지난 기록이면 true
+let chkAddMode = false;         // true: '추가 점검'(문제 생긴 것만) 화면
+let chkAddSession = null;       // 추가 점검 한 번(한 묶음)을 구분하는 값
 let _chkPhotoTarget = null;     // {kind:'item', key} | {kind:'fix'}
 let _chkFixCtx = null;          // 조치 완료 입력 중인 {recId, key}
 let _chkFixPhoto = null;
@@ -6609,7 +6623,7 @@ function chkEnsure() { if (!Array.isArray(DB.checks)) DB.checks = []; }
 function chkSetById(id) { return CHECK_SETS.find(s => s.id === id) || CHECK_SETS[0]; }
 function chkFind(siteId, date, setId) {
   chkEnsure();
-  return DB.checks.find(c => c.siteId === siteId && c.date === date && c.setId === setId);
+  return DB.checks.find(c => c.siteId === siteId && c.date === date && c.setId === setId && c.kind !== 'add');
 }
 function chkNewRecord(setId) {
   const set = chkSetById(setId);
@@ -6627,6 +6641,15 @@ function chkNewRecord(setId) {
     savedAt: null
   };
 }
+function chkNewAddRecord(setId) {
+  const rec = chkNewRecord(setId);
+  const d = new Date();
+  rec.kind = 'add';
+  rec.addSession = chkAddSession;
+  rec.time = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+  return rec;
+}
+function chkTimeLabel(rec) { return rec.kind === 'add' ? `➕ 추가 점검 ${rec.time || ''}`.trim() : ''; }
 function chkPersist(rec) {
   chkEnsure();
   if (!rec.items.some(i => i.result)) return;   // 아직 아무것도 체크하지 않았으면 저장 안 함
@@ -6635,7 +6658,12 @@ function chkPersist(rec) {
   saveDB();
 }
 function chkLoadToday() {
-  curCheck = chkFind(curSiteId, todayStr(), curCheckSetId) || chkNewRecord(curCheckSetId);
+  if (chkAddMode) {
+    chkEnsure();
+    curCheck = DB.checks.find(c => c.siteId === curSiteId && c.kind === 'add' && c.addSession === chkAddSession && c.setId === curCheckSetId) || chkNewAddRecord(curCheckSetId);
+  } else {
+    curCheck = chkFind(curSiteId, todayStr(), curCheckSetId) || chkNewRecord(curCheckSetId);
+  }
   curCheckReadonly = false;
 }
 /* 이 현장에서 ×(불량)로 기록됐고 아직 조치 완료가 없는 항목 목록 */
@@ -6742,12 +6770,28 @@ function startCheckFromHome() {
 }
 
 function openTodayCheck() {
+  chkAddMode = false;
   if (!CHECK_SETS.some(s => s.id === curCheckSetId)) curCheckSetId = 'common';
   chkLoadToday();
   goScreen('scCheck');
   renderCheckScreen();
 }
+/* 추가 점검: 아침 전체 점검과 별도로, 낮에 문제가 생긴 것만 올림 */
+function openAddCheck() {
+  chkAddMode = true;
+  chkAddSession = new Date().toISOString();
+  if (!CHECK_SETS.some(s => s.id === curCheckSetId)) curCheckSetId = 'common';
+  chkLoadToday();
+  goScreen('scCheck');
+  renderCheckScreen();
+  window.scrollTo(0, 0);
+}
+function setCheckMode(mode) {
+  if (mode === 'add') { if (!chkAddMode || curCheckReadonly) openAddCheck(); }
+  else if (chkAddMode || curCheckReadonly) openTodayCheck();
+}
 function setCheckSet(id) {
+  if (curCheckReadonly) chkAddMode = false;
   curCheckSetId = id;
   chkLoadToday();
   renderCheckScreen();
@@ -6758,6 +6802,8 @@ function openPastCheck(recId) {
   if (!rec) return;
   curCheck = rec;
   curCheckSetId = rec.setId;
+  chkAddMode = rec.kind === 'add';
+  chkAddSession = rec.addSession || null;
   curCheckReadonly = rec.date !== todayStr();
   renderCheckScreen();
   window.scrollTo(0, 0);
@@ -6765,6 +6811,15 @@ function openPastCheck(recId) {
 
 function renderCheckScreen() {
   const site = DB.sites.find(x => x.id === curSiteId) || {};
+  const isAdd = !!(curCheck && curCheck.kind === 'add');
+  const addEdit = isAdd && !curCheckReadonly;
+  document.getElementById('scCheckTitle').textContent = isAdd ? '➕ 추가 점검' : '✅ 오늘 점검';
+  document.getElementById('chkSetTitle').textContent = isAdd ? '문제가 생긴 작업을 고르세요' : '오늘 하는 작업을 고르세요';
+  document.getElementById('chkModeWrap').innerHTML = curCheckReadonly ? '' :
+    `<div class="chk-mode-row">
+      <button class="chk-mode-tab full ${isAdd ? '' : 'active'}" onclick="setCheckMode('full')">✅ 전체 점검<small>아침에 한 번</small></button>
+      <button class="chk-mode-tab add ${isAdd ? 'active' : ''}" onclick="setCheckMode('add')">➕ 추가 점검<small>문제 생긴 것만</small></button>
+    </div>`;
   document.getElementById('scCheckSub').textContent = `${site.name || ''} · ${curCheck ? curCheck.date : todayStr()}`;
 
   // 1) 미조치 점검 항목 (맨 위에 고정)
@@ -6777,7 +6832,7 @@ function renderCheckScreen() {
         return `<div class="chk-open-item">
           ${item.photo ? `<img class="chk-open-thumb" src="${item.photo}" onclick="chkViewPhoto('${rec.id}','${item.key}','photo')" alt="점검 사진">` : ''}
           <div class="chk-open-info">
-            <div class="chk-open-meta">${rec.date} · ${set.icon} ${escapeHtml(set.name)}</div>
+            <div class="chk-open-meta">${rec.date}${rec.kind === 'add' ? ' ' + escapeHtml(rec.time || '') + ' 추가' : ''} · ${set.icon} ${escapeHtml(set.name)}</div>
             <div class="chk-open-label">${escapeHtml(chkBad(item))}</div>
             ${item.memo ? `<div class="chk-open-memo">📝 ${escapeHtml(item.memo)}</div>` : ''}
             ${chkDueText(item) ? `<div class="chk-open-memo">${chkDueText(item)}</div>` : ''}
@@ -6802,12 +6857,12 @@ function renderCheckScreen() {
     : (curCheck.items.some(i => i.result === 'ng' && !i.fixedAt)
         ? `<div class="chk-tip">💡 불량은 <b>바로 조치하고, 위쪽 목록에서 '조치 완료'를 눌러 기록</b>해 두는 것이 가장 좋습니다. 조치 기록까지 남아 있으면 점검의 가치가 가장 큽니다.</div>`
         : '');
-  const done = curCheck.items.filter(i => i.result && !i.extra).length;
+  const done = isAdd ? curCheck.items.filter(i => i.result === 'ng').length : curCheck.items.filter(i => i.result && !i.extra).length;
   const totalN = curCheck.items.filter(i => !i.extra).length;
   const savedAt = curCheck.savedAt ? new Date(curCheck.savedAt) : null;
   const timeTxt = savedAt ? ` · 마지막 저장 ${String(savedAt.getHours()).padStart(2,'0')}:${String(savedAt.getMinutes()).padStart(2,'0')}` : '';
-  const head = `<div class="label-sm" style="margin-bottom:10px;">${chkSetById(curCheck.setId).icon} ${escapeHtml(chkSetById(curCheck.setId).name)} — ${done}/${totalN}개 확인${timeTxt}${chkSetById(curCheck.setId).law ? `<div style="margin-top:4px;font-weight:400;opacity:.85;">근거: ${escapeHtml(chkSetById(curCheck.setId).law)}</div>` : ''}</div>${ro ? '' : `<div style="font-size:14px;line-height:1.5;margin:-2px 0 12px;color:var(--c-muted);">현장을 한 바퀴 돌며 <b style="color:var(--c-text);">모두 확인했으면 ○</b>, <b style="color:var(--c-text);">한 곳이라도 문제면 ×</b>를 누르세요.</div>`}`;
-  const itemsHtml = curCheck.items.map(it => {
+  const head = `<div class="label-sm" style="margin-bottom:10px;">${chkSetById(curCheck.setId).icon} ${escapeHtml(chkSetById(curCheck.setId).name)} — ${isAdd ? `${curCheck.time || ''} 추가 점검 · 불량 ${done}건` : `${done}/${totalN}개 확인`}${timeTxt}${chkSetById(curCheck.setId).law ? `<div style="margin-top:4px;font-weight:400;opacity:.85;">근거: ${escapeHtml(chkSetById(curCheck.setId).law)}</div>` : ''}</div>${ro ? '' : (isAdd ? `<div style="font-size:14px;line-height:1.5;margin:-2px 0 12px;color:var(--c-muted);"><b style="color:var(--c-text);">문제가 생긴 항목만 ×</b>를 누르세요. 나머지는 그대로 두면 됩니다.</div>` : `<div style="font-size:14px;line-height:1.5;margin:-2px 0 12px;color:var(--c-muted);">현장을 한 바퀴 돌며 <b style="color:var(--c-text);">모두 확인했으면 ○</b>, <b style="color:var(--c-text);">한 곳이라도 문제면 ×</b>를 누르세요.</div>`)}`;
+  const itemsHtml = curCheck.items.filter(it => !(isAdd && ro && !it.result)).map(it => {
     const cls = it.result === 'ng' ? 'ng' : it.result === 'ok' ? 'ok' : '';
     const photoBtn = it.photo
       ? `<button class="chk-photo-btn has" onclick="chkViewPhoto('${curCheck.id}','${it.key}','photo')" aria-label="사진 보기"><img src="${it.photo}" alt=""></button>`
@@ -6830,8 +6885,8 @@ function renderCheckScreen() {
     const btns = ro
       ? `<div class="chk-btn-row"><div class="chk-btn ${it.result === 'ok' ? 'ok on' : it.result === 'ng' ? 'ng on' : ''}" style="display:flex;align-items:center;justify-content:center;cursor:default;">${it.result === 'ok' ? '○ 양호' : it.result === 'ng' ? '× 불량' : '미확인'}</div>${photoBtn}</div>`
       : `<div class="chk-btn-row">
-          <button class="chk-btn ok ${it.result === 'ok' ? 'on' : ''}" onclick="setCheckResult('${it.key}','ok')">○ 양호</button>
-          <button class="chk-btn ng ${it.result === 'ng' ? 'on' : ''}" onclick="setCheckResult('${it.key}','ng')">× 불량</button>
+          ${addEdit ? '' : `<button class="chk-btn ok ${it.result === 'ok' ? 'on' : ''}" onclick="setCheckResult('${it.key}','ok')">○ 양호</button>`}
+          <button class="chk-btn ng ${it.result === 'ng' ? 'on' : ''}" onclick="setCheckResult('${it.key}','ng')">${addEdit ? '× 문제 있음' : '× 불량'}</button>
           ${photoBtn}${retake}
         </div>`;
     let more = '';
@@ -6860,14 +6915,14 @@ function renderCheckScreen() {
   // 4-2) 오늘 점검 전체 공유
   const todayRecs = chkTodayRecords();
   document.getElementById('chkShareAllWrap').innerHTML = todayRecs.length
-    ? `<button class="chk-share-btn" style="margin-top:8px;" onclick="shareTodayChecks()">📤 오늘 점검 ${todayRecs.length}개 공종 전부 카톡·문자로 보내기</button>`
+    ? `<button class="chk-share-btn" style="margin-top:8px;" onclick="shareTodayChecks()">📤 오늘 점검 ${todayRecs.length}건 전부 카톡·문자로 보내기</button>`
     : '';
 
   // 4-3) 점검 기록 지우기(초기화)
   chkEnsure();
   const saved = curCheck && DB.checks.includes(curCheck);
   document.getElementById('chkDeleteWrap').innerHTML = saved
-    ? `<button class="btn btn-outline" style="margin-top:8px;min-height:50px;color:var(--c-red);border-color:rgba(239,69,101,.4);" onclick="confirmDeleteCheck()">${curCheckReadonly ? '🗑 이 날 점검 기록 삭제' : '↺ 오늘 이 점검 지우고 다시 하기'}</button>` : '';
+    ? `<button class="btn btn-outline" style="margin-top:8px;min-height:50px;color:var(--c-red);border-color:rgba(239,69,101,.4);" onclick="confirmDeleteCheck()">${curCheckReadonly ? '🗑 이 날 점검 기록 삭제' : (isAdd ? '🗑 이 추가 점검 지우기' : '↺ 오늘 이 점검 지우고 다시 하기')}</button>` : '';
 
   // 5) 지난 점검 기록
   chkEnsure();
@@ -6881,8 +6936,8 @@ function renderCheckScreen() {
         const openN = c.items.filter(i => i.result === 'ng' && !i.fixedAt).length;
         return `<div class="chk-hist-item" onclick="openPastCheck('${c.id}')">
           <div style="flex:1;min-width:0;">
-            <div style="font-size:14px;font-weight:700;">${c.date} · ${set.icon} ${escapeHtml(set.name)}</div>
-            <div style="font-size:12px;color:var(--c-muted);margin-top:3px;">양호 ${okN} · 불량 ${ngN}${openN ? ` · <span style="color:var(--c-red);font-weight:700;">미조치 ${openN}</span>` : ''}</div>
+            <div style="font-size:14px;font-weight:700;">${c.date}${c.kind === 'add' ? ' · ➕ 추가 ' + escapeHtml(c.time || '') : ''} · ${set.icon} ${escapeHtml(set.name)}</div>
+            <div style="font-size:12px;color:var(--c-muted);margin-top:3px;">${c.kind === 'add' ? '' : `양호 ${okN} · `}불량 ${ngN}${openN ? ` · <span style="color:var(--c-red);font-weight:700;">미조치 ${openN}</span>` : ''}</div>
           </div>
           <div class="cat-arrow">›</div></div>`;
       }).join('')
@@ -7083,10 +7138,12 @@ function buildCheckReportDoc(rec) {
   const set = chkSetById(rec.setId);
   const inspector = (DB.settings && DB.settings.userName) || site.manager || '';
   const docNo = `CHK-${rec.date.replace(/\./g, '')}-${rec.id.slice(-4).toUpperCase()}`;
-  const okN = rec.items.filter(i => i.result === 'ok').length;
-  const ngN = rec.items.filter(i => i.result === 'ng').length;
-  const noN = rec.items.length - okN - ngN;
-  const rows = rec.items.map((it, i) => {
+  const isAddRec = rec.kind === 'add';
+  const shown = isAddRec ? rec.items.filter(i => i.result) : rec.items;
+  const okN = shown.filter(i => i.result === 'ok').length;
+  const ngN = shown.filter(i => i.result === 'ng').length;
+  const noN = shown.length - okN - ngN;
+  const rows = shown.map((it, i) => {
     const res = it.result === 'ok' ? '<b style="color:#1e8449;font-size:13px;">○</b>'
       : it.result === 'ng' ? '<b style="color:#c0392b;font-size:13px;">×</b>' : '<span style="color:#aaa;">—</span>';
     const fix = it.result !== 'ng' ? ''
@@ -7103,7 +7160,7 @@ function buildCheckReportDoc(rec) {
 
   // 사진: 불량 항목 사진(조치 후 사진 포함)을 3장씩 한 줄로
   const photos = [];
-  rec.items.forEach((it, i) => {
+  shown.forEach((it, i) => {
     if (it.photo) photos.push({ src: it.photo, cap: `${i + 1}. ${it.result === 'ng' ? '불량' : it.result === 'ok' ? '양호' : '점검'} 사진` });
     if (it.fixPhoto) photos.push({ src: it.fixPhoto, cap: `${i + 1}. 조치 후 사진` });
   });
@@ -7123,14 +7180,14 @@ function buildCheckReportDoc(rec) {
         <div style="font-size:10px;color:#888;">${escapeHtml(site.company) || ''}</div>
       </div>
       <div style="text-align:right;">
-        <div class="rrd-title">작업 전 안전점검표</div>
+        <div class="rrd-title">${isAddRec ? '추가 안전점검표' : '작업 전 안전점검표'}</div>
         <span class="rrd-type-badge rrd-action">${set.icon} ${escapeHtml(set.name)}</span><br>${set.law ? `<span style="font-size:10px;color:#666;">근거: ${escapeHtml(set.law)}</span><br>` : ''}
         <span style="font-size:10px;color:#aaa;">${docNo}</span>
       </div>
     </div>
     <table class="rrd-table">
-      <tr><td class="lbl">현장명</td><td>${escapeHtml(site.name) || '—'}</td><td class="lbl">점검일</td><td>${rec.date}</td></tr>
-      <tr><td class="lbl">점검자</td><td>${escapeHtml(inspector) || '—'}</td><td class="lbl">점검 결과</td><td>양호 ${okN} · 불량 ${ngN}${noN ? ` · 미확인 ${noN}` : ''}</td></tr>
+      <tr><td class="lbl">현장명</td><td>${escapeHtml(site.name) || '—'}</td><td class="lbl">점검일</td><td>${rec.date}${isAddRec && rec.time ? ' ' + rec.time + ' (추가 점검)' : ''}</td></tr>
+      <tr><td class="lbl">점검자</td><td>${escapeHtml(inspector) || '—'}</td><td class="lbl">점검 결과</td><td>${isAddRec ? `불량 ${ngN}건 (문제가 생긴 항목만 기록)` : `양호 ${okN} · 불량 ${ngN}${noN ? ` · 미확인 ${noN}` : ''}`}</td></tr>
     </table>
     <div class="rrd-section">
       <div class="rrd-section-title">점검 항목</div>
@@ -7168,7 +7225,7 @@ async function downloadCheckReport() {
   buildCheckReportDoc(curCheck);
   const site = DB.sites.find(x => x.id === curCheck.siteId) || {};
   const nm = (site.name || '현장').replace(/[\\/:*?"<>|]/g, '');
-  await captureAndDownloadA4('checkReportDoc', `작업전_안전점검표_${nm}_${curCheck.date}_${chkSetById(curCheck.setId).name}`);
+  await captureAndDownloadA4('checkReportDoc', `${curCheck.kind === 'add' ? '추가_안전점검표' : '작업전_안전점검표'}_${nm}_${curCheck.date}${curCheck.kind === 'add' && curCheck.time ? '_' + curCheck.time.replace(':', '') : ''}_${chkSetById(curCheck.setId).name}`);
 }
 
 
@@ -7329,7 +7386,7 @@ function confirmDeleteCheck() {
   if (!curCheck) return;
   const set = chkSetById(curCheck.setId);
   const open = curCheck.items.filter(i => i.result === 'ng' && !i.fixedAt).length;
-  const msg = `${curCheck.date} ${set.name} 점검 기록(○/×, 사진, 메모, 조치 내용)이 모두 지워지고 복구할 수 없습니다.` +
+  const msg = `${curCheck.date}${curCheck.kind === 'add' ? ' ' + (curCheck.time || '') + ' 추가 점검' : ''} ${set.name} 점검 기록(○/×, 사진, 메모, 조치 내용)이 모두 지워지고 복구할 수 없습니다.` +
     (open ? `\n아직 조치 안 된 불량 ${open}건도 함께 사라집니다.` : '');
   showConfirm(curCheckReadonly ? '이 날 점검 기록 삭제' : '오늘 점검 지우고 다시 하기', msg, '지우기', () => deleteCurrentCheck());
 }
@@ -7342,7 +7399,7 @@ function deleteCurrentCheck() {
   saveDB();
   toast('🗑 점검 기록을 지웠습니다');
   curCheckReadonly = false;
-  if (wasPast) curCheckSetId = curCheckSetId || 'common';
+  if (wasPast) { chkAddMode = false; curCheckSetId = curCheckSetId || 'common'; }
   chkLoadToday();
   renderCheckScreen();
   try { renderCheckStartCard(curSiteId); renderHomeCheckCard(); } catch (e) {}
@@ -7360,7 +7417,8 @@ function buildTodayChecksText(recs) {
     const set = chkSetById(rec.setId);
     const ok = rec.items.filter(i => i.result === 'ok').length;
     const ngs = rec.items.filter(i => i.result === 'ng');
-    lines.push(`${set.icon} ${set.name} — ` + (ngs.length ? `양호 ${ok} · 불량 ${ngs.length}` : (ok ? '전부 양호' : '미확인')));
+    if (rec.kind === 'add') lines.push(`➕ 추가 점검 ${rec.time || ''} · ${set.icon} ${set.name} — 불량 ${ngs.length}`);
+    else lines.push(`${set.icon} ${set.name} — ` + (ngs.length ? `양호 ${ok} · 불량 ${ngs.length}` : (ok ? '전부 양호' : '미확인')));
     ngs.forEach(i => lines.push(` ↳ ${chkBadLine(i)}${i.fixedAt ? ' (조치 완료)' : ' (미조치)'}`));
   });
   return lines.join('\n');
@@ -7382,7 +7440,7 @@ async function shareTodayChecks() {
       const setName = chkSetById(rec.setId).name;
       for (let i = 0; i < slices.length; i++) {
         const blob = await new Promise(res => slices[i].toBlob(res, 'image/png'));
-        files.push(new File([blob], `점검표_${setName}_${rec.date}_${i + 1}.png`, { type: 'image/png' }));
+        files.push(new File([blob], `${rec.kind === 'add' ? '추가점검표' + (rec.time ? '_' + rec.time.replace(':', '') : '') : '점검표'}_${setName}_${rec.date}_${i + 1}.png`, { type: 'image/png' }));
       }
     }
     if (curCheck) buildCheckReportDoc(curCheck);
