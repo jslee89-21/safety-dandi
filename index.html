@@ -775,6 +775,9 @@ input[type=date]::-webkit-calendar-picker-indicator { opacity: .8; }
 .wx-title { font-size: 17px; font-weight: 800; line-height: 1.35; overflow-wrap: anywhere; }
 .wx-card.hot .wx-title { color: var(--c-red); }
 .wx-desc { font-size: 13.5px; color: var(--c-muted); line-height: 1.5; margin-top: 2px; overflow-wrap: anywhere; }
+.wx-desc.wx-nums { color: var(--c-text); font-size: 15px; }
+.wx-desc.wx-nums b { color: var(--c-text); font-weight: 800; }
+.chk-wx-line b { font-weight: 800; }
 .wx-tip { font-size: 14.5px; line-height: 1.6; margin-top: 10px; overflow-wrap: anywhere; }
 .wx-btn { width: 100%; margin-top: 10px; min-height: 50px; border-radius: 12px; border: 2px solid var(--c-blue); background: transparent; color: var(--c-blue); font-size: 16px; font-weight: 800; font-family: inherit; cursor: pointer; }
 .wx-btn.hot { border-color: var(--c-red); background: var(--c-red); color: #fff; }
@@ -2077,7 +2080,7 @@ input[type=date]::-webkit-calendar-picker-indicator { opacity: .8; }
       대구지방고용노동청 건설산재예방감독과 제작·배포<br>
       중소규모 건설현장 근로자 안전을 위한 무료 안전관리 도구
     </div>
-    <div id="appBuildLabel" style="font-size:12px;color:var(--c-muted);text-align:center;margin-top:8px;letter-spacing:.3px;user-select:all;">build · 20261102_11 · jslee89</div>
+    <div id="appBuildLabel" style="font-size:12px;color:var(--c-muted);text-align:center;margin-top:8px;letter-spacing:.3px;user-select:all;">build · 20261102_12 · jslee89</div>
     <div class="btn-row">
       <button class="btn btn-primary" onclick="saveSettings()">저장</button>
     </div>
@@ -7408,7 +7411,7 @@ function renderCheckScreen() {
       <button class="btn btn-outline btn-sm" style="flex-shrink:0;" onclick="addCheckCustom()">+ 추가</button>
     </div>`;
   const wxTxt = wxRecText(curCheck, !ro);
-  document.getElementById('chkWxWrap').innerHTML = wxTxt ? `<div class="chk-wx-line">🌡 ${escapeHtml(wxTxt)}</div>` : '';
+  document.getElementById('chkWxWrap').innerHTML = wxTxt ? `<div class="chk-wx-line">🌡 ${escapeHtml(wxTxt).replace(/(\d+(?:\.\d+)?[℃%])/g, '<b>$1</b>')}</div>` : '';
   document.getElementById('chkItemsWrap').innerHTML = head + itemsHtml + addBox;
 
   // 4) 오늘 발견된 불량 → 근로자공유(TBM)로 연결
@@ -8426,8 +8429,8 @@ function renderWeatherCard() {
   if (hot) {
     const one = DB.sites.length === 1;
     body = `<div class="wx-row"><div class="wx-icon">🔥</div><div class="wx-info">
-      <div class="wx-title">폭염 관리 대상 — 체감 ${Math.round(w.feels)}℃</div>
-      <div class="wx-desc">기온 ${Math.round(w.t)}℃${rhTxt} · 체감온도 ${HEAT_FEELS}℃ 이상</div></div>
+      <div class="wx-title">폭염 관리 대상</div>
+      <div class="wx-desc wx-nums">체감 <b>${Math.round(w.feels)}℃</b> · 기온 <b>${Math.round(w.t)}℃</b>${rhTxt ? ' · 습도 <b>' + Math.round(w.rh) + '%</b>' : ''}</div></div>
       <button class="wx-refresh" onclick="wxEnableByTap()" aria-label="날씨 새로고침">↻<small>새로</small></button></div>
       <div class="wx-tip"><b>물 · 그늘 · 휴식</b>을 챙기세요. 가장 더운 오후 시간대(대체로 14~17시)에는 옥외 작업을 줄이거나 쉬는 시간을 늘려 주세요.</div>` +
       (one ? `<button class="wx-btn hot" onclick="openHeatCheck()">🌡 폭염 관리 점검하기</button>`
