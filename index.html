@@ -2080,7 +2080,7 @@ input[type=date]::-webkit-calendar-picker-indicator { opacity: .8; }
       대구지방고용노동청 건설산재예방감독과 제작·배포<br>
       중소규모 건설현장 근로자 안전을 위한 무료 안전관리 도구
     </div>
-    <div id="appBuildLabel" style="font-size:12px;color:var(--c-muted);text-align:center;margin-top:8px;letter-spacing:.3px;user-select:all;">build · 20261102_12 · jslee89</div>
+    <div id="appBuildLabel" style="font-size:12px;color:var(--c-muted);text-align:center;margin-top:8px;letter-spacing:.3px;user-select:all;">build · 20261102_14 · jslee89</div>
     <div class="btn-row">
       <button class="btn btn-primary" onclick="saveSettings()">저장</button>
     </div>
@@ -5601,20 +5601,9 @@ function setPngDpi(dataUrl, dpi) {
 async function captureAndDownloadA4(docElementId, baseName) {
   toast('📄 이미지 생성 중...');
   try {
-    const scale = 2;
     const sourceEl = document.getElementById(docElementId);
-    const safeRanges = getUnsplittableRanges(sourceEl, scale);
-    const hardBreaks = getHardBreakPoints(sourceEl, scale);
-    // ⚠️ 요소가 화면 밖(.offscreen, position:fixed)에 있을 때
-    // scrollHeight/offsetHeight로는 실제 콘텐츠보다 높이가 크게 측정되어
-    // 마지막에 빈 페이지가 추가로 생기는 문제가 있었음.
-    // getBoundingClientRect()가 더 정확한 실제 렌더링 높이를 반환함
-    const actualHeight = Math.ceil(sourceEl.getBoundingClientRect().height);
-    const canvas = await html2canvas(sourceEl, {
-      scale, useCORS: true, backgroundColor: '#fff', logging: false,
-      height: actualHeight
-    });
-    const slices = sliceCanvasToA4(canvas, safeRanges, hardBreaks);
+    const scale = 2;
+    const slices = await docToSlices(sourceEl, scale);
     // 화면표시 794px가 A4 가로폭(210mm) 기준이므로, scale:2 적용 시 실제 DPI는
     // 약 192(=96×2) — 이 값을 PNG에 기록해 "실제 크기 인쇄" 시 정확히 A4로 나오게 함
     const dpi = 96 * scale;
@@ -7794,13 +7783,78 @@ async function shareOpenChecks() {
   await shareContent('안전점검 미조치 사항', buildOpenChecksText(), files);
 }
 
+/* 서류 → A4 쪽 이미지 목록.
+   긴 서류(예: 최초 위험성평가 160여 개 항목)는 한 장짜리 큰 캔버스를 폰이 못 만들어 실패하므로,
+   몇 쪽씩 나눠 선명하게(2배) 그린 뒤 A4 쪽으로 자름. 짧은 서류는 기존 방식 그대로. */
+const TALL_DOC_CSS_PX = 5500;   // 이 높이(css px)를 넘으면 나눠서 그림 (2배 해상도 기준 11000px)
+async function docToSlices(el, scale) {
+  // 화면 미리보기용 축소(transform)가 걸려 있으면 해상도가 낮아지므로 잠시 풀고 캡처
+  const prevTf = el.style.transform;
+  el.style.transform = 'none';
+  try { return await docToSlicesRaw(el, scale); }
+  finally { el.style.transform = prevTf; }
+}
+async function docToSlicesRaw(el, scale) {
+  scale = scale || 2;
+  const rect = el.getBoundingClientRect();
+  const hCss = Math.ceil(rect.height), wCss = rect.width;
+  const ranges = getUnsplittableRanges(el, scale), hard = getHardBreakPoints(el, scale);
+  if (hCss <= TALL_DOC_CSS_PX) {
+    const canvas = await html2canvas(el, { scale, useCORS: true, backgroundColor: '#fff', logging: false, height: hCss });
+    return sliceCanvasToA4(canvas, ranges, hard);
+  }
+  const W = Math.round(wCss * scale), H = Math.round(hCss * scale);
+  const ideal = Math.floor(W * 297 / 210);
+  const forced = hard.filter(p => p > 0 && p < H);
+  const breaks = []; let cur = 0;
+  while (cur < H) {
+    let ib = Math.min(cur + ideal, H);
+    const nf = forced.find(p => p > cur && p < ib); if (nf !== undefined) ib = nf;
+    const sb = ib >= H ? ib : findSafeBreakY(ib, ranges);
+    const fb = sb > cur ? sb : ib;
+    breaks.push(fb); cur = fb;
+  }
+  const pages = []; let st = 0;
+  breaks.forEach(e => { pages.push({ s: st, e }); st = e; });
+  const chunkMax = TALL_DOC_CSS_PX * scale;
+  const out = [];
+  let i = 0;
+  while (i < pages.length) {
+    let j = i; const cs = pages[i].s;
+    while (j + 1 < pages.length && pages[j + 1].e - cs <= chunkMax) j++;
+    const ce = pages[j].e, spanCss = Math.ceil((ce - cs) / scale), startCss = cs / scale;
+    const wrap = document.createElement('div');
+    wrap.style.cssText = `position:fixed;left:-20000px;top:0;overflow:hidden;background:#fff;width:${wCss}px;height:${spanCss}px;`;
+    const inner = el.cloneNode(true);
+    inner.style.cssText += `;transform:none;margin:0;position:relative;top:${-startCss}px;width:${wCss}px;`;
+    wrap.appendChild(inner); document.body.appendChild(wrap);
+    let seg;
+    try { seg = await html2canvas(wrap, { scale, useCORS: true, backgroundColor: '#fff', logging: false, width: Math.ceil(wCss), height: spanCss }); }
+    finally { wrap.remove(); }
+    for (let k = i; k <= j; k++) {
+      const pg = document.createElement('canvas');
+      pg.width = seg.width; pg.height = Math.floor(seg.width * 297 / 210);
+      const ctx = pg.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, pg.width, pg.height);
+      const sy = Math.round(pages[k].s - cs), sh = Math.min(Math.round(pages[k].e - pages[k].s), seg.height - sy, pg.height);
+      if (sh > 0) ctx.drawImage(seg, 0, sy, seg.width, sh, 0, 0, seg.width, sh);
+      out.push(pg);
+    }
+    i = j + 1;
+  }
+  out.forEach((pg, n) => {
+    if (out.length > 1) {
+      const ctx = pg.getContext('2d'), fs = Math.round(pg.width * 0.014);
+      ctx.font = `${fs}px '맑은 고딕', 'Malgun Gothic', sans-serif`; ctx.fillStyle = '#888'; ctx.textAlign = 'center';
+      ctx.fillText(`${n + 1} / ${out.length}`, pg.width / 2, pg.height - fs);
+    }
+  });
+  return out;
+}
+
 /* ══════════════ 보고서 카톡·문자 공유 ══════════════ */
 async function docToFiles(docId, baseName) {
-  const scale = 2;
   const el = document.getElementById(docId);
-  const ranges = getUnsplittableRanges(el, scale), hard = getHardBreakPoints(el, scale);
-  const canvas = await html2canvas(el, { scale, useCORS: true, backgroundColor: '#fff', logging: false, height: Math.ceil(el.getBoundingClientRect().height) });
-  const slices = sliceCanvasToA4(canvas, ranges, hard);
+  const slices = await docToSlices(el, 2);
   const files = [];
   for (let i = 0; i < slices.length; i++) {
     const blob = await new Promise(res => slices[i].toBlob(res, 'image/png'));
@@ -7948,11 +8002,8 @@ async function shareTodayChecks() {
       toast(`📄 점검표 만드는 중... (${r + 1}/${recs.length})`, 6000);
       const rec = recs[r];
       buildCheckReportDoc(rec);
-      const scale = 2;
       const el = document.getElementById('checkReportDoc');
-      const ranges = getUnsplittableRanges(el, scale), hard = getHardBreakPoints(el, scale);
-      const canvas = await html2canvas(el, { scale, useCORS: true, backgroundColor: '#fff', logging: false, height: Math.ceil(el.getBoundingClientRect().height) });
-      const slices = sliceCanvasToA4(canvas, ranges, hard);
+      const slices = await docToSlices(el, 2);
       const setName = chkSetById(rec.setId).name;
       for (let i = 0; i < slices.length; i++) {
         const blob = await new Promise(res => slices[i].toBlob(res, 'image/png'));
@@ -7971,11 +8022,8 @@ async function shareCheckReport() {
   try {
     toast('📄 점검표 이미지 만드는 중...');
     buildCheckReportDoc(curCheck);
-    const scale = 2;
     const el = document.getElementById('checkReportDoc');
-    const ranges = getUnsplittableRanges(el, scale), hard = getHardBreakPoints(el, scale);
-    const canvas = await html2canvas(el, { scale, useCORS: true, backgroundColor: '#fff', logging: false, height: Math.ceil(el.getBoundingClientRect().height) });
-    const slices = sliceCanvasToA4(canvas, ranges, hard);
+    const slices = await docToSlices(el, 2);
     const files = [];
     for (let i = 0; i < slices.length; i++) {
       const blob = await new Promise(res => slices[i].toBlob(res, 'image/png'));
