@@ -729,10 +729,6 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 .chk-set-chip.heat { border-color: var(--c-red); color: var(--c-red); }
 .chk-set-chip.cold { border-color: var(--c-blue); color: var(--c-blue); }
 .chk-set-chip.cold.active { background: var(--c-blue); color: #fff; border-color: var(--c-blue); }
-.cold-row { display: flex; align-items: center; gap: 10px; background: rgba(77,171,247,.08); border: 1.5px dashed rgba(77,171,247,.5); border-radius: 12px; padding: 10px 12px; margin-bottom: 14px; }
-.cold-row .cr-text { flex: 1; min-width: 0; font-size: 14.5px; line-height: 1.5; overflow-wrap: anywhere; }
-.cold-row .cr-text small { display: block; color: var(--c-muted); font-size: 12.5px; }
-.cold-btn { flex-shrink: 0; min-height: 46px; padding: 0 14px; border-radius: 12px; border: 2px solid var(--c-blue); background: transparent; color: var(--c-blue); font-size: 15px; font-weight: 800; font-family: inherit; cursor: pointer; }
 .wx-card.cold { background: rgba(77,171,247,.14); border-color: var(--c-blue); }
 .wx-card.cold .wx-title { color: var(--c-blue); }
 .wx-btn.cold { border-color: var(--c-blue); background: var(--c-blue); color: #fff; }
@@ -2012,7 +2008,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
       대구지방고용노동청 건설산재예방감독과 제작·배포<br>
       중소규모 건설현장 근로자 안전을 위한 무료 안전관리 도구
     </div>
-    <div id="appBuildLabel" style="font-size:12px;color:var(--c-muted);text-align:center;margin-top:8px;letter-spacing:.3px;user-select:all;">build · 20261102_01 · jslee89</div>
+    <div id="appBuildLabel" style="font-size:12px;color:var(--c-muted);text-align:center;margin-top:8px;letter-spacing:.3px;user-select:all;">build · 20261102_02 · jslee89</div>
     <div class="btn-row">
       <button class="btn btn-primary" onclick="saveSettings()">저장</button>
     </div>
@@ -6713,8 +6709,7 @@ function chkNewRecord(setId) {
     })),
     createdAt: new Date().toISOString(),
     savedAt: null,
-    weather: wxForRecord(),
-    coldAlert: coldActive()
+    weather: wxForRecord()
   };
 }
 function chkNewAddRecord(setId) {
@@ -6731,7 +6726,6 @@ function chkPersist(rec) {
   if (!rec.items.some(i => i.result)) return;   // 아직 아무것도 체크하지 않았으면 저장 안 함
   rec.savedAt = new Date().toISOString();
   if (!rec.weather) rec.weather = wxForRecord();
-  if (!rec.coldAlert && coldActive()) rec.coldAlert = true;
   if (!DB.checks.includes(rec)) DB.checks.push(rec);
   saveDB();
 }
@@ -7850,6 +7844,7 @@ document.addEventListener('visibilitychange', () => {
    - 한파는 법으로 정해진 기준이 없어 기온(과 체감온도)만 보여줌
    - 위치는 소수 둘째 자리로 줄여서(약 1km 단위) 날씨 서버(Open-Meteo)에 보내고, 내 폰에도 마지막 위치만 저장 */
 const HEAT_FEELS = 31;
+const COLD_MIN = -5;                     // 오늘 예상 최저기온이 이 값 이하이면 '추위 주의' (법적 기준 아님, 현장 관리용)
 const WX_FRESH_MS = 20 * 60 * 1000;      // 이 시간 안이면 다시 받지 않음
 const WX_HOT_MS = 6 * 3600 * 1000;       // 폭염 판단에 쓰는 최대 경과시간
 const WX_REC_MS = 3 * 3600 * 1000;       // 점검표에 기록할 수 있는 최대 경과시간
@@ -7873,13 +7868,14 @@ function wxIsHot() { const w = wxCache(); return !!(w && wxAge(w) <= WX_HOT_MS &
 function wxForRecord() {
   const w = wxCache();
   if (!w || wxAge(w) > WX_REC_MS) return null;
-  return { t: w.t, feels: w.feels, rh: w.rh, at: w.at };
+  return { t: w.t, feels: w.feels, rh: w.rh, at: w.at, tmin: w.tmin == null ? null : w.tmin };
 }
 function wxHm(iso) { const d = new Date(iso); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
 function wxText(w) {
   if (!w) return '';
   return `기온 ${Math.round(w.t)}℃ · 체감 ${Math.round(w.feels)}℃` + (w.rh != null ? ` · 습도 ${Math.round(w.rh)}%` : '') +
-    ` (${wxHm(w.at)} 기준${w.feels >= HEAT_FEELS ? ' · 폭염 관리 대상' : ''})`;
+    ` (${wxHm(w.at)} 기준${w.feels >= HEAT_FEELS ? ' · 폭염 관리 대상' : ''})` +
+    (w.tmin != null && w.tmin <= COLD_MIN ? ` · 오늘 예상 최저 ${Math.round(w.tmin)}℃ (추위 주의)` : '');
 }
 
 function wxGetPos() {
@@ -7908,7 +7904,7 @@ async function wxRefresh(byTap) {
     let j;
     try {
       const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
-        `&current=temperature_2m,relative_humidity_2m,wind_speed_10m&wind_speed_unit=kmh&timezone=Asia%2FSeoul`, { signal: ctl.signal });
+        `&current=temperature_2m,relative_humidity_2m,wind_speed_10m&daily=temperature_2m_min&forecast_days=1&wind_speed_unit=kmh&timezone=Asia%2FSeoul`, { signal: ctl.signal });
       if (!r.ok) throw new Error('http ' + r.status);
       j = await r.json();
     } finally { clearTimeout(to); }
@@ -7918,13 +7914,15 @@ async function wxRefresh(byTap) {
     let feels = t;
     if (rh != null && t >= 10) feels = kmaFeelsLike(t, rh);
     else if (t < 10 && typeof wind === 'number') feels = windChillFeels(t, wind);
-    DB.settings.weather = { at: new Date().toISOString(), t, rh, wind, feels, lat, lon };
+    const dm = j.daily && Array.isArray(j.daily.temperature_2m_min) ? j.daily.temperature_2m_min[0] : null;
+    const tmin = typeof dm === 'number' ? dm : null;
+    DB.settings.weather = { at: new Date().toISOString(), t, rh, wind, feels, lat, lon, tmin };
     DB.settings.weatherOn = true;
     saveDB(); wxState = 'ok';
   } catch (e) {
     console.error('weather failed', e); wxState = 'error';
   } finally {
-    wxBusy = false; renderWeatherCard();
+    wxBusy = false; renderWeatherCard(); try { renderColdCard(); } catch (e) {}
     try { renderHeatBanner(); } catch (e) {}
   }
 }
@@ -8007,25 +8005,17 @@ function renderHeatBanner() {
   }
   if (!curCheckReadonly && coldActive()) {
     const onCold = curCheckSetId === 'cold';
-    html += `<div class="chk-cold-banner">🥶 <b>한파특보 발령 중 — 추위 주의</b>` +
+    const cw = wxCache();
+    html += `<div class="chk-cold-banner">🥶 <b>추위 주의</b> (오늘 예상 최저 ${Math.round(cw.tmin)}℃)` +
       (onCold ? '<br>아래 한파 관리 항목을 점검하세요.' : `<br>작업 점검과 함께 <b>한파 관리</b>도 점검하세요.<button class="wx-btn cold" style="margin-top:8px;" onclick="setCheckSet('cold')">🥶 한파 관리 점검하기</button>`) + `</div>`;
   }
   el.innerHTML = html;
 }
 
-/* ── 한파특보 (기상청 문자·앱에서 확인한 뒤 소장이 직접 켬, 켠 날 하루만 유효) ── */
-function coldSeason() { const m = new Date().getMonth() + 1; return m >= 10 || m <= 4; }   // 10월~4월
+/* ── 추위 주의: 오늘 예상 최저기온이 COLD_MIN 이하일 때 (기상청 특보와는 별개의 현장 관리용 기준) ── */
 function coldActive() {
-  const c = DB && DB.settings && DB.settings.coldAlert;
-  return !!(c && c.on && c.date === todayStr());
-}
-function setColdAlert(on) {
-  if (!DB.settings) DB.settings = {};
-  DB.settings.coldAlert = on ? { on: true, date: todayStr(), at: new Date().toISOString() } : { on: false };
-  saveDB(); renderColdCard();
-  try { renderHeatBanner(); } catch (e) {}
-  try { if (document.querySelector('.screen.show').id === 'scCheck') renderCheckScreen(); } catch (e) {}
-  toast(on ? '🥶 한파특보 발령 중으로 표시했습니다 (오늘 하루)' : '한파특보 표시를 껐습니다');
+  const w = wxCache();
+  return !!(w && w.tmin != null && w.tmin <= COLD_MIN && new Date(w.at).toDateString() === new Date().toDateString());
 }
 function openColdCheck() {
   if (DB.sites.length !== 1) { toast('현장에 들어가서 오늘 점검의 \'한파 관리\'를 선택하세요', 3500); return; }
@@ -8035,24 +8025,16 @@ function openColdCheck() {
 function renderColdCard() {
   const el = document.getElementById('homeColdCard');
   if (!el) return;
-  const on = coldActive();
-  if (!on && !coldSeason()) { el.style.display = 'none'; el.innerHTML = ''; return; }
-  el.style.display = '';
-  if (on) {
-    const one = DB.sites.length === 1;
-    el.className = 'wx-card cold';
-    el.innerHTML = `<div class="wx-row"><div class="wx-icon">🥶</div><div class="wx-info">
-      <div class="wx-title">한파특보 발령 중 — 추위 주의</div>
-      <div class="wx-desc">오늘 하루 표시됩니다</div></div>
-      <button class="wx-refresh" onclick="setColdAlert(false)" aria-label="끄기">✕<small>끄기</small></button></div>
-      <div class="wx-tip">따뜻한 <b>휴식 장소·음료</b>, <b>방한 보호구</b>, <b>결빙·미끄럼</b>을 챙기세요.</div>` +
-      (one ? `<button class="wx-btn cold" onclick="openColdCheck()">🥶 한파 관리 점검하기</button>`
-           : `<div class="wx-tip" style="margin-top:6px;">현장에 들어가서 오늘 점검의 <b>'한파 관리'</b>를 선택하세요.</div>`);
-  } else {
-    el.className = 'cold-row';
-    el.innerHTML = `<div class="cr-text">🥶 한파특보가 발령됐나요?<small>기상청 문자·앱에서 확인한 뒤 눌러 주세요</small></div>
-      <button class="cold-btn" onclick="setColdAlert(true)">발령 중</button>`;
-  }
+  if (!coldActive()) { el.style.display = 'none'; el.innerHTML = ''; return; }
+  const w = wxCache();
+  const one = DB.sites.length === 1;
+  el.style.display = ''; el.className = 'wx-card cold';
+  el.innerHTML = `<div class="wx-row"><div class="wx-icon">🥶</div><div class="wx-info">
+    <div class="wx-title">추위 주의 — 오늘 예상 최저 ${Math.round(w.tmin)}℃</div>
+    <div class="wx-desc">예상 최저기온 ${COLD_MIN}℃ 이하</div></div></div>
+    <div class="wx-tip">따뜻한 <b>휴식 장소·음료</b>, <b>방한 보호구</b>, <b>결빙·미끄럼</b>을 챙기세요.</div>` +
+    (one ? `<button class="wx-btn cold" onclick="openColdCheck()">🥶 한파 관리 점검하기</button>`
+         : `<div class="wx-tip" style="margin-top:6px;">현장에 들어가서 오늘 점검의 <b>'한파 관리'</b>를 선택하세요.</div>`);
 }
 /* 점검 기록에 남길 날씨·특보 문구 (live=true면 아직 저장 안 된 기록에도 지금 값을 보여줌) */
 function wxRecText(rec, live) {
@@ -8060,7 +8042,6 @@ function wxRecText(rec, live) {
   const parts = [];
   const w = rec.weather || (live ? wxForRecord() : null);
   if (w) parts.push(wxText(w));
-  if (rec.coldAlert || (live && coldActive())) parts.push('한파특보 발령 중');
   return parts.join(' · ');
 }
 /* 앱을 다시 열었을 때 (위치 권한을 이미 허용한 경우만) */
