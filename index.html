@@ -7,12 +7,12 @@
 <meta name="theme-color" content="#0F1117">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="현장 단디">
+<meta name="apple-mobile-web-app-title" content="현장수첩">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="icon-192.png">
-<title>현장 단디 — 건설현장 안전점검·필수서류</title>
+<title>현장수첩 — 건설현장 안전점검·필수서류</title>
 <!-- 구글 폰트 의존성 제거 — 인터넷 연결 없이도 완전히 작동하도록,
      기기에 이미 설치된 한글 폰트(윈도우: 맑은고딕, 안드로이드/아이폰: 각 OS 기본 한글 폰트)를
      그대로 사용함. 시스템 폰트도 충분히 깔끔하고 가독성이 좋음 -->
@@ -710,6 +710,25 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 }
 .check-start-card:hover { background: rgba(6,214,160,.16); }
 .chk-split-card { margin-bottom: 14px; }
+/* 날씨 · 폭염 */
+.wx-card { background: rgba(77,171,247,.10); border: 1.5px solid rgba(77,171,247,.45); border-radius: 14px; padding: 14px 14px; margin-bottom: 14px; }
+.wx-card.hot { background: rgba(239,69,101,.12); border-color: var(--c-red); }
+.wx-row { display: flex; align-items: center; gap: 12px; }
+.wx-icon { font-size: 30px; flex-shrink: 0; line-height: 1; }
+.wx-info { flex: 1; min-width: 0; }
+.wx-title { font-size: 17px; font-weight: 800; line-height: 1.35; overflow-wrap: anywhere; }
+.wx-card.hot .wx-title { color: var(--c-red); }
+.wx-desc { font-size: 13.5px; color: var(--c-muted); line-height: 1.5; margin-top: 2px; overflow-wrap: anywhere; }
+.wx-tip { font-size: 14.5px; line-height: 1.6; margin-top: 10px; overflow-wrap: anywhere; }
+.wx-btn { width: 100%; margin-top: 10px; min-height: 50px; border-radius: 12px; border: 2px solid var(--c-blue); background: transparent; color: var(--c-blue); font-size: 16px; font-weight: 800; font-family: inherit; cursor: pointer; }
+.wx-btn.hot { border-color: var(--c-red); background: var(--c-red); color: #fff; }
+.wx-refresh { flex-shrink: 0; min-width: 48px; min-height: 48px; border-radius: 12px; border: 1px solid var(--c-border); background: transparent; color: var(--c-text); font-size: 20px; font-family: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1; }
+.wx-refresh small { font-size: 11px; }
+.chk-heat-banner { background: rgba(239,69,101,.12); border: 1.5px solid var(--c-red); border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; font-size: 15px; line-height: 1.6; overflow-wrap: anywhere; }
+.chk-wx-line { background: rgba(77,171,247,.10); border: 1px solid rgba(77,171,247,.4); border-radius: 10px; padding: 8px 12px; margin-bottom: 10px; font-size: 13.5px; line-height: 1.5; overflow-wrap: anywhere; }
+.chk-set-chip.heat { border-color: var(--c-red); color: var(--c-red); }
+.chk-set-chip.heat.active { background: var(--c-red); color: #fff; border-color: var(--c-red); }
+
 .csp-row { display: flex; gap: 10px; }
 .csp-btn { flex: 1; min-width: 0; min-height: 82px; border-radius: 14px; border: 2px solid transparent; cursor: pointer; font-family: var(--font-title); font-size: 19px; font-weight: 800; line-height: 1.25; padding: 8px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center; }
 .csp-btn small { font-size: 13.5px; font-weight: 700; font-family: var(--font-body); opacity: .85; }
@@ -1220,7 +1239,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 ══════════════════════════════════════════ -->
 <div class="screen show" id="scHome">
   <div class="topnav">
-    <span style="display:flex;flex-direction:column;line-height:1.15;"><span class="home-logo">현장 <span style="color:var(--c-text);">단디</span></span><span style="font-size:10.5px;color:var(--c-muted);margin-top:2px;white-space:nowrap;">건설현장 안전점검·필수서류</span></span>
+    <span style="display:flex;flex-direction:column;line-height:1.15;"><span class="home-logo">현장<span style="color:var(--c-text);">수첩</span></span><span style="font-size:10.5px;color:var(--c-muted);margin-top:2px;white-space:nowrap;">건설현장 안전점검·필수서류</span></span>
     <button class="topnav-action ghost" onclick="openModal('modalOnboarding')" style="margin-left:auto;">❓ 도움말</button>
     <button class="topnav-action ghost" onclick="openModal('modalSettings')">⚙ 설정</button>
   </div>
@@ -1239,6 +1258,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
       <div class="cat-arrow">›</div>
     </div>
     <div class="check-start-card" id="homeCheckCard" style="display:none;"></div>
+    <div class="wx-card" id="homeWeatherCard" style="display:none;"></div>
     <div class="home-stats">
       <div class="stat-box"><div class="stat-num" id="statSites">0</div><div class="stat-lbl">등록 현장</div></div>
       <div class="stat-box"><div class="stat-num" id="statReports">0</div><div class="stat-lbl">총 기록 (교육+평가)</div></div>
@@ -1324,6 +1344,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
   <div class="scroll-body">
     <div id="chkModeWrap"></div>
     <div id="chkOpenWrap"></div>
+    <div id="chkHeatWrap"></div>
     <div class="chk-section-title" id="chkSetTitle">오늘 하는 작업을 고르세요</div>
     <div class="chk-set-wrap" id="chkSetWrap"></div>
     <div id="chkReadonlyNote"></div>
@@ -1975,12 +1996,11 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
     </div>
     <div class="divider"></div>
     <div style="font-size:11.5px;color:var(--c-muted);line-height:1.8;text-align:center;">
-      <b style="color:var(--c-text);">현장 단디</b><br>
-      (건설현장 3단디 캠페인 지원 도구)<br>
+      <b style="color:var(--c-text);">현장수첩</b><br>
       대구지방고용노동청 건설산재예방감독과 제작·배포<br>
       중소규모 건설현장 근로자 안전을 위한 무료 안전관리 도구
     </div>
-    <div id="appBuildLabel" style="font-size:12px;color:var(--c-muted);text-align:center;margin-top:8px;letter-spacing:.3px;user-select:all;">build · 20261022_22 · jslee89</div>
+    <div id="appBuildLabel" style="font-size:12px;color:var(--c-muted);text-align:center;margin-top:8px;letter-spacing:.3px;user-select:all;">build · 20261101_03 · jslee89</div>
     <div class="btn-row">
       <button class="btn btn-primary" onclick="saveSettings()">저장</button>
     </div>
@@ -2144,8 +2164,8 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
     <div style="background:rgba(255,209,102,.08);border:1px solid rgba(255,209,102,.25);border-radius:8px;padding:12px 14px;font-size:12px;color:var(--c-yellow);line-height:1.7;">
       📌 휴대폰 설정에 따라 저장 직후 파일이 <b>자동으로 미리보기 화면</b>으로 열릴 수 있습니다.<br><br>
       이 화면에서는 <b>뒤로가기 버튼을 누르지 마시고</b>, 아래 방법으로 앱으로 돌아와주세요:<br>
-      · 화면 하단(또는 상단) <b>최근 앱 목록</b> 버튼으로 현장 단디 탭 선택<br>
-      · 또는 브라우저 <b>탭 목록 아이콘</b>에서 현장 단디 탭 선택
+      · 화면 하단(또는 상단) <b>최근 앱 목록</b> 버튼으로 현장수첩 탭 선택<br>
+      · 또는 브라우저 <b>탭 목록 아이콘</b>에서 현장수첩 탭 선택
     </div>
     <div class="btn-row">
       <button class="btn btn-primary" onclick="closeModal('modalPdfSaved')">확인했습니다</button>
@@ -2975,6 +2995,7 @@ function renderHome() {
   }
 
   renderHomeCheckCard();
+  try { renderWeatherCard(); } catch (e) {}
   const list = document.getElementById('siteList');
   if (!DB.sites.length) {
     list.innerHTML = `<div class="empty-state"><div class="icon">🏗</div><p>등록된 현장이 없습니다.<br>아래 <b>현장추가</b> 버튼을 눌러 현장을 추가하세요.</p></div>`;
@@ -3355,6 +3376,7 @@ function renderAttendeeChips() {
 
 /* photos */
 async function handlePhotoUpload(e) {
+  resumeClear();
   const file = e.target.files[0];
   e.target.value = '';
   if (!file) return;
@@ -3700,7 +3722,7 @@ function buildReportDoc(r) {
     <div class="rd-header">
       <div class="rd-brand">
         <div class="rd-brand-icon">🦺</div>
-        <div><div class="rd-brand-name">현장 단디</div><div class="rd-brand-sub">${escapeHtml(site.company) || ''}</div></div>
+        <div><div class="rd-brand-name">현장수첩</div><div class="rd-brand-sub">${escapeHtml(site.company) || ''}</div></div>
       </div>
       <div>
         <div class="rd-title">특별안전보건교육 실시확인서</div>
@@ -3781,7 +3803,7 @@ function buildReportDoc(r) {
 
     <div class="rd-footer">
       ${recordStampHtml(r)}
-      본 확인서는 현장 단디(건설현장 3단디 캠페인·대구지방고용노동청 건설산재예방감독과)에 의해 자동 생성되었습니다.<br>
+      본 확인서는 현장수첩(대구지방고용노동청 건설산재예방감독과)에 의해 자동 생성되었습니다.<br>
       산업안전보건법 제29조(근로자에 대한 안전보건교육) 및 같은 법 시행규칙 제26조·별표5 라목(특별교육 대상 작업별 교육) 준수
     </div>`;
 }
@@ -3883,7 +3905,7 @@ function exportAllData() {
     const base64 = btoa(unescape(encodeURIComponent(json)));
     const dateStr = todayStr().replace(/\./g, '-');
     const link = document.createElement('a');
-    link.download = `현장단디_백업_${dateStr}.json`;
+    link.download = `현장수첩_백업_${dateStr}.json`;
     // JSON도 브라우저가 "바로 열어보는" 파일로 취급해 다운로드를 건너뛸 수 있어
     // 범용 바이너리로 위장해 무조건 다운로드되게 함 (PNG/PDF에서 검증된 방식)
     link.href = `data:application/octet-stream;base64,${base64}`;
@@ -4702,6 +4724,7 @@ function renderRiskAttendees() {
 
 /* Risk photos */
 async function handleRiskPhoto(e) {
+  resumeClear();
   const files = Array.from(e.target.files).slice(0, 9 - riskPhotos.length);
   e.target.value = '';
   for (const file of files) {
@@ -4983,7 +5006,7 @@ function buildRiskReportDoc(r) {
   document.getElementById('riskReportDoc').innerHTML = `
     <div class="rrd-header">
       <div>
-        <div style="font-size:12px;font-weight:700;color:#EF4565;">현장 단디</div>
+        <div style="font-size:12px;font-weight:700;color:#EF4565;">현장수첩</div>
         <div style="font-size:10px;color:#888;">${escapeHtml(site.company)||''}</div>
       </div>
       <div style="text-align:right;">
@@ -5174,7 +5197,7 @@ function buildRiskReportDoc(r) {
         </td>
       </tr>
     </table>
-    <div class="rrd-footer">${recordStampHtml(r)}본 보고서는 현장 단디(건설현장 3단디 캠페인·대구지방고용노동청 건설산재예방감독과)에 의해 자동 생성되었습니다.<br>산업안전보건법 제36조 위험성평가 · 고용노동부 고시 제2023-19호(위험성평가 고시) · KOSHA GUIDE G-30-2023 준수</div>
+    <div class="rrd-footer">${recordStampHtml(r)}본 보고서는 현장수첩(대구지방고용노동청 건설산재예방감독과)에 의해 자동 생성되었습니다.<br>산업안전보건법 제36조 위험성평가 · 고용노동부 고시 제2023-19호(위험성평가 고시) · KOSHA GUIDE G-30-2023 준수</div>
     ${(r.attendees||[]).length>0 && !(r.rtype==='action' && r.linkedRiskId) ? `
     <div class="rd-signsheet-page">
       <div class="rrd-attendees">${attHtml}</div>
@@ -5819,7 +5842,9 @@ function markAllActionChecks(i, checked) {
 function triggerActionPhoto(i) {
   const inp = document.createElement('input');
   inp.type = 'file'; inp.accept = 'image/*'; inp.multiple = true;
+  window._dynPhotoInp = inp;   // 화면에 붙지 않은 입력창이 사진 선택 전에 사라지지 않도록 붙잡아 둠
   inp.onchange = async (e) => {
+    resumeClear();
     const files = Array.from(e.target.files).slice(0, 4);
     for (const file of files) {
       const photo = await readAndCompressPhoto(file);
@@ -5827,6 +5852,7 @@ function triggerActionPhoto(i) {
       renderActionEvidenceSection();
     }
   };
+  resumeSave();
   inp.click();
 }
 
@@ -5839,7 +5865,9 @@ function removeActionPhoto(i, pi) {
 function triggerActionSlotPhoto(i, slotType) {
   const inp = document.createElement('input');
   inp.type = 'file'; inp.accept = 'image/*';
+  window._dynPhotoInp = inp;   // 화면에 붙지 않은 입력창이 사진 선택 전에 사라지지 않도록 붙잡아 둠
   inp.onchange = async (e) => {
+    resumeClear();
     const file = e.target.files[0];
     if (!file) return;
     const photo = await readAndCompressPhoto(file);
@@ -5847,6 +5875,7 @@ function triggerActionSlotPhoto(i, slotType) {
     actionEvidenceItems[i][field] = photo;
     renderActionEvidenceSection();
   };
+  resumeSave();
   inp.click();
 }
 
@@ -6561,11 +6590,23 @@ const CHECK_SETS = [
     '작업대의 안전난간과 출입문이 정상이고 닫혀 있다',
     '과상승 방지·과부하 방지·비상정지 장치가 정상이다',
     '작업대 아래에 사람이 들어오지 못하게 통제하고, 이동 시 신호수가 있다'
+  ]},
+  { id: 'heat', icon: '🌡️', name: '폭염 관리', items: [
+    '시원한 물을 작업 장소 가까이에 충분히 준비했다',
+    '그늘지고 시원한 휴식 장소를 마련했다',
+    '더운 오후 시간대에는 작업을 줄이거나 쉬는 시간을 늘렸다',
+    '두통·어지럼증·구토 등 이상 증상이 있는 근로자가 없는지 수시로 확인한다',
+    '고령·기저질환 등 더위에 약한 근로자를 확인하고 작업을 조정했다'
   ]}
 ];
 
 /* 불량(×)일 때 TBM·공유·미조치 목록에 쓰는 짧은 문구 (점검 문구는 "~있다" 형태라 불량일 때 읽기 어색함) */
 const CHECK_BAD = {
+ "시원한 물을 작업 장소 가까이에 충분히 준비했다": "폭염: 시원한 물 준비 부족",
+ "그늘지고 시원한 휴식 장소를 마련했다": "폭염: 그늘·휴식 장소 없음",
+ "더운 오후 시간대에는 작업을 줄이거나 쉬는 시간을 늘렸다": "폭염: 더운 시간대 작업·휴식 조정 안 됨",
+ "두통·어지럼증·구토 등 이상 증상이 있는 근로자가 없는지 수시로 확인한다": "폭염: 근로자 이상 증상 확인 안 됨",
+ "고령·기저질환 등 더위에 약한 근로자를 확인하고 작업을 조정했다": "폭염: 더위 취약 근로자 확인·조정 안 됨",
  "개구부·단부에 덮개 또는 안전난간이 설치되어 있다": "개구부·단부 덮개/안전난간 미설치",
  "작업발판·사다리가 튼튼하게 설치되어 있다": "작업발판·사다리 불안정",
  "작업자가 안전모·안전대 등 보호구를 착용했다": "보호구(안전모·안전대 등) 미착용",
@@ -6647,7 +6688,8 @@ function chkNewRecord(setId) {
       fixedAt: null, fixNote: '', fixPhoto: null
     })),
     createdAt: new Date().toISOString(),
-    savedAt: null
+    savedAt: null,
+    weather: wxForRecord()
   };
 }
 function chkNewAddRecord(setId) {
@@ -6663,6 +6705,7 @@ function chkPersist(rec) {
   chkEnsure();
   if (!rec.items.some(i => i.result)) return;   // 아직 아무것도 체크하지 않았으면 저장 안 함
   rec.savedAt = new Date().toISOString();
+  if (!rec.weather) rec.weather = wxForRecord();
   if (!DB.checks.includes(rec)) DB.checks.push(rec);
   saveDB();
 }
@@ -6864,9 +6907,13 @@ function renderCheckScreen() {
   }
 
   // 2) 작업 종류 선택
-  document.getElementById('chkSetWrap').innerHTML = CHECK_SETS.map(s =>
-    `<div class="chk-set-chip ${s.id === curCheckSetId ? 'active' : ''}" onclick="setCheckSet('${s.id}')">${s.icon} ${escapeHtml(s.name)}</div>`
+  const hotNow = wxIsHot();
+  const setList = CHECK_SETS.filter(s => s.id !== 'heat' || hotNow || curCheckSetId === 'heat');
+  if (hotNow) setList.sort((a, b) => (b.id === 'heat') - (a.id === 'heat'));
+  document.getElementById('chkSetWrap').innerHTML = setList.map(s =>
+    `<div class="chk-set-chip ${s.id === 'heat' ? 'heat ' : ''}${s.id === curCheckSetId ? 'active' : ''}" onclick="setCheckSet('${s.id}')">${s.icon} ${escapeHtml(s.name)}${s.id === 'heat' && hotNow ? ' · 추천' : ''}</div>`
   ).join('');
+  renderHeatBanner();
 
   // 3) 점검 항목
   const ro = curCheckReadonly;
@@ -6918,7 +6965,9 @@ function renderCheckScreen() {
       <input type="text" id="chkCustomInput" placeholder="이 현장만의 점검 항목 직접 추가">
       <button class="btn btn-outline btn-sm" style="flex-shrink:0;" onclick="addCheckCustom()">+ 추가</button>
     </div>`;
-  document.getElementById('chkItemsWrap').innerHTML = head + itemsHtml + addBox;
+  const wxRec = curCheck.weather || (ro ? null : wxForRecord());
+  const wxLine = wxRec ? `<div class="chk-wx-line">🌡 ${escapeHtml(wxText(wxRec))}</div>` : '';
+  document.getElementById('chkItemsWrap').innerHTML = wxLine + head + itemsHtml + addBox;
 
   // 4) 오늘 발견된 불량 → 근로자공유(TBM)로 연결
   const ngItems = curCheck.items.filter(i => i.result === 'ng');
@@ -7043,8 +7092,8 @@ function pickPhotoSource(inputId) {
     const m = ev.target && ev.target.getAttribute && ev.target.getAttribute('data-m');
     if (ev.target !== back && !m) return;
     back.remove();
-    if (m === 'cam') { inp.setAttribute('capture', 'environment'); inp.click(); setTimeout(() => inp.removeAttribute('capture'), 500); }
-    else if (m === 'gal') { inp.removeAttribute('capture'); inp.click(); }
+    if (m === 'cam') { resumeSave(); inp.setAttribute('capture', 'environment'); inp.click(); setTimeout(() => inp.removeAttribute('capture'), 500); }
+    else if (m === 'gal') { resumeSave(); inp.removeAttribute('capture'); inp.click(); }
   });
   document.body.appendChild(back);
 }
@@ -7054,6 +7103,7 @@ function chkPickPhoto(kind, key) {
   pickPhotoSource('chkPhotoInput');
 }
 async function chkHandlePhoto(e) {
+  resumeClear();
   const file = e.target.files[0];
   e.target.value = '';
   if (!file || !_chkPhotoTarget) return;
@@ -7194,7 +7244,7 @@ function buildCheckReportDoc(rec) {
   document.getElementById('checkReportDoc').innerHTML = `
     <div class="rrd-header" style="border-bottom-color:#06b88a;">
       <div>
-        <div style="font-size:12px;font-weight:700;color:#EF4565;">현장 단디</div>
+        <div style="font-size:12px;font-weight:700;color:#EF4565;">현장수첩</div>
         <div style="font-size:10px;color:#888;">${escapeHtml(site.company) || ''}</div>
       </div>
       <div style="text-align:right;">
@@ -7205,6 +7255,7 @@ function buildCheckReportDoc(rec) {
     </div>
     <table class="rrd-table">
       <tr><td class="lbl">현장명</td><td>${escapeHtml(site.name) || '—'}</td><td class="lbl">점검일</td><td>${rec.date}${isAddRec && rec.time ? ' ' + rec.time + ' (추가 점검)' : ''}</td></tr>
+      ${rec.weather ? `<tr><td class="lbl">기온</td><td colspan="3">${escapeHtml(wxText(rec.weather))}</td></tr>` : ''}
       <tr><td class="lbl">점검자</td><td>${escapeHtml(inspector) || '—'}</td><td class="lbl">점검 결과</td><td>${isAddRec ? `불량 ${ngN}건 (문제가 생긴 항목만 기록)` : `양호 ${okN} · 불량 ${ngN}${noN ? ` · 미확인 ${noN}` : ''}`}</td></tr>
     </table>
     <div class="rrd-section">
@@ -7218,7 +7269,7 @@ function buildCheckReportDoc(rec) {
     <table class="rrd-sign">
       <tr>${signCell('점검자', inspector)}${signCell('현장소장 확인', site.manager)}${hasSafety ? signCell('안전관리자 확인', site.safety || '') : ''}</tr>
     </table>
-    <div class="rrd-footer">${recordStampHtml(rec)}본 점검표는 현장 단디(건설현장 3단디 캠페인·대구지방고용노동청 건설산재예방감독과)에 의해 자동 생성되었습니다.<br>점검자·현장소장이 확인 서명하여 보관하시기 바랍니다.</div>`;
+    <div class="rrd-footer">${recordStampHtml(rec)}본 점검표는 현장수첩(대구지방고용노동청 건설산재예방감독과)에 의해 자동 생성되었습니다.<br>점검자·현장소장이 확인 서명하여 보관하시기 바랍니다.</div>`;
 }
 
 function openCheckReport() {
@@ -7431,6 +7482,8 @@ function buildTodayChecksText(recs) {
   const site = DB.sites.find(x => x.id === curSiteId) || {};
   const d = todayStr();
   const lines = [`[${site.name || '현장'}] ${d.slice(5).replace('.', '/')} 안전점검`];
+  const wxr = recs.find(r => r.weather);
+  if (wxr) lines.push('🌡 ' + wxText(wxr.weather));
   recs.forEach(rec => {
     const set = chkSetById(rec.setId);
     const ok = rec.items.filter(i => i.result === 'ok').length;
@@ -7601,7 +7654,7 @@ async function triggerInstallApp() {
   );
 }
 
-console.log('%c현장 단디 %c· 현장 안전관리, 단디하게 %c\nmade by jslee89 🦺',
+console.log('%c현장수첩 %c· 현장 안전관리, 수첩 한 권으로 %c\nmade by jslee89 🦺',
   'color:#FF6B35;font-weight:900;font-size:16px;',
   'color:#888;font-size:11px;',
   'color:#06D6A0;font-size:11px;');
@@ -7614,11 +7667,334 @@ function requestPersistentStorage() {
     }
   } catch (e) {}
 }
+/* ══════════════ 사진 촬영 중 앱이 다시 열려도 하던 화면으로 복귀 ══════════════
+   안드로이드는 카메라를 켜는 동안 메모리가 부족하면 브라우저 화면을 비워 버린다.
+   그러면 촬영 후 앱이 첫 화면부터 다시 열리므로, 카메라/사진첩을 열기 직전에
+   "어느 화면에서 무엇을 하고 있었는지"를 저장해 두고, 앱이 새로 열리면 그 화면으로 되돌린다.
+   (사진 자체는 전달되지 않으므로 다시 찍도록 안내) */
+const RESUME_KEY = 'safework_resume';
+const RESUME_MARK = 'dandi_resume_t';
+const RESUME_MAX_AGE = 20 * 60 * 1000;
+
+function resumeClear() { try { localStorage.removeItem(RESUME_MARK); } catch (e) {} }
+
+function resumeCollectFields(root) {
+  const out = {};
+  if (!root) return out;
+  root.querySelectorAll('input,textarea,select').forEach(el => {
+    if (!el.id || el.type === 'file') return;
+    out[el.id] = (el.type === 'checkbox' || el.type === 'radio') ? !!el.checked : el.value;
+  });
+  return out;
+}
+function resumeApplyFields(f) {
+  Object.keys(f || {}).forEach(id => {
+    const el = document.getElementById(id);
+    if (!el || el.type === 'file') return;
+    if (el.type === 'checkbox' || el.type === 'radio') el.checked = !!f[id];
+    else el.value = f[id];
+  });
+}
+function resumeSnapshot() {
+  const scr = document.querySelector('.screen.show');
+  if (!scr) return null;
+  const s = { screen: scr.id, siteId: curSiteId, scrollY: window.scrollY || 0 };
+  if (scr.id === 'scCheck') {
+    s.set = curCheckSetId; s.add = !!chkAddMode; s.addSession = chkAddSession;
+    s.readonly = !!curCheckReadonly;
+    s.rec = curCheck ? JSON.parse(JSON.stringify(curCheck)) : null;
+    const fixOpen = document.getElementById('modalCheckFix').classList.contains('show');
+    if (fixOpen && _chkFixCtx) {
+      s.fix = { ctx: _chkFixCtx, photo: _chkFixPhoto,
+        date: document.getElementById('chkFixDate').value, note: document.getElementById('chkFixNote').value };
+    }
+  } else if (scr.id === 'scNewRisk') {
+    document.querySelectorAll('#hazardList .hazard-card').forEach((card, i) => {
+      const ta = card.querySelectorAll('textarea');
+      if (hazardRows[i]) {
+        if (ta[0]) hazardRows[i].desc = ta[0].value;
+        if (ta[1]) hazardRows[i].measure = ta[1].value;
+      }
+    });
+    s.risk = { type: curRiskType, kind: curActionKind, cat: curActionCategory, linked: linkedSourceId,
+      editing: _editingRiskId, shared: selectedSharedRiskIds, photos: riskPhotos, attendees: riskAttendees,
+      hazards: hazardRows, evidence: actionEvidenceItems };
+    s.fields = resumeCollectFields(scr);
+  } else if (scr.id === 'scNewEdu') {
+    s.edu = { workId: curWorkId, editing: _editingReportId, reportId: curReportId,
+      photos: newEduPhotos, attendees: newEduAttendees };
+    s.fields = resumeCollectFields(scr);
+  } else {
+    return null;
+  }
+  return s;
+}
+/* 카메라/사진첩을 열기 직전에 호출 */
+function resumeSave() {
+  try {
+    const snap = resumeSnapshot();
+    if (!snap) { resumeClear(); return; }
+    localStorage.setItem(RESUME_MARK, String(Date.now()));
+    idbSet(RESUME_KEY, snap).catch(() => resumeClear());
+  } catch (e) { resumeClear(); }
+}
+/* 앱이 새로 열릴 때 호출: 저장된 화면이 있으면 되돌리고 true */
+async function resumeRestore() {
+  let t = 0;
+  try { t = +localStorage.getItem(RESUME_MARK) || 0; } catch (e) {}
+  resumeClear();
+  if (!t || Date.now() - t > RESUME_MAX_AGE) return false;
+  let s = null;
+  try { s = await idbGet(RESUME_KEY); idbSet(RESUME_KEY, null).catch(() => {}); } catch (e) { return false; }
+  if (!s || !s.siteId || !DB.sites.some(x => x.id === s.siteId)) return false;
+  try {
+    openSite(s.siteId);
+    if (s.screen === 'scCheck') {
+      curCheckSetId = s.set || 'common';
+      chkAddMode = !!s.add; chkAddSession = s.addSession || null;
+      curCheckReadonly = !!s.readonly;
+      if (s.readonly && s.rec) { openPastCheck(s.rec.id); goScreen('scCheck'); }
+      else {
+        chkLoadToday();
+        if (curCheck && s.rec && curCheck.id === s.rec.id) {
+          // 저장되어 있던 내용이 더 최신이면 그대로 사용 (사진 등 포함)
+        } else if (s.rec && s.rec.items && s.rec.items.some(i => i.result)) {
+          curCheck = s.rec; chkPersist(curCheck);
+        }
+        goScreen('scCheck'); renderCheckScreen();
+      }
+      if (s.fix && s.fix.ctx) {
+        openCheckFix(s.fix.ctx.recId, s.fix.ctx.key);
+        _chkFixPhoto = s.fix.photo || null; renderChkFixPhoto();
+        document.getElementById('chkFixDate').value = s.fix.date || '';
+        document.getElementById('chkFixNote').value = s.fix.note || '';
+      }
+    } else if (s.screen === 'scNewRisk' && s.risk) {
+      const r = s.risk;
+      curRiskType = r.type || 'initial'; curActionKind = r.kind || null; curActionCategory = r.cat || null;
+      linkedSourceId = r.linked || null;
+      try { renderRiskScreen(); } catch (e) {}
+      openRiskList(curRiskType, curActionCategory);
+      goNewRisk();
+      _editingRiskId = r.editing || null;
+      selectedSharedRiskIds = r.shared || [];
+      riskPhotos = r.photos || []; riskAttendees = r.attendees || [];
+      hazardRows = r.hazards || []; actionEvidenceItems = r.evidence || [];
+      resumeApplyFields(s.fields);
+      if (curRiskType !== 'action' && !hazardRows.length) addHazardRow();
+      renderHazardList(); renderRiskAttendees(); renderRiskPhotoGrid();
+      const hb = document.getElementById('hazardClearBtn');
+      if (hb) hb.style.display = hazardRows.length ? '' : 'none';
+      if (actionEvidenceItems.length) {
+        const aeSec = document.getElementById('actionEvidenceSection');
+        if (aeSec) aeSec.style.display = '';
+        renderActionEvidenceSection();
+      }
+      try { renderSharedRiskSelector(); } catch (e) {}
+    } else if (s.screen === 'scNewEdu' && s.edu) {
+      const e = s.edu;
+      curWorkId = e.workId; curReportId = e.reportId || null;
+      try { renderEduAllList(); } catch (er) {}
+      goScreen('scEduAllList');
+      if (e.editing && DB.reports.some(x => x.id === e.editing)) { curReportId = e.editing; goEditEducation(); }
+      else goNewEdu();
+      newEduPhotos = e.photos || []; newEduAttendees = e.attendees || [];
+      resumeApplyFields(s.fields);
+      renderAttendeeChips(); renderPhotoGrid();
+    } else {
+      return false;
+    }
+    setTimeout(() => window.scrollTo(0, s.scrollY || 0), 60);
+    setTimeout(() => toast('📷 사진이 저장되지 않았어요. 하던 화면으로 돌아왔으니 사진을 다시 찍어주세요', 5000), 400);
+    return true;
+  } catch (e) {
+    console.error('resumeRestore failed', e);
+    return false;
+  }
+}
+/* 앱이 그대로 살아 있다면(정상) 곧 사진 결과가 오므로 표시를 지움 */
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') setTimeout(resumeClear, 2500);
+});
+
+/* ══════════════ 날씨 · 폭염 관리 ══════════════
+   - 앱을 열 때 현재 위치의 기온·습도를 받아 기상청 여름철 체감온도 공식으로 체감온도를 계산함
+   - 체감온도 31℃ 이상이면 "폭염 관리 대상": 오늘 점검에 '폭염 관리' 항목이 나타나고, 점검표에 기온이 기록됨
+   - 한파는 법으로 정해진 기준이 없어 기온(과 체감온도)만 보여줌
+   - 위치는 소수 둘째 자리로 줄여서(약 1km 단위) 날씨 서버(Open-Meteo)에 보내고, 내 폰에도 마지막 위치만 저장 */
+const HEAT_FEELS = 31;
+const WX_FRESH_MS = 20 * 60 * 1000;      // 이 시간 안이면 다시 받지 않음
+const WX_HOT_MS = 6 * 3600 * 1000;       // 폭염 판단에 쓰는 최대 경과시간
+const WX_REC_MS = 3 * 3600 * 1000;       // 점검표에 기록할 수 있는 최대 경과시간
+let wxState = 'idle';                    // idle | loading | ok | denied | error
+let wxBusy = false;
+
+/* 기상청 여름철 체감온도 (기온 ta ℃, 상대습도 rh %) */
+function kmaFeelsLike(ta, rh) {
+  const tw = ta * Math.atan(0.151977 * Math.sqrt(rh + 8.313659)) + Math.atan(ta + rh) - Math.atan(rh - 1.676331)
+    + 0.00391838 * Math.pow(rh, 1.5) * Math.atan(0.023101 * rh) - 4.686035;
+  return -0.2442 + 0.55399 * tw + 0.45535 * ta - 0.0022 * tw * tw + 0.00278 * tw * ta + 3.0;
+}
+/* 겨울철 체감온도 (기온 ℃, 풍속 km/h) — 기온 10℃ 이하에서만 사용 */
+function windChillFeels(ta, kmh) {
+  const v = Math.pow(Math.max(kmh, 4.8), 0.16);
+  return 13.12 + 0.6215 * ta - 11.37 * v + 0.3965 * v * ta;
+}
+function wxCache() { return (DB.settings && DB.settings.weather) || null; }
+function wxAge(w) { return w ? Date.now() - new Date(w.at).getTime() : Infinity; }
+function wxIsHot() { const w = wxCache(); return !!(w && wxAge(w) <= WX_HOT_MS && w.feels >= HEAT_FEELS); }
+function wxForRecord() {
+  const w = wxCache();
+  if (!w || wxAge(w) > WX_REC_MS) return null;
+  return { t: w.t, feels: w.feels, rh: w.rh, at: w.at };
+}
+function wxHm(iso) { const d = new Date(iso); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
+function wxText(w) {
+  if (!w) return '';
+  return `기온 ${Math.round(w.t)}℃ · 체감 ${Math.round(w.feels)}℃` + (w.rh != null ? ` · 습도 ${Math.round(w.rh)}%` : '') +
+    ` (${wxHm(w.at)} 기준${w.feels >= HEAT_FEELS ? ' · 폭염 관리 대상' : ''})`;
+}
+
+function wxGetPos() {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) { reject({ code: 0 }); return; }
+    navigator.geolocation.getCurrentPosition(
+      p => resolve({ lat: p.coords.latitude, lon: p.coords.longitude }),
+      e => reject(e), { enableHighAccuracy: false, timeout: 12000, maximumAge: 10 * 60 * 1000 });
+  });
+}
+async function wxRefresh(byTap) {
+  if (wxBusy) return;
+  const old = wxCache();
+  if (!byTap && old && wxAge(old) < WX_FRESH_MS) { wxState = 'ok'; renderWeatherCard(); return; }
+  wxBusy = true; wxState = 'loading'; renderWeatherCard();
+  try {
+    let pos;
+    try { pos = await wxGetPos(); }
+    catch (e) {
+      if (e && e.code === 1) { wxState = 'denied'; if (DB.settings) { DB.settings.weatherOn = false; saveDB(); } return; }
+      if (old && old.lat != null) pos = { lat: old.lat, lon: old.lon };   // 위치를 못 잡으면 마지막 위치 사용
+      else throw e;
+    }
+    const lat = Math.round(pos.lat * 100) / 100, lon = Math.round(pos.lon * 100) / 100;
+    const ctl = new AbortController(); const to = setTimeout(() => ctl.abort(), 12000);
+    let j;
+    try {
+      const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+        `&current=temperature_2m,relative_humidity_2m,wind_speed_10m&wind_speed_unit=kmh&timezone=Asia%2FSeoul`, { signal: ctl.signal });
+      if (!r.ok) throw new Error('http ' + r.status);
+      j = await r.json();
+    } finally { clearTimeout(to); }
+    const c = j && j.current;
+    if (!c || typeof c.temperature_2m !== 'number') throw new Error('no data');
+    const t = c.temperature_2m, rh = typeof c.relative_humidity_2m === 'number' ? c.relative_humidity_2m : null, wind = c.wind_speed_10m;
+    let feels = t;
+    if (rh != null && t >= 10) feels = kmaFeelsLike(t, rh);
+    else if (t < 10 && typeof wind === 'number') feels = windChillFeels(t, wind);
+    DB.settings.weather = { at: new Date().toISOString(), t, rh, wind, feels, lat, lon };
+    DB.settings.weatherOn = true;
+    saveDB(); wxState = 'ok';
+  } catch (e) {
+    console.error('weather failed', e); wxState = 'error';
+  } finally {
+    wxBusy = false; renderWeatherCard();
+    try { renderHeatBanner(); } catch (e) {}
+  }
+}
+function wxEnableByTap() { wxRefresh(true); }
+
+function renderWeatherCard() {
+  const el = document.getElementById('homeWeatherCard');
+  if (!el) return;
+  const w = wxCache();
+  const fresh = w && new Date(w.at).toDateString() === new Date().toDateString();
+  const on = !!(DB.settings && DB.settings.weatherOn);
+  if (!on && !fresh && wxState !== 'denied' && wxState !== 'loading' && wxState !== 'error') {
+    el.className = 'wx-card'; el.style.display = '';
+    el.innerHTML = `<div class="wx-row"><div class="wx-icon">🌡</div><div class="wx-info">
+      <div class="wx-title">현재 위치 날씨 · 폭염 확인</div>
+      <div class="wx-desc">체감온도가 높으면 폭염 관리 점검을 알려드려요</div></div></div>
+      <button class="wx-btn" onclick="wxEnableByTap()">📍 위치 허용하고 날씨 보기</button>`;
+    return;
+  }
+  el.style.display = '';
+  if (wxState === 'loading' && !fresh) {
+    el.className = 'wx-card'; el.innerHTML = `<div class="wx-row"><div class="wx-icon">🌡</div><div class="wx-info"><div class="wx-title">날씨 확인 중…</div></div></div>`;
+    return;
+  }
+  if (wxState === 'denied') {
+    el.className = 'wx-card';
+    el.innerHTML = `<div class="wx-row"><div class="wx-icon">📍</div><div class="wx-info">
+      <div class="wx-title">위치 권한이 꺼져 있어요</div>
+      <div class="wx-desc">폰 설정에서 이 앱(또는 크롬)의 위치를 허용한 뒤 다시 눌러 주세요</div></div></div>
+      <button class="wx-btn" onclick="wxEnableByTap()">다시 시도</button>`;
+    return;
+  }
+  if (!fresh) {
+    el.className = 'wx-card';
+    el.innerHTML = `<div class="wx-row"><div class="wx-icon">🌡</div><div class="wx-info">
+      <div class="wx-title">날씨를 불러오지 못했어요</div>
+      <div class="wx-desc">인터넷 연결을 확인해 주세요</div></div></div>
+      <button class="wx-btn" onclick="wxEnableByTap()">다시 시도</button>`;
+    return;
+  }
+  const hot = w.feels >= HEAT_FEELS && wxAge(w) <= WX_HOT_MS;
+  const stale = wxAge(w) > 60 * 60 * 1000;
+  const feelsTxt = Math.round(w.feels) !== Math.round(w.t) ? ` · 체감 <b>${Math.round(w.feels)}℃</b>` : '';
+  const rhTxt = w.rh != null ? ` · 습도 ${Math.round(w.rh)}%` : '';
+  let body;
+  if (hot) {
+    const one = DB.sites.length === 1;
+    body = `<div class="wx-row"><div class="wx-icon">🔥</div><div class="wx-info">
+      <div class="wx-title">폭염 관리 대상 — 체감 ${Math.round(w.feels)}℃</div>
+      <div class="wx-desc">기온 ${Math.round(w.t)}℃${rhTxt} · 체감온도 ${HEAT_FEELS}℃ 이상</div></div>
+      <button class="wx-refresh" onclick="wxEnableByTap()" aria-label="날씨 새로고침">↻<small>새로</small></button></div>
+      <div class="wx-tip"><b>물 · 그늘 · 휴식</b>을 챙기세요. 가장 더운 오후 시간대(대체로 14~17시)에는 옥외 작업을 줄이거나 쉬는 시간을 늘려 주세요.</div>` +
+      (one ? `<button class="wx-btn hot" onclick="openHeatCheck()">🌡 폭염 관리 점검하기</button>`
+           : `<div class="wx-tip" style="margin-top:6px;">현장에 들어가서 오늘 점검의 <b>'폭염 관리'</b>를 선택하세요.</div>`);
+    el.className = 'wx-card hot';
+  } else {
+    body = `<div class="wx-row"><div class="wx-icon">🌤</div><div class="wx-info">
+      <div class="wx-title">지금 <b>${Math.round(w.t)}℃</b>${feelsTxt}</div>
+      <div class="wx-desc">${rhTxt ? rhTxt.slice(3) + ' · ' : ''}${wxHm(w.at)} 기준${stale ? ' (오래된 정보)' : ''} · 폭염 관리 대상 아님</div></div>
+      <button class="wx-refresh" onclick="wxEnableByTap()" aria-label="날씨 새로고침">↻<small>새로</small></button></div>`;
+    el.className = 'wx-card';
+  }
+  el.innerHTML = body;
+}
+function openHeatCheck() {
+  if (DB.sites.length !== 1) { toast('현장에 들어가서 오늘 점검의 \'폭염 관리\'를 선택하세요', 3500); return; }
+  curSiteId = DB.sites[0].id; curCheckSetId = 'heat'; chkAddMode = false;
+  openTodayCheck();
+}
+/* 점검 화면 위쪽의 폭염 안내 */
+function renderHeatBanner() {
+  const el = document.getElementById('chkHeatWrap');
+  if (!el) return;
+  if (curCheckReadonly || !wxIsHot()) { el.innerHTML = ''; return; }
+  const w = wxCache();
+  const onHeat = curCheckSetId === 'heat';
+  el.innerHTML = `<div class="chk-heat-banner">🔥 <b>오늘은 폭염 관리 대상</b> (체감 ${Math.round(w.feels)}℃)` +
+    (onHeat ? '<br>아래 폭염 관리 항목을 점검하세요.' : `<br>작업 점검과 함께 <b>폭염 관리</b>도 점검하세요.<button class="wx-btn hot" style="margin-top:8px;" onclick="setCheckSet('heat')">🌡 폭염 관리 점검하기</button>`) + `</div>`;
+}
+/* 앱을 다시 열었을 때 (위치 권한을 이미 허용한 경우만) */
+function wxAutoStart() {
+  try { renderWeatherCard(); } catch (e) {}
+  if (DB.settings && DB.settings.weatherOn) wxRefresh(false);
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && DB.settings && DB.settings.weatherOn) {
+    const w = wxCache(); if (!w || wxAge(w) >= WX_FRESH_MS) wxRefresh(false);
+  }
+});
+
 (async () => {
   await loadDB();
   requestPersistentStorage();
   applyFontScale();
   renderHome();
+  try { await resumeRestore(); } catch (e) { console.error(e); }
+  wxAutoStart();
   if (isRunningStandalone()) {
     const card = document.getElementById('installAppCard');
     if (card) card.style.display = 'none';

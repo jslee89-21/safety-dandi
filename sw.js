@@ -1,10 +1,10 @@
-/* 안전서류 단디 — 서비스워커
+/* 현장수첩 — 서비스워커
    ⚠️ 이전 버전은 "저장된 파일을 무조건 먼저 보여주는" 방식이라, GitHub에
    새 버전을 올려도 계속 예전 화면이 보이는 문제가 있었음. 이제는 "인터넷이
    되면 항상 최신 파일을 받아오고, 인터넷이 안 될 때만 저장된 파일로 대체"
    하는 방식으로 바꿔서, 평소엔 항상 최신 버전이 보이고 오프라인일 때만
    저장된 버전으로 안전하게 작동하게 함 */
-const CACHE_NAME = 'safety-dandi-v3';
+const CACHE_NAME = 'sucheop-v1';
 const APP_SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (event) => {
