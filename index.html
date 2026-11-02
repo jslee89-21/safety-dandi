@@ -2083,7 +2083,7 @@ input[type=date]::-webkit-calendar-picker-indicator { opacity: .8; }
       대구지방고용노동청 건설산재예방감독과 제작·배포<br>
       중소규모 건설현장 근로자 안전을 위한 무료 안전관리 도구
     </div>
-    <div id="appBuildLabel" style="font-size:12px;color:var(--c-muted);text-align:center;margin-top:8px;letter-spacing:.3px;user-select:all;">build · 20261102_16 · jslee89</div>
+    <div id="appBuildLabel" style="font-size:12px;color:var(--c-muted);text-align:center;margin-top:8px;letter-spacing:.3px;user-select:all;">build · 20261102_17 · jslee89</div>
     <div class="btn-row">
       <button class="btn btn-primary" onclick="saveSettings()">저장</button>
     </div>
@@ -3027,10 +3027,11 @@ function openModal(id) { document.getElementById(id).classList.add('show'); }
 function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 
 /* ══════════════ CONFIRM ══════════════ */
-function showConfirm(title, msg, okLabel, cb) {
+function showConfirm(title, msg, okLabel, cb, okClass) {
   document.getElementById('confirmTitle').textContent = title;
   document.getElementById('confirmMsg').textContent = msg;
   document.getElementById('confirmOkBtn').textContent = okLabel;
+  document.getElementById('confirmOkBtn').className = 'btn ' + (okClass || 'btn-danger');
   confirmCb = cb;
   document.getElementById('confirmBox').classList.add('show');
 }
@@ -7746,18 +7747,23 @@ function dataUrlToFile(dataUrl, name) {
   for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
   return new File([arr], name, { type: mime });
 }
-async function shareContent(title, text, files) {
+/* 사용자가 화면을 마지막으로 누른 시각 — 공유 창은 '방금 누른 직후'에만 열 수 있어서 확인용 */
+let _lastTapAt = 0;
+['pointerup', 'touchend', 'click'].forEach(ev => document.addEventListener(ev, e => { if (e.isTrusted) _lastTapAt = Date.now(); }, true));
+async function shareNow(title, text, files) {
   try {
     if (navigator.share) {
       if (files && files.length && navigator.canShare && navigator.canShare({ files })) {
         await navigator.share({ title, text, files });
       } else {
+        if (files && files.length) toast('이 폰은 이미지 첨부 공유를 지원하지 않아 글만 보냅니다', 3500);
         await navigator.share({ title, text });
       }
       return;
     }
   } catch (e) {
     if (e && e.name === 'AbortError') return;   // 사용자가 공유 창을 닫음
+    toast('⚠️ 공유 창을 열지 못했어요 (' + (e && e.name || '오류') + ')', 4000);
   }
   // 공유 창을 쓸 수 없으면 내용을 복사
   try {
@@ -7766,6 +7772,16 @@ async function shareContent(title, text, files) {
   } catch (e) {
     showConfirm('공유할 내용', text, '확인', () => {});
   }
+}
+async function shareContent(title, text, files) {
+  // 긴 서류는 이미지를 만드는 사이에 '방금 누른 상태'가 풀려서 공유 창이 거부됨 →
+  // 준비가 끝나면 [보내기]를 한 번 더 누르게 해서, 그 누름으로 공유 창을 염
+  const stale = Date.now() - _lastTapAt > 3000;
+  if (files && files.length && stale) {
+    showConfirm('📤 보낼 준비가 되었습니다', `이미지 ${files.length}장이 준비되었습니다.\n아래 [보내기]를 누르면 카톡·문자 선택 창이 열립니다.`, '📤 보내기', () => { shareNow(title, text, files); }, 'btn-primary');
+    return;
+  }
+  await shareNow(title, text, files);
 }
 function buildOpenChecksText() {
   const site = DB.sites.find(x => x.id === curSiteId) || {};
