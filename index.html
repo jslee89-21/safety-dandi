@@ -150,6 +150,24 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 }
 .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--c-orange); }
 .field select option { background: var(--c-card); }
+/* 아이폰 사파리: 날짜 입력칸이 기본 너비로 삐져나오는 문제 방지 */
+input[type=date], input[type=time], input[type=month] {
+  -webkit-appearance: none; appearance: none;
+  display: block; width: 100%; min-width: 0; max-width: 100%; box-sizing: border-box;
+  line-height: 1.3; text-align: left;
+}
+input[type=date]::-webkit-date-and-time-value, input[type=time]::-webkit-date-and-time-value { text-align: left; min-height: 1.3em; margin: 0; }
+input[type=date]::-webkit-calendar-picker-indicator { opacity: .8; }
+/* 앱 안 브라우저 안내 바 */
+#inappBar { background: rgba(255,209,102,.14); border-bottom: 1px solid rgba(255,209,102,.5); padding: 10px 14px; }
+.inapp-msg { font-size: 14px; line-height: 1.5; color: var(--c-text); }
+.inapp-btns { display: flex; gap: 8px; margin-top: 8px; }
+.inapp-go { flex: 1; min-width: 0; min-height: 48px; border: none; border-radius: 10px; background: var(--c-orange); color: #0f1117; font-size: 16px; font-weight: 800; font-family: inherit; cursor: pointer; }
+.inapp-x { flex-shrink: 0; min-width: 64px; min-height: 48px; border: 1px solid var(--c-border); border-radius: 10px; background: none; color: var(--c-muted); font-size: 14px; font-family: inherit; cursor: pointer; }
+/* 아이폰: 입력 글자가 16px 미만이면 칸을 누를 때 화면이 확대되어 레이아웃이 어긋남 */
+@supports (-webkit-touch-callout: none) {
+  input:not([type=checkbox]):not([type=radio]):not([type=file]), select, textarea { font-size: 16px !important; }
+}
 .field textarea { min-height: 90px; resize: vertical; line-height: 1.7; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
@@ -710,6 +728,44 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 }
 .check-start-card:hover { background: rgba(6,214,160,.16); }
 .chk-split-card { margin-bottom: 14px; }
+/* 최초 위험성평가 일괄 작성 */
+.ibk-step { font-size: 15px; font-weight: 800; margin-bottom: 10px; }
+.ibk-bundles { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 10px; }
+.ibk-bundle { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 14px 8px; border-radius: 14px; border: 2px solid var(--c-border); background: var(--c-card); color: var(--c-text); font-family: inherit; cursor: pointer; min-width: 0; }
+.ibk-bundle.on { border-color: var(--c-green); background: rgba(6,214,160,.12); }
+.ibk-ic { font-size: 30px; line-height: 1.1; }
+.ibk-nm { font-size: 20px; font-weight: 900; }
+.ibk-sub { font-size: 12.5px; color: var(--c-muted); line-height: 1.4; text-align: center; overflow-wrap: anywhere; }
+.ibk-chk { font-size: 13px; font-weight: 800; color: var(--c-muted); margin-top: 4px; }
+.ibk-bundle.on .ibk-chk { color: var(--c-green); }
+.ibk-hint { font-size: 14px; color: var(--c-muted); margin-bottom: 8px; line-height: 1.5; }
+.ibk-hint b { color: var(--c-text); }
+.ibk-empty { font-size: 14px; color: var(--c-muted); line-height: 1.6; padding: 14px; border: 1px dashed var(--c-border); border-radius: 12px; }
+.ibk-cat { display: flex; align-items: center; gap: 12px; padding: 12px 12px; margin-bottom: 6px; border: 1px solid var(--c-border); border-radius: 12px; background: var(--c-card); cursor: pointer; min-height: 52px; }
+.ibk-cat.on { border-color: rgba(6,214,160,.6); background: rgba(6,214,160,.07); }
+.ibk-box { flex-shrink: 0; width: 28px; height: 28px; border-radius: 8px; border: 2px solid var(--c-border); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; color: #0f1117; }
+.ibk-cat.on .ibk-box { background: var(--c-green); border-color: var(--c-green); }
+.ibk-cn { flex: 1; min-width: 0; font-size: 15px; font-weight: 700; overflow-wrap: anywhere; }
+.ibk-cc { font-size: 12.5px; color: var(--c-muted); font-family: var(--font-mono); flex-shrink: 0; }
+.hazard-cat { font-size: 11px; color: var(--c-muted); background: rgba(255,255,255,.06); border-radius: 6px; padding: 2px 6px; max-width: 100%; overflow-wrap: anywhere; }
+.hz-group-body .hazard-cat { display: none; }
+.hz-group { border: 1px solid var(--c-border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; background: var(--c-card); }
+.hz-group-head { display: flex; align-items: stretch; }
+.hz-group-toggle { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; padding: 14px 12px; background: none; border: none; color: var(--c-text); font-family: inherit; text-align: left; cursor: pointer; min-height: 56px; }
+.hz-g-arr { color: var(--c-muted); transition: transform .15s; flex-shrink: 0; }
+.hz-group.open .hz-g-arr { transform: rotate(90deg); }
+.hz-g-name { flex: 1; min-width: 0; font-size: 15px; font-weight: 800; overflow-wrap: anywhere; }
+.hz-g-cnt { flex-shrink: 0; font-size: 12.5px; color: var(--c-muted); font-family: var(--font-mono); }
+.hz-g-del { flex-shrink: 0; min-width: 56px; background: none; border: none; border-left: 1px solid var(--c-border); color: var(--c-red); font-size: 18px; font-family: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1; }
+.hz-g-del small { font-size: 10.5px; }
+.hz-group-body { display: none; padding: 0 10px 4px; }
+.hz-group.open .hz-group-body { display: block; }
+.hz-plan-list { display: flex; flex-direction: column; gap: 4px; }
+.hz-plan-item { display: flex; align-items: flex-start; gap: 8px; font-size: 14px; line-height: 1.5; padding: 4px 0; }
+.hz-plan-item span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.hz-plan-del { flex-shrink: 0; min-width: 36px; min-height: 32px; border-radius: 8px; border: 1px solid var(--c-border); background: none; color: var(--c-muted); font-size: 14px; cursor: pointer; font-family: inherit; }
+.hz-plan-empty { font-size: 13px; color: var(--c-muted); }
+
 /* 날씨 · 폭염 */
 .wx-card { background: rgba(77,171,247,.10); border: 1.5px solid rgba(77,171,247,.45); border-radius: 14px; padding: 14px 14px; margin-bottom: 14px; }
 .wx-card.hot { background: rgba(239,69,101,.12); border-color: var(--c-red); }
@@ -1239,6 +1295,14 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 </style>
 </head>
 <body>
+<!-- 카카오톡 등 앱 안 브라우저로 열렸을 때만 보이는 안내 -->
+<div id="inappBar" style="display:none;">
+  <div class="inapp-msg">⚠️ <b>앱 안에서 열린 화면</b>입니다. 사진을 찍으면 화면이 꺼질 수 있어요. 브라우저로 여세요.</div>
+  <div class="inapp-btns">
+    <button type="button" class="inapp-go" id="inappGo" onclick="inappOpenExternal()">🌐 크롬에서 열기</button>
+    <button type="button" class="inapp-x" onclick="inappDismiss()">닫기</button>
+  </div>
+</div>
 
 <!-- ══════════════════════════════════════════
      SCREEN 0 — HOME (현장 목록)
@@ -1593,13 +1657,18 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
     <div id="riskHazardSection">
       <div class="label-sm" style="margin-bottom:10px;">위험요인 및 평가 <span style="color:var(--c-muted);font-size:10px;">위험도 = 빈도×강도</span></div>
       <div id="initialPresetBanner" style="display:none;margin-bottom:10px;">
-        <div style="background:rgba(239,69,101,.08);border:1px solid rgba(239,69,101,.25);border-radius:8px;padding:12px 14px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;">
-          <span style="font-size:22px;">📋</span>
-          <div style="flex:1 1 140px;min-width:0;">
-            <div style="font-size:13px;font-weight:700;margin-bottom:2px;">KOSHA 기준 위험요인 자동 입력</div>
-            <div id="presetBannerDesc" style="font-size:11px;color:var(--c-muted);">산업안전보건공단 위험성평가 지침 기준 공종별 기본 위험요인을 불러올 수 있습니다.</div>
+        <div style="background:rgba(239,69,101,.08);border:1px solid rgba(239,69,101,.25);border-radius:8px;padding:12px 14px;">
+          <div style="display:flex;align-items:flex-start;gap:10px;">
+            <span style="font-size:22px;">📋</span>
+            <div style="flex:1;min-width:0;">
+              <div id="presetBannerTitle" style="font-size:13px;font-weight:700;margin-bottom:2px;">KOSHA 기준 위험요인 자동 입력</div>
+              <div id="presetBannerDesc" style="font-size:11px;color:var(--c-muted);line-height:1.5;"></div>
+            </div>
           </div>
-          <button class="btn btn-primary btn-sm" style="white-space:nowrap;" onclick="openPresetModal()">📋 자동 입력</button>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+            <button class="btn btn-primary btn-sm" id="presetBulkBtn" style="display:none;flex:1 1 200px;min-height:48px;" onclick="openInitialBulk()">🏗 공사 종류로 한 번에 작성</button>
+            <button class="btn btn-sm" id="presetOpenBtn" style="flex:1 1 140px;min-height:48px;white-space:nowrap;" onclick="openPresetModal()">📋 자동 입력</button>
+          </div>
         </div>
       </div>
       <div id="hazardList"></div>
@@ -2008,7 +2077,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
       대구지방고용노동청 건설산재예방감독과 제작·배포<br>
       중소규모 건설현장 근로자 안전을 위한 무료 안전관리 도구
     </div>
-    <div id="appBuildLabel" style="font-size:12px;color:var(--c-muted);text-align:center;margin-top:8px;letter-spacing:.3px;user-select:all;">build · 20261102_02 · jslee89</div>
+    <div id="appBuildLabel" style="font-size:12px;color:var(--c-muted);text-align:center;margin-top:8px;letter-spacing:.3px;user-select:all;">build · 20261102_09 · jslee89</div>
     <div class="btn-row">
       <button class="btn btn-primary" onclick="saveSettings()">저장</button>
     </div>
@@ -4231,9 +4300,14 @@ function setPresetBanner(rtype) {
   if (!box) return;
   box.style.display = (rtype === 'initial' || rtype === 'periodic') ? '' : 'none';
   const d = document.getElementById('presetBannerDesc');
+  const ini = rtype === 'initial';
+  const bulk = document.getElementById('presetBulkBtn'), open = document.getElementById('presetOpenBtn'), tt = document.getElementById('presetBannerTitle');
+  if (bulk) bulk.style.display = ini ? '' : 'none';
+  if (open) { open.textContent = ini ? '공종·위험요인 직접 고르기' : '📋 자동 입력'; open.className = ini ? 'btn btn-outline btn-sm' : 'btn btn-primary btn-sm'; }
+  if (tt) tt.textContent = ini ? '착공 전 전체 공종을 한 번에 평가' : 'KOSHA 기준 위험요인 자동 입력';
   if (d) d.textContent = rtype === 'periodic'
     ? '새로 시작하거나 바뀐 작업에 해당하는 공종만 골라, 필요한 위험요인만 불러오세요.'
-    : '산업안전보건공단 위험성평가 지침 기준 공종별 기본 위험요인을 불러올 수 있습니다.';
+    : '건축(아파트·주택·근생) 또는 토목(도로·하천·댐)을 고르면 위험요인과 예정 감소대책이 한 번에 작성됩니다. 해당 없는 공종만 빼면 됩니다.';
 }
 function goNewRiskEntry() {
   if (curRiskType === 'action') {
@@ -4272,7 +4346,7 @@ function pickActionKind(kind) {
 
 /* 조치결과 연계 평가 선택 목록 */
 function openRiskPicker() {
-  const evals = DB.risks.filter(r => r.siteId === curSiteId && (r.rtype === 'initial' || r.rtype === 'periodic'))
+  const evals = DB.risks.filter(r => r.siteId === curSiteId && (r.rtype === 'initial' || r.rtype === 'periodic') && !r.plan)
     .sort((a,b) => b.reportDate.localeCompare(a.reportDate));
   const wrap = document.getElementById('riskPickerList');
   if (!evals.length) {
@@ -4317,6 +4391,7 @@ function selectLinkedRisk(riskId) {
 
 function goNewRisk() {
   riskPhotos = []; riskAttendees = []; hazardRows = [];
+  riskPlanMode = (curRiskType === 'initial'); hazardGroupOpen = {};
   _editingRiskId = null;
   selectedSharedRiskIds = [];
   // linkedSourceId는 여기서 초기화하지 않음 — 호출자(selectLinkedRisk, goActionFromReport 등)가
@@ -4352,10 +4427,30 @@ function goNewRisk() {
   updateRiskPhotoSectionLabel(isAction);
   document.getElementById('rInpWork').placeholder = isAction ? '예: 낙하 위험 개선조치, 안전난간 설치' : '예: 철근 배근, 거푸집 조립, 비계 설치';
   document.getElementById('hazardList').innerHTML = '';
+  resetWorkNameField();
   applyActionKindFields(isAction);
+  syncWorkNameField();
   renderRiskAttendees(); renderRiskPhotoGrid();
-  if (!isAction) addHazardRow();
+  if (!isAction && !riskPlanMode) addHazardRow();   // 최초평가(일괄 작성)는 빈 칸 없이 시작
+  if (!isAction && riskPlanMode) renderHazardList();
   goScreen('scNewRisk');
+}
+
+/* 최초평가(일괄 작성 방식)는 작업·공정명을 입력받지 않음 — 공종 이름으로 자동 생성 */
+function planWorkName() {
+  const cats = [];
+  hazardRows.forEach(h => { const c = h.cat || ''; if (c && !cats.includes(c)) cats.push(c); });
+  if (!cats.length) return '착공 전 전 공종';
+  const names = cats.map(c => c.replace(/^\S+\s/, ''));
+  return names.length <= 3 ? names.join('·') : names.slice(0, 3).join('·') + ' 등 ' + names.length + '개 공종';
+}
+function resetWorkNameField() {   // 이전 화면에서 내가 숨긴 경우에만 되돌림
+  const f = document.getElementById('workNameField');
+  if (f && f.dataset.planHid) { f.style.display = ''; delete f.dataset.planHid; }
+}
+function syncWorkNameField() {
+  const f = document.getElementById('workNameField');
+  if (f && curRiskType === 'initial' && riskPlanMode) { f.style.display = 'none'; f.dataset.planHid = '1'; }
 }
 
 /* 조치·회의·공유 세부 종류에 따라 기본정보 필드 라벨/필수여부/표시를 조정 */
@@ -4491,7 +4586,9 @@ function updateRiskPhotoSectionLabel(isAction) {
 function addHazardRow() {
   const id = Date.now();
   hazardRows.push({ id, desc: '', freq: 2, severity: 2, checks: [], checkedItems: [], measure: '' });
+  if (riskPlanMode) hazardGroupOpen['✏️ 직접 추가'] = true;   // 묶음 보기에서도 새 칸이 바로 보이도록
   renderHazardList();
+  if (riskPlanMode && hazardRows.length > 8) setTimeout(() => { const g = [...document.querySelectorAll('.hz-group')].pop(); if (g) g.scrollIntoView({ behavior: 'smooth', block: 'end' }); }, 80);
   const btn = document.getElementById('hazardClearBtn');
   if (btn) btn.style.display = '';
 }
@@ -4500,7 +4597,7 @@ function removeHazardRow(id) {
   renderHazardList();
 }
 function renderHazardList() {
-  document.getElementById('hazardList').innerHTML = hazardRows.map((h,i) => {
+  const _cards = hazardRows.map((h,i) => {
     const s   = h.freq * h.severity;
     const rlc = getRLClass(s);
     const rlt = getRLText(s);
@@ -4520,13 +4617,13 @@ function renderHazardList() {
     // 미이행 항목 카운트
     const totalCk = checkList.length;
     const doneCk  = [...checkedSet].filter(ci => ci < totalCk).length;
-    const ckBadge = totalCk > 0
+    const ckBadge = (!riskPlanMode && totalCk > 0)
       ? `<span style="font-size:10px;font-family:var(--font-mono);color:${doneCk===totalCk?'var(--c-green)':'var(--c-yellow)'};">${doneCk}/${totalCk} 이행</span>`
       : '';
     return `
     <div class="hazard-card" id="hr_${h.id}">
       <div class="hazard-card-header">
-        <span class="hazard-num">No.${i+1}</span>
+        <span class="hazard-num">No.${i+1}</span>${h.cat ? `<span class="hazard-cat">${escapeHtml(h.cat)}</span>` : ''}
         <div class="risk-level-badge ${rlc}" id="rl_${i}" style="padding:2px 8px;font-size:10px;">${rlt}&nbsp;(${s}점)</div>
         ${ckBadge}
         <button class="hazard-del" onclick="removeHazardRow(${h.id})">✕ 삭제</button>
@@ -4574,8 +4671,12 @@ function renderHazardList() {
 
         <div class="hazard-divider"></div>
 
-        <!-- ③ 현재 안전조치 체크 -->
-        <div class="hazard-field">
+        <!-- ③ ${riskPlanMode ? '감소대책(예정)' : '현재 안전조치 체크'} -->
+        ${riskPlanMode ? `<div class="hazard-field">
+          <label>③ 감소대책 (예정) <span style="color:var(--c-muted);font-weight:400;">(착공 전 수립 · 이행 여부는 체크하지 않습니다)</span></label>
+          <div class="hz-plan-list">${checkList.length ? checkList.map((ck, ci) => `<div class="hz-plan-item"><span>• ${escapeHtml(ck)}</span><button type="button" class="hz-plan-del" onclick="removeHazardCheck(${i},${ci})" aria-label="이 대책 삭제">✕</button></div>`).join('') : `<div class="hz-plan-empty">※ 아래 <b>+ 대책 추가</b>로 직접 입력하세요</div>`}</div>
+          <div style="display:flex;gap:6px;margin-top:8px;"><button class="preset-sel-btn" onclick="addCustomCheck(${i})">+ 대책 추가</button></div>
+        </div>` : `        <div class="hazard-field">
           <label>③ 현재 안전조치 이행 여부 <span style="color:var(--c-muted);font-weight:400;">(해당 항목 체크)</span></label>
           <div class="hz-check-list">${checksHtml}</div>
           <div style="display:flex;gap:6px;margin-top:8px;">
@@ -4585,16 +4686,19 @@ function renderHazardList() {
           </div>
         </div>
 
+`}
+
         <!-- ④ 감소대책 필요 내용 (미이행 항목 자동 표시) -->
         <div class="hazard-field">
-          <label>④ 추가 감소대책 / 메모</label>
-          <textarea placeholder="미이행 조치에 대한 개선계획 또는 추가 의견"
+          <label>${riskPlanMode ? '④ 추가 의견 / 메모 (선택)' : '④ 추가 감소대책 / 메모'}</label>
+          <textarea placeholder="${riskPlanMode ? '필요한 경우 추가 의견을 적으세요' : '미이행 조치에 대한 개선계획 또는 추가 의견'}"
             onchange="hazardRows[${i}].measure=this.value" style="min-height:44px;">${h.measure||''}</textarea>
         </div>
 
       </div>
     </div>`;
-  }).join('');
+  });
+  document.getElementById('hazardList').innerHTML = riskPlanMode ? groupHazardCards(_cards) : _cards.join('');
 }
 
 function toggleHazardCheck(hi, ci, checked) {
@@ -4756,8 +4860,10 @@ function renderRiskPhotoGrid() {
 /* Save risk */
 function saveRisk() {
   const workName = document.getElementById('rInpWork').value.trim();
+  const planInit = curRiskType === 'initial' && riskPlanMode;
   const isMeetingOrShare = curRiskType === 'action' && (curActionKind === 'meeting' || curActionKind === 'share');
-  if (!workName && !isMeetingOrShare) { toast('❌ 작업·공정명을 입력하세요'); return; }
+  if (planInit && !hazardRows.some(h => (h.desc || '').trim())) { toast('❌ 위험요인이 없습니다. "공사 종류로 한 번에 작성"을 눌러 주세요'); return; }
+  if (!workName && !isMeetingOrShare && !planInit) { toast('❌ 작업·공정명을 입력하세요'); return; }
 
   const isRemediation = curRiskType === 'action' && curActionKind === 'remediation';
   if (!isRemediation && !document.getElementById('rInpDate').value) {
@@ -4777,6 +4883,7 @@ function saveRisk() {
 
 function saveRiskConfirmed() {
   let workName = document.getElementById('rInpWork').value.trim();
+  if (curRiskType === 'initial' && riskPlanMode && !workName) workName = planWorkName();   // 일괄 작성은 "건축공사 전 공종" 등이 이미 채워짐, 직접 고르기는 공종 이름으로 대신
   const actionTypeVal = curRiskType === 'action' ? document.getElementById('rInpActionType').value : null;
   // 회의·공유에서 주제를 비워두면 유형명을 기본 표시명으로 사용
   if (!workName && curRiskType === 'action' && (curActionKind === 'meeting' || curActionKind === 'share')) {
@@ -4805,6 +4912,7 @@ function saveRiskConfirmed() {
     evaluator:   document.getElementById('rInpEvaluator').value.trim(),
     supervisor:  document.getElementById('rInpSupervisor').value.trim(),
     actionType:  curRiskType==='action' ? document.getElementById('rInpActionType').value : null,
+    plan:        curRiskType==='initial' ? !!riskPlanMode : false,
     hazards:     curRiskType!=='action' ? hazardRows.map(h=>({...h, checkedItems:[...(h.checkedItems||[])]})) : [],
     actionEvidence: curRiskType==='action' ? serializeActionEvidence() : [],
     memo:        document.getElementById('rInpMemo').value.trim(),
@@ -4955,7 +5063,36 @@ function buildRiskReportDoc(r) {
     role => role==='관리자' ? 'rd-att-role-mgr' : role==='근로자대표' ? 'rd-att-role-rep' : 'rd-att-role-wkr',
     { title: `${r.actionType==='안전회의'?'회의':r.actionType==='근로자공유'?'공유':r.rtype==='action'?'조치':'평가'} 참석자 서명부`, docNo, siteName: site.name, reportDate: r.reportDate });
   // KOSHA G-30-2023 위험성평가표
-  const hazardHtml = (r.hazards||[]).length > 0 ? (() => {
+  const hazardHtml = (r.plan && (r.hazards||[]).length > 0) ? (() => {
+    let lastCat = null;
+    const rows = r.hazards.map((h, i) => {
+      const sc = h.freq * h.severity, cat = h.cat || '✏️ 직접 추가';
+      const head = cat !== lastCat ? `<tr class="rrd-cat-row"><td colspan="7" style="background:#f0f0f0;font-weight:700;font-size:10px;text-align:left;padding:4px 6px;">${escapeHtml(cat)}</td></tr>` : '';
+      lastCat = cat;
+      const cks = (h.checks||[]).length ? (h.checks||[]).map(c=>`<div>• ${escapeHtml(c)}</div>`).join('') : '<span style="color:#aaa;">—</span>';
+      return head + `<tr>
+        <td class="tc rrd-hno">${i+1}</td>
+        <td class="tl" style="font-size:10px;">${escapeHtml(h.desc)||'—'}</td>
+        <td class="tc">${h.freq===3?'상':h.freq===2?'중':'하'}</td>
+        <td class="tc">${h.severity===3?'상':h.severity===2?'중':'하'}</td>
+        <td class="tc ${getRLClass_rpt(sc)}" style="font-size:9px;">${getRLText(sc)}<br>(${sc}점)</td>
+        <td class="tl" style="font-size:9px;line-height:1.7;">${cks}</td>
+        <td class="tl" style="font-size:10px;color:#555;">${escapeHtml(h.measure)||'—'}</td>
+      </tr>`;
+    }).join('');
+    return `<div class="rrd-section">
+      <div class="rrd-section-title">위험성평가 결과표 (KOSHA G-30-2023 기준) — 유해·위험요인 ${r.hazards.length}개</div>
+      <table class="rrd-hazard-table" style="table-layout:fixed;">
+        <colgroup><col style="width:5%"><col style="width:25%"><col style="width:6%"><col style="width:6%"><col style="width:10%"><col style="width:30%"><col style="width:18%"></colgroup>
+        <thead><tr><th>#</th><th>유해·위험요인</th><th>가능성</th><th>중대성</th><th>위험성<br>수준</th><th>감소대책(예정)</th><th>비고(메모)</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div style="font-size:9px;color:#888;margin-top:4px;line-height:1.7;">
+        ※ 가능성·중대성: 상(3)·중(2)·하(1) &nbsp;|&nbsp; 위험성 수준: 매우높음(9)·높음(6)·낮음(3~4)·허용가능(1~2)<br>
+        ※ 착공 전 전체 공종에 대해 수립한 예정 감소대책입니다. 실제 이행 여부는 수시 위험성평가·조치결과·일일 점검에서 확인합니다.
+      </div>
+    </div>`;
+  })() : (r.hazards||[]).length > 0 ? (() => {
     const rows = (r.hazards||[]).map((h, i) => {
       const s   = h.freq * h.severity;
       const rlc = getRLClass_rpt(s);
@@ -5598,6 +5735,7 @@ function goEditRisk() {
   // 폼 상태 복원
   riskPhotos     = r.photos     ? [...r.photos]     : [];
   riskAttendees  = r.attendees  ? [...r.attendees]  : [];
+  riskPlanMode   = (r.rtype === 'initial' && r.plan === true); hazardGroupOpen = {};
   hazardRows     = r.hazards    ? r.hazards.map(h=>({...h,
     checks: h.checks ? [...h.checks] : [],
     checkedItems: h.checkedItems ? [...h.checkedItems] : []
@@ -5625,7 +5763,9 @@ function goEditRisk() {
   document.getElementById('riskActionFields').style.display  = isAction ? '' : 'none';
   document.getElementById('riskHazardSection').style.display = isAction ? 'none' : '';
   updateRiskPhotoSectionLabel(isAction);
+  resetWorkNameField();
   applyActionKindFields(isAction);
+  syncWorkNameField();
   setPresetBanner(r.rtype);
   document.getElementById('hazardClearBtn').style.display = hazardRows.length > 0 ? '' : 'none';
   document.getElementById('riskAttendeeInputName').value = '';
@@ -5665,6 +5805,7 @@ let actionEvidenceItems = [];  // 연계 평가의 위험요인별 조치 항목
    이행 체크항목 중 아직 미조치인 게 몇 개 남았는지 계산 — initActionEvidence()와
    동일한 완료 판정 로직을 공유해서, 현장 전체 현황판에서도 일관되게 사용 */
 function computeHazardCompletionStatus(evalRisk) {
+  if (evalRisk && evalRisk.plan) return { totalItems: 0, pendingCount: 0, hazardsWithPending: [], linkedActionCount: 0 };   // 최초평가(예정 대책)는 미조치 집계 대상이 아님
   const linkedActions = DB.risks.filter(r => r.linkedRiskId === evalRisk.id && r.rtype === 'action');
   const doneMap = {};
   linkedActions.forEach(pa => {
@@ -5989,13 +6130,11 @@ const KOSHA_HAZARDS = [
     ]
   },
   {
-    id:'excavation', icon:'⛏️', name:'굴착·토공',
+    id:'excavation', icon:'⛏️', name:'소규모 터파기·토공',
     keywords:['굴착','흙막이','터파기','되메우기','토사','법면','굴착기','매설물','지하수','배수'],
     hazards:[
-      { desc:'굴착면 기울기 불량 및 흙막이 미설치로 인한 토사 붕괴·매몰', f:2, s:4,
+      { desc:'굴착면 기울기 불량으로 인한 토사 붕괴·매몰(소규모 터파기)', f:2, s:4,
         checks:['굴착면 기울기 법면 기준(1:0.5~1:1.8) 준수', '흙막이 지보공 설계 검토 및 설치', '굴착 전 지질조사 실시', '굴착면 비탈 경사 확인'] },
-      { desc:'흙막이 지보공 버팀재 좌굴·탈락으로 인한 붕괴', f:2, s:4,
-        checks:['버팀재 간격·설치기준 준수', '계측기 설치 및 주기적 측정', '흙막이 변위 이상 시 즉시 중지', '구조물 하중 집중 금지'] },
       { desc:'굴착 주변 중장비 진동·하중으로 인한 지반 함몰', f:2, s:4,
         checks:['굴착면 2m 이내 중장비 접근 제한', '지반 지지력 검토', '하중 분산 철판 설치', '경고 표지 및 접근금지 라인 설치'] },
       { desc:'지하 매설 가스관·전선 손상으로 인한 가스폭발·감전', f:2, s:4,
@@ -6010,8 +6149,22 @@ const KOSHA_HAZARDS = [
         checks:['굴착 주위 안전 펜스 설치', '야간 경고등 및 반사재 설치', '출입구 제한 및 관리', '주변 통행인 안내 표지 설치'] },
       { desc:'야간작업 시 조명 불량으로 인한 굴착 구역 추락', f:2, s:4,
         checks:['작업 구역 조도 75럭스 이상 확보', '이동식 조명탑 설치', '야간 작업 제한 원칙', '개인 헤드랜턴 지급'] },
+    ]
+  },
+  {
+    id:'shoring', icon:'🧱', name:'흙막이·대규모 굴착',
+    keywords:['흙막이','지보공','버팀대','앵커','계측','CIP','H-pile','지하굴착'],
+    hazards:[
+      { desc:'흙막이 지보공 버팀재 좌굴·탈락으로 인한 붕괴', f:2, s:4,
+        checks:['버팀재 간격·설치기준 준수', '계측기 설치 및 주기적 측정', '흙막이 변위 이상 시 즉시 중지', '구조물 하중 집중 금지'] },
       { desc:'흙막이 배면 수압 증가로 인한 흙막이 붕괴', f:2, s:4,
         checks:['배면 수위계 설치 및 모니터링', '강우 시 배수 시스템 가동', '우기 전 흙막이 점검 강화', '계측 이상 시 작업 중지 기준 수립'] },
+      { desc:'흙막이 벽체(H-pile·CIP·시트파일) 천공·항타 장비 전도 및 협착', f:2, s:4,
+        checks:['장비 설치 지반 다짐·철판 깔기','장비 작업반경 내 출입금지','신호수 배치','작업계획서 수립 및 작업 전 교육'] },
+      { desc:'굴착 진행 중 흙막이 변위·인접 구조물 침하 징후 방치로 인한 붕괴', f:2, s:4,
+        checks:['굴착 단계별 계측(경사계·지하수위계·균열계) 실시','관리기준치 초과 시 작업 중지 및 보강','인접 건물·도로 사전 조사 및 상시 점검','굴착 깊이별 지보공(버팀대·앵커) 설치 후 다음 단계 굴착'] },
+      { desc:'굴착 구간 사다리·가설계단 불량으로 인한 승강 중 추락', f:3, s:3,
+        checks:['굴착 깊이 1.5m 이상 시 안전한 승강로(가설계단·사다리) 설치','사다리 상단 60cm 이상 돌출·고정','승강로 주변 정리정돈','우천 후 미끄럼 방지 조치'] },
     ]
   },
   {
@@ -6340,6 +6493,132 @@ const KOSHA_HAZARDS = [
         checks:['보안경 착용', '절단기 보호 덮개 설치', '파편 비산 방향 통제', '가죽 장갑 착용'] },
     ]
   },
+  {
+    id:'housekeeping', icon:'🧹', name:'정리정돈·통로·사다리',
+    keywords:['사다리','통로','계단','정리정돈','넘어짐','미끄러짐','조명','못','적치'],
+    hazards:[
+      { desc:'사다리 전도·미끄러짐으로 인한 추락', f:3, s:3,
+        checks:['사다리 고정(미끄럼방지·결속) 확인','사다리 윗부분 60cm 이상 돌출','2인 1조 또는 하부 지지자 배치','파손·변형 사다리 사용 금지'] },
+      { desc:'임시 계단·통로 난간 미설치로 인한 추락', f:3, s:4,
+        checks:['임시 계단·통로 안전난간 설치','계단 디딤판 상태 점검','미끄럼 방지 조치','개구부 덮개·표지 설치'] },
+      { desc:'통로·작업장 바닥 자재 방치로 인한 넘어짐·걸림', f:4, s:2,
+        checks:['자재 적치구역 지정','통로 확보 및 정리정돈 일상 점검','작업 종료 시 정리 실시','폐자재 즉시 반출'] },
+      { desc:'조명 불량으로 인한 통로·작업장 넘어짐·충돌', f:3, s:2,
+        checks:['통로·작업장 조도 확보','임시 조명 고정 및 보호 덮개 설치','야간작업 시 추가 조명 설치','조명 전선 정리'] },
+      { desc:'노출된 못·철선·날카로운 자재에 의한 찔림·베임', f:3, s:2,
+        checks:['못·철선 제거 및 구부림 처리','안전화(밑창 보강)·장갑 착용','폐자재 분리 수거','작업 후 바닥 점검'] },
+      { desc:'자재 적재 불량으로 인한 붕괴·낙하', f:2, s:3,
+        checks:['적재 높이·폭 기준 준수','쓰러짐 방지 결속','경사지·불안정 바닥 적치 금지','적치 상태 일일 점검'] },
+    ]
+  },
+  {
+    id:'weather', icon:'🌡️', name:'폭염·한파·악천후',
+    keywords:['폭염','한파','열사병','동상','강풍','폭우','낙뢰','악천후','저체온','결빙'],
+    hazards:[
+      { desc:'폭염 시 옥외작업 중 열사병·열탈진', f:3, s:4,
+        checks:['시원한 물·그늘 휴식 장소 제공','체감온도에 따른 휴식 시간 부여','가장 더운 시간대 작업 조정','이상 증상 발생 시 응급조치 및 119 연락 체계'] },
+      { desc:'한파 시 저체온증·동상', f:2, s:3,
+        checks:['따뜻한 휴게 장소·음료 제공','방한복·장갑 등 방한 보호구 지급','한파 시 작업시간·휴식 조정','추위에 약한 근로자 작업 배치 조정'] },
+      { desc:'결빙·적설로 인한 미끄러짐·추락', f:3, s:3,
+        checks:['작업 전 통로·발판 제설·결빙 제거','미끄럼 방지 조치 실시','결빙 시 고소작업·지붕작업 중지','미끄럼 방지 안전화 착용'] },
+      { desc:'강풍 시 자재 비산·고소작업 중 추락', f:2, s:4,
+        checks:['기상예보 사전 확인','강풍 시 고소작업·양중작업 중지','가설자재·덮개 결속·고정','작업 중지 기준 사전 공지'] },
+      { desc:'집중호우 시 지반 약화·감전·고립', f:2, s:4,
+        checks:['호우 시 굴착·고소·전기 작업 중지','배수 상태 점검','임시 전기설비 누전·침수 방지','대피 경로·장소 사전 지정'] },
+      { desc:'낙뢰로 인한 감전·피재', f:1, s:4,
+        checks:['낙뢰 예보 시 옥외 고소·크레인 작업 중지','대피 장소 지정','철골·크레인 등 금속구조물 접촉 금지','작업 재개 기준 설정'] },
+    ]
+  },
+  {
+    id:'finishing', icon:'🏢', name:'내장·단열·승강기·창호 마감',
+    keywords:['단열재','우레탄폼','승강기','엘리베이터','피트','창호','커튼월','석고보드','마감','말비계'],
+    hazards:[
+      { desc:'단열재(우레탄폼 등) 시공 중 화기작업으로 인한 화재', f:2, s:4,
+        checks:['단열재 시공 구간 화기작업 금지·구역 분리','용접·용단 시 불티 비산방지포 설치','소화기 비치 및 화재감시자 배치','가연성 자재 적치 최소화'] },
+      { desc:'승강기 피트·승강로 개구부 추락', f:3, s:4,
+        checks:['승강로 개구부 방호문·안전난간 설치','피트 진입 시 추락방지 조치','출입통제 및 위험 표지 부착','피트 내 조명·승강 설비 확보'] },
+      { desc:'외벽 창호·커튼월 설치 중 추락', f:2, s:4,
+        checks:['안전대 부착설비 설치','외부 작업발판·안전난간 확보','하부 출입통제 및 낙하물방지망 설치','강풍 시 작업 중지'] },
+      { desc:'말비계·이동식 작업대 사용 중 추락·전도', f:3, s:3,
+        checks:['작업발판 최대높이·폭 기준 준수','바퀴 잠금 및 평탄한 바닥 확인','작업대 위 사다리·받침 사용 금지','과적 금지'] },
+      { desc:'석고보드·유리 등 중량 마감자재 운반·설치 중 협착·낙하', f:3, s:3,
+        checks:['2인 1조 운반','운반 도구(카트·유리 흡착기 등) 사용','통로 확보','보호 장갑·안전화 착용'] },
+      { desc:'실내 절단·연마 작업 중 분진·소음 노출', f:3, s:2,
+        checks:['방진마스크 착용','국소배기·환기 실시','귀마개 등 청력보호구 착용','절단 시 습식 작업 병행'] },
+      { desc:'접착제·실란트 등 유기용제 사용 시 중독·화재', f:2, s:3,
+        checks:['환기 확보','점화원 제거','보호구(마스크·장갑) 착용','물질안전보건자료(MSDS) 비치 및 교육'] },
+    ]
+  },
+  {
+    id:'traffic', icon:'🚦', name:'도로·교통통제 구간 작업',
+    keywords:['도로','교통','차량','신호수','러버콘','야간','통제','점멸등'],
+    hazards:[
+      { desc:'작업구간 진입 차량과의 충돌', f:3, s:4,
+        checks:['교통통제(안전시설·표지) 계획 수립 및 설치','신호수 배치 및 신호 체계 확립','러버콘·점멸등·방호울타리 설치','작업구간 속도제한 표지 설치'] },
+      { desc:'야간 작업 중 시인성 부족으로 인한 차량 충돌', f:2, s:4,
+        checks:['야광 조끼·반사 장구 착용','조명 설비 설치','야간 교통통제 강화','작업 전 TBM에서 위험구간 공유'] },
+      { desc:'덤프·장비 후진 중 근로자 충돌·협착', f:3, s:4,
+        checks:['유도자 배치','후방 경보·카메라 설치','장비 동선과 보행 동선 분리','작업반경 내 출입통제'] },
+      { desc:'도로 굴착부·단차 방호 미흡으로 인한 통행 차량·보행자 사고', f:2, s:3,
+        checks:['굴착부 방호울타리·표지 설치','야간 경광등 설치','복공판 설치 및 고정 상태 점검','우회 통행로 확보'] },
+      { desc:'장비·자재 반입 중 일반 차량·보행자 접촉', f:2, s:3,
+        checks:['출입구 신호수 배치','반입 시간 조정','통행 보행자 보호시설 설치','유도·안내 표지 설치'] },
+    ]
+  },
+  {
+    id:'river', icon:'🌊', name:'하천·수변·가물막이 작업',
+    keywords:['하천','수위','가물막이','익사','제방','호우','수변','댐','물막이','구명조끼'],
+    hazards:[
+      { desc:'집중호우·상류 방류로 수위 급상승 시 근로자 고립·익사', f:2, s:4,
+        checks:['기상특보·수위 정보 수시 확인','우천·수위 상승 시 작업 중지 및 대피 기준 수립','대피로·대피장소 사전 지정 및 공지','수위 감시자 배치 및 경보 체계 구축'] },
+      { desc:'하천·수변 작업 중 추락·익사', f:2, s:4,
+        checks:['구명조끼 착용','구명환·구명로프 비치','수변 안전난간·출입통제 설치','2인 1조 작업'] },
+      { desc:'가물막이·물막이 가시설 붕괴·유실', f:2, s:4,
+        checks:['구조 검토 및 시공 상세 준수','수압·세굴·침하 수시 점검','계측 관리 및 이상 시 대피','호우 전·후 점검'] },
+      { desc:'연약지반·하상에서 장비 전도·빠짐', f:2, s:4,
+        checks:['지반 지지력 확인 및 깔판 설치','장비 진입 경로 사전 확인','신호수 배치','장비 가장자리 접근 금지선 설치'] },
+      { desc:'수중펌프·임시 전기설비 사용 중 감전', f:2, s:4,
+        checks:['누전차단기 설치','접지 및 방수 연결부 사용','전선 피복 손상 점검','젖은 상태 작업 금지'] },
+      { desc:'부교·작업선(보트) 이동 중 전복·추락', f:1, s:4,
+        checks:['구명조끼 착용','승선 인원·적재 제한','기상 불량 시 운항 중지','비상구조 장비 비치'] },
+    ]
+  },
+  {
+    id:'slopeblast', icon:'⛰️', name:'사면·터널·발파 작업',
+    keywords:['사면','법면','낙석','발파','터널','낙반','화약','절토','록볼트','천공'],
+    hazards:[
+      { desc:'절토 사면·법면 붕괴·낙석', f:2, s:4,
+        checks:['사면 경사·안정성 검토 및 계측','낙석방지망·낙석방지책 설치','우기 전·후 사면 점검','사면 하부 출입통제'] },
+      { desc:'발파 시 비산석·진동으로 인한 근로자·인근 피해', f:2, s:4,
+        checks:['발파작업계획서 수립 및 책임자 지정','발파 전 대피·통제 및 신호 체계 확립','방호·방진 조치','화약류 관리 및 취급자 자격 확인'] },
+      { desc:'터널 굴진 중 낙반·붕괴', f:2, s:4,
+        checks:['지보 시공 및 막장 관찰','계측 관리 및 이상 징후 시 대피','숏크리트·록볼트 시공 상태 점검','작업 전 부석 제거'] },
+      { desc:'터널 내 환기불량·분진·유해가스', f:2, s:3,
+        checks:['환기설비 가동 및 상태 점검','가스·산소 농도 측정','방진마스크 착용','비상 대피 설비 비치'] },
+      { desc:'암반 천공 작업 중 장비 협착·소음·진동', f:3, s:3,
+        checks:['장비 작업반경 통제','귀마개 등 보호구 착용','유도자 배치','장비 사전 점검'] },
+      { desc:'사면·가장자리 작업 중 근로자 추락·굴러 떨어짐', f:2, s:4,
+        checks:['안전대·생명줄 설치','사면 작업 시 2인 1조','가장자리 접근 금지선 설치','우천·결빙 시 작업 중지'] },
+    ]
+  },
+  {
+    id:'paving', icon:'🛣️', name:'성토·다짐·포장 작업',
+    keywords:['성토','다짐','포장','아스팔트','롤러','제방','덤프','적재함'],
+    hazards:[
+      { desc:'성토·제방 가장자리에서 롤러·덤프트럭 전도·추락', f:2, s:4,
+        checks:['가장자리 이격거리 확보 및 안전턱 설치','지반 지지력·경사 확인','유도자 배치','운행 속도 제한'] },
+      { desc:'다짐·포장 장비 작업 중 근로자 협착·충돌', f:3, s:4,
+        checks:['작업반경 내 출입통제','신호수·유도자 배치','후방 경보·카메라 확인','장비 동선과 근로자 동선 분리'] },
+      { desc:'아스팔트 고온 혼합물 접촉으로 인한 화상', f:2, s:3,
+        checks:['내열 장갑·안전화·보호복 착용','고온 구간 근접 통제','살포·포설 구간 접근 금지','응급처치 용품 비치'] },
+      { desc:'아스팔트 흄·분진 흡입으로 인한 호흡기 장해', f:3, s:2,
+        checks:['방진·방독마스크 착용','바람 방향을 고려한 작업 배치','환기·휴식 확보','작업자 건강 이상 확인'] },
+      { desc:'덤프 적재함 상승 중 전선 접촉·전도', f:2, s:4,
+        checks:['상부 전선 이격 확인','적재함 상승 시 유도자 배치','평탄한 지반에서 적재함 상승','적재함 상승 상태 이동 금지'] },
+      { desc:'장비 간 작업 구간 교차로 인한 충돌', f:2, s:3,
+        checks:['장비별 작업구역·동선 분리','무전기 등 통신 체계 확립','신호 체계를 TBM에서 공유'] },
+    ]
+  }
 ];
 
 /* ══ Preset modal open/close/apply ══ */
@@ -6408,7 +6687,8 @@ function applyPresets() {
       desc: h.desc, freq: toKosha(h.f), severity: toKosha(h.s),
       checks: h.checks ? [...h.checks] : [],
       checkedItems: [],
-      measure: ''
+      measure: '',
+      cat: kCatLabel(KOSHA_HAZARDS[wi])
     });
   });
   renderHazardList();
@@ -6424,6 +6704,147 @@ function clearHazardRows() {
     renderHazardList();
     document.getElementById('hazardClearBtn').style.display = 'none';
   });
+}
+
+/* ══════════════ 최초 위험성평가: 공사 종류로 한 번에 작성 ══════════════
+   최초 평가는 착공 전에 "이 현장에 어떤 위험이 있는가"를 정리하는 것이라, 조치 이행 여부는 체크하지 않고
+   KOSHA 표준 감소대책을 "예정 대책"으로 함께 적어 둠. 실제 이행은 수시 평가·조치결과·일일 점검에서 기록. */
+let riskPlanMode = false;      // true: 최초평가(예정 대책 방식)
+let hazardGroupOpen = {};      // 공종별 펼침 상태
+let _hzGroups = [];
+const INITIAL_BUNDLES = [
+  { id: 'bldg', icon: '🏢', name: '건축', sub: '아파트·주택·근린생활시설', off: ['shoring'],
+    cats: ['excavation', 'shoring', 'foundation', 'concrete', 'scaffold', 'goso', 'steelframe', 'rooftop', 'masonry', 'finishing', 'painting2', 'plumbing', 'electric', 'welding', 'heavyeq', 'lifting', 'confined', 'dismantle', 'housekeeping', 'weather'] },
+  { id: 'civil', icon: '🛣️', name: '토목', sub: '도로·하천·댐',
+    cats: ['excavation', 'shoring', 'foundation', 'slopeblast', 'river', 'traffic', 'paving', 'concrete', 'goso', 'scaffold', 'steelframe', 'painting2', 'plumbing', 'electric', 'welding', 'heavyeq', 'lifting', 'confined', 'dismantle', 'housekeeping', 'weather'] }
+];
+const INITIAL_CAT_ORDER = (() => { const o = []; INITIAL_BUNDLES.forEach(b => b.cats.forEach(c => { if (!o.includes(c)) o.push(c); })); return o; })();
+let bulkBundles = [], bulkCats = [];
+function kCat(id) { return KOSHA_HAZARDS.find(c => c.id === id); }
+function kCatLabel(c) { return c.icon + ' ' + c.name; }
+
+function openInitialBulk() {
+  bulkBundles = []; bulkCats = [];
+  renderInitialBulk();
+  document.getElementById('initialBulkModal').classList.add('show');
+}
+function closeInitialBulk() { document.getElementById('initialBulkModal').classList.remove('show'); }
+function toggleBulkBundle(id) {
+  const i = bulkBundles.indexOf(id);
+  if (i >= 0) bulkBundles.splice(i, 1); else bulkBundles.push(id);
+  const set = new Set();
+  const on = new Set();
+  bulkBundles.forEach(b => { const B = INITIAL_BUNDLES.find(x => x.id === b); B.cats.forEach(c => { set.add(c); if (!(B.off || []).includes(c)) on.add(c); }); });
+  bulkCats = INITIAL_CAT_ORDER.filter(c => on.has(c));
+  renderInitialBulk();
+}
+function toggleBulkCat(id) {
+  const i = bulkCats.indexOf(id);
+  if (i >= 0) bulkCats.splice(i, 1); else bulkCats.push(id);
+  renderInitialBulk();
+}
+function bulkAvailable() {   // 선택한 공사 종류에 해당하는 공종 목록 (표시 순서)
+  const set = new Set();
+  bulkBundles.forEach(b => INITIAL_BUNDLES.find(x => x.id === b).cats.forEach(c => set.add(c)));
+  return INITIAL_CAT_ORDER.filter(c => set.has(c));
+}
+function renderInitialBulk() {
+  const wrap = document.getElementById('initialBulkBody');
+  const avail = bulkAvailable();
+  const total = avail.filter(c => bulkCats.includes(c)).reduce((n, c) => n + kCat(c).hazards.length, 0);
+  const chips = INITIAL_BUNDLES.map(b => `<button type="button" class="ibk-bundle ${bulkBundles.includes(b.id) ? 'on' : ''}" onclick="toggleBulkBundle('${b.id}')">
+      <span class="ibk-ic">${b.icon}</span><span class="ibk-nm">${b.name}</span><span class="ibk-sub">${b.sub}</span>
+      <span class="ibk-chk">${bulkBundles.includes(b.id) ? '✔ 선택됨' : '눌러서 선택'}</span></button>`).join('');
+  let list = '';
+  if (!avail.length) {
+    list = `<div class="ibk-empty">위에서 공사 종류를 고르면, 필요한 공종이 모두 선택된 채로 나타납니다.<br>(건축과 토목을 함께 고를 수도 있습니다)</div>`;
+  } else {
+    list = `<div class="ibk-hint">우리 현장에 <b>해당 없는 공종만 체크를 해제</b>하세요.</div>` +
+      avail.map(id => {
+        const c = kCat(id); const on = bulkCats.includes(id);
+        return `<label class="ibk-cat ${on ? 'on' : ''}" onclick="event.preventDefault();toggleBulkCat('${id}')">
+          <span class="ibk-box">${on ? '✔' : ''}</span>
+          <span class="ibk-cn">${c.icon} ${escapeHtml(c.name)}</span><span class="ibk-cc">${c.hazards.length}개</span></label>`;
+      }).join('');
+  }
+  wrap.innerHTML = `<div class="ibk-step">① 공사 종류를 고르세요</div><div class="ibk-bundles">${chips}</div>
+    <div class="ibk-step" style="margin-top:16px;">② 해당 없는 공종은 해제하세요</div>${list}`;
+  const btn = document.getElementById('initialBulkApply');
+  btn.textContent = total ? `이 내용으로 작성하기 (위험요인 ${total}개)` : '공사 종류를 먼저 고르세요';
+  btn.disabled = !total;
+  btn.style.opacity = total ? '1' : '.5';
+}
+function applyInitialBulk() {
+  const avail = bulkAvailable().filter(c => bulkCats.includes(c));
+  if (!avail.length) { toast('❌ 선택된 공종이 없습니다'); return; }
+  if (hazardRows.length === 1 && !hazardRows[0].desc.trim() && !(hazardRows[0].checks || []).length) hazardRows = [];
+  const have = new Set(hazardRows.map(h => h.desc));
+  const toKosha = v => v <= 1 ? 1 : v <= 2 ? 2 : 3;
+  let n = 0;
+  avail.forEach(id => {
+    const c = kCat(id);
+    c.hazards.forEach(h => {
+      if (have.has(h.desc)) return;
+      hazardRows.push({ id: Date.now() + Math.random(), desc: h.desc, freq: toKosha(h.f), severity: toKosha(h.s),
+        checks: h.checks ? [...h.checks] : [], checkedItems: [], measure: '', cat: kCatLabel(c) });
+      n++;
+    });
+  });
+  const nameEl = document.getElementById('rInpWork');
+  if (nameEl && !nameEl.value.trim()) {
+    nameEl.value = bulkBundles.map(b => INITIAL_BUNDLES.find(x => x.id === b).name).join('·') + '공사 전 공종';
+  }
+  hazardGroupOpen = {};
+  renderHazardList();
+  closeInitialBulk();
+  document.getElementById('hazardClearBtn').style.display = '';
+  toast(`✅ 위험요인 ${n}개가 작성되었습니다 (공종 ${avail.length}개)`, 3500);
+  setTimeout(() => { const l = document.getElementById('hazardList'); if (l) l.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 120);
+}
+
+/* 최초평가(예정 대책 방식)의 위험요인 카드를 공종별로 묶어서 보여줌 */
+function groupHazardCards(cards) {
+  const groups = [];
+  hazardRows.forEach((h, i) => {
+    const cat = h.cat || '✏️ 직접 추가';
+    let g = groups.find(x => x.cat === cat);
+    if (!g) { g = { cat, idxs: [] }; groups.push(g); }
+    g.idxs.push(i);
+  });
+  _hzGroups = groups.map(g => g.cat);
+  if (hazardRows.length <= 8) return cards.join('');
+  return groups.map((g, gi) => {
+    const open = hazardGroupOpen[g.cat] === true;
+    const high = g.idxs.filter(i => hazardRows[i].freq * hazardRows[i].severity >= 9).length;
+    return `<div class="hz-group ${open ? 'open' : ''}" id="hzg_${gi}">
+      <div class="hz-group-head">
+        <button type="button" class="hz-group-toggle" onclick="toggleHazardGroup(${gi})"><span class="hz-g-arr">›</span>
+          <span class="hz-g-name">${escapeHtml(g.cat)}</span>
+          <span class="hz-g-cnt">${g.idxs.length}개${high ? ` · 높음 ${high}` : ''}</span></button>
+        <button type="button" class="hz-g-del" onclick="removeHazardGroup(${gi})" aria-label="이 공종 전체 삭제">🗑<small>공종 삭제</small></button>
+      </div>
+      <div class="hz-group-body">${g.idxs.map(i => cards[i]).join('')}</div></div>`;
+  }).join('');
+}
+function toggleHazardGroup(gi) {
+  const el = document.getElementById('hzg_' + gi);
+  if (!el) return;
+  const open = el.classList.toggle('open');
+  hazardGroupOpen[_hzGroups[gi]] = open;
+}
+function removeHazardGroup(gi) {
+  const cat = _hzGroups[gi];
+  const n = hazardRows.filter(h => (h.cat || '✏️ 직접 추가') === cat).length;
+  showConfirm('공종 삭제', `"${cat}"의 위험요인 ${n}개를 모두 삭제하시겠습니까?`, '삭제', () => {
+    hazardRows = hazardRows.filter(h => (h.cat || '✏️ 직접 추가') !== cat);
+    renderHazardList();
+    document.getElementById('hazardClearBtn').style.display = hazardRows.length ? '' : 'none';
+  });
+}
+function removeHazardCheck(hi, ci) {
+  if (!hazardRows[hi] || !hazardRows[hi].checks) return;
+  hazardRows[hi].checks.splice(ci, 1);
+  renderHazardList();
 }
 
 /* ══════════════ WORK DROPDOWN ══════════════ */
@@ -7588,6 +8009,8 @@ async function shareCheckReport() {
     if (b) { b.remove(); return true; }
     const c = document.getElementById('confirmBox');
     if (c && c.classList.contains('show')) { closeConfirm(); return true; }
+    const pm = document.querySelectorAll('.preset-modal-backdrop.show');
+    if (pm.length) { pm[pm.length - 1].classList.remove('show'); return true; }
     const mods = document.querySelectorAll('.modal-backdrop.show');
     if (mods.length) {
       const m = mods[mods.length - 1];
@@ -7624,6 +8047,45 @@ document.querySelector('.fab').onclick = openModal_NewSite;
 document.querySelectorAll('.modal-backdrop').forEach(bd => {
   bd.addEventListener('click', e => { if (e.target === bd) bd.classList.remove('show'); });
 });
+
+
+/* ══════════════ 앱 안 브라우저(카카오톡 등) 감지 → 외부 브라우저로 열기 안내 ══════════════ */
+const INAPP_RE = /KAKAOTALK|NAVER\(inapp|DaumApps|Line\/|FBAN|FBAV|FB_IAB|Instagram|; wv\)|\bwv\b|Whale\/.*Mobile.*inapp|BAND\/|Snapchat|Twitter|MicroMessenger/i;
+function inappInfo() {
+  const ua = navigator.userAgent || '';
+  const proto = location.protocol;
+  if (proto !== 'https:' && proto !== 'http:') return null;
+  if (!INAPP_RE.test(ua)) return null;
+  const android = /Android/i.test(ua), kakao = /KAKAOTALK/i.test(ua);
+  return { android, kakao, ios: /iPhone|iPad|iPod/i.test(ua) };
+}
+function inappExternalUrl() {
+  const i = inappInfo(); if (!i) return null;
+  const url = location.href;
+  if (i.kakao) return 'kakaotalk://web/openExternal?url=' + encodeURIComponent(url);
+  if (i.android) {
+    const u = new URL(url);
+    return 'intent://' + u.host + u.pathname + u.search + '#Intent;scheme=' + u.protocol.replace(':', '') + ';package=com.android.chrome;end';
+  }
+  return null;
+}
+function inappOpenExternal() {
+  const to = inappExternalUrl();
+  if (to) { location.href = to; return; }
+  toast('우측 하단(또는 상단) 메뉴에서 "Safari로 열기"를 눌러 주세요', 5000);
+}
+function inappDismiss() {
+  document.getElementById('inappBar').style.display = 'none';
+  try { sessionStorage.setItem('inappDismissed', '1'); } catch (e) {}
+}
+(function inappInit() {
+  const i = inappInfo(); if (!i) return;
+  try { if (sessionStorage.getItem('inappDismissed') === '1') return; } catch (e) {}
+  const bar = document.getElementById('inappBar'); if (!bar) return;
+  bar.style.display = '';
+  const go = document.getElementById('inappGo');
+  if (go) go.textContent = i.ios && !i.kakao ? '🌐 Safari에서 열기 방법' : i.android || i.kakao ? '🌐 ' + (i.android ? '크롬' : '브라우저') + '에서 열기' : '🌐 브라우저에서 열기';
+})();
 
 /* ══════════════ INIT ══════════════ */
 // PWA 서비스워커 등록 — GitHub Pages 등 정식 웹 호스팅에서 열었을 때만 동작.
@@ -7739,7 +8201,7 @@ function resumeSnapshot() {
     });
     s.risk = { type: curRiskType, kind: curActionKind, cat: curActionCategory, linked: linkedSourceId,
       editing: _editingRiskId, shared: selectedSharedRiskIds, photos: riskPhotos, attendees: riskAttendees,
-      hazards: hazardRows, evidence: actionEvidenceItems };
+      hazards: hazardRows, evidence: actionEvidenceItems, plan: riskPlanMode };
     s.fields = resumeCollectFields(scr);
   } else if (scr.id === 'scNewEdu') {
     s.edu = { workId: curWorkId, editing: _editingReportId, reportId: curReportId,
@@ -7801,6 +8263,7 @@ async function resumeRestore() {
       selectedSharedRiskIds = r.shared || [];
       riskPhotos = r.photos || []; riskAttendees = r.attendees || [];
       hazardRows = r.hazards || []; actionEvidenceItems = r.evidence || [];
+      if (typeof r.plan === 'boolean') riskPlanMode = r.plan;
       resumeApplyFields(s.fields);
       if (curRiskType !== 'action' && !hazardRows.length) addHazardRow();
       renderHazardList(); renderRiskAttendees(); renderRiskPhotoGrid();
@@ -8083,6 +8546,20 @@ document.addEventListener('visibilitychange', () => {
     <div class="preset-modal-body" id="presetModalBody"></div>
     <div class="preset-modal-footer">
       <button class="btn btn-primary" onclick="applyPresets()">선택한 위험요인 적용</button>
+    </div>
+  </div>
+</div>
+
+<!-- 최초 위험성평가: 공사 종류로 한 번에 작성 -->
+<div class="preset-modal-backdrop" id="initialBulkModal">
+  <div class="preset-modal">
+    <div class="preset-modal-header">
+      <h3>🏗 공사 종류로 한 번에 작성</h3>
+      <button class="modal-close" onclick="closeInitialBulk()">✕<small>닫기</small></button>
+    </div>
+    <div class="preset-modal-body" id="initialBulkBody"></div>
+    <div class="preset-modal-footer">
+      <button class="btn btn-primary" id="initialBulkApply" onclick="applyInitialBulk()">공사 종류를 먼저 고르세요</button>
     </div>
   </div>
 </div>
